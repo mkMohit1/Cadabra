@@ -17,14 +17,12 @@ const LoginPage = () => {
     isUser: false,
     otpFieldVisible: false,
     otpSent: false,
-    loginWithWhatsapp: true,
+    loginWith: "whatsapp", // Default login method
   });
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // Accessing the API URL and API Key from the Redux store
-  const { SOLUTIONS_INFINI_API_URL, SOLUTIONS_INFINI_API_KEY } = useSelector(state => state.auth);
   const generateOtp = () => {
     let otp = "";
     for (let i = 0; i < 4; i++) {
@@ -39,40 +37,43 @@ const LoginPage = () => {
 
   const handleSendOtp = async (event) => {
     event.preventDefault();
-    const { mobileNumber } = formData;
+    const { mobileNumber, loginWith } = formData;
 
+    // Validate mobile number format
     if (!/^\d{10}$/.test(mobileNumber)) {
       updateFormData({ errorMessage: "Please enter a valid mobile number." });
       return;
     }
 
+    // Check if the user exists
     const allUsers = await (await fetch('https://server-lmhc.onrender.com/users')).json();
     const existingUser = allUsers.find((user) => user.mobileNumber === mobileNumber);
-
     if (!existingUser) {
       updateFormData({ isUser: true });
       return;
     }
 
+    // Generate OTP
     const otp = generateOtp();
     updateFormData({ otp });
 
+    // Send OTP based on selected method (WhatsApp or Voice)
     try {
       const response = await axios.post(`https://server-lmhc.onrender.com/send-otp`, {
-        mobileNumber, 
+        mobileNumber,
         otp,
-        type:formData.loginWithWhatsapp
+        type: loginWith,  // Passing the selected login method
       });
 
       if (response.status === 200) {
         updateFormData({
-          successMessage: `OTP sent successfully via ${formData.loginWithWhatsapp?"whatsapp text":"Voice OTP"}.`,
+          successMessage: `OTP sent successfully via ${loginWith}.`,
           otpFieldVisible: true,
           otpSent: true,
         });
-        if(formData.loginWithWhatsapp){
-          sessionStorage.setItem("whatsappOtp", otp);
-        }        
+
+        // Store OTP and user details in sessionStorage
+        sessionStorage.setItem(`${loginWith}Otp`, otp);
         sessionStorage.setItem("User/Admin", existingUser.isAdmin);
         updateFormData({ userID: existingUser._id });
       } else {
@@ -85,10 +86,10 @@ const LoginPage = () => {
 
   const handleSubmitOtp = (event) => {
     event.preventDefault();
-    const { enteredOtp, otp } = formData;
+    const { enteredOtp, otp, mobileNumber } = formData;
 
     if (enteredOtp === otp) {
-      const formattedMobileNumber = formData.mobileNumber.replace(/^(\+91|91|0)/, "");
+      const formattedMobileNumber = mobileNumber.replace(/^(\+91|91|0)/, "");
       sessionStorage.setItem("loggedInUserMobileNumber", formattedMobileNumber);
       setFormData({ successMessage: "Login successful!", errorMessage: "" });
 
@@ -105,88 +106,15 @@ const LoginPage = () => {
     }
   };
 
-  const handleLoginWithWhatsapp = (event) => {
-    event.preventDefault();
+  const handleLoginMode = (method) => {
+    // Toggle between WhatsApp and Voice OTP login methods
     updateFormData({
-      loginWithWhatsapp: true,
+      loginWith: method,
       otpFieldVisible: false,
       otpSent: false,
       errorMessage: "",
       successMessage: "",
     });
-  };
-
-  const handleVoiceOtpLoginClick = async (event) => {
-    event.preventDefault();
-    const { mobileNumber, otp } = formData;
-
-    try {
-      const response = await axios.get(`${SOLUTIONS_INFINI_API_URL}`, {
-        params: {
-          api_key: SOLUTIONS_INFINI_API_KEY,
-          method: "dial.click2call",
-          caller: mobileNumber,
-          receiver: "ivr:250142",  // Example IVR receiver number
-          format: "json",
-          meta: JSON.stringify({ OTP: otp }),
-        },
-      });
-      console.log(response.data); // Log or process the response data if needed
-    } catch (error) {
-      updateFormData({ errorMessage: "Failed to initiate Voice OTP. Please try again." });
-    }
-
-    updateFormData({
-      loginWithWhatsapp: false,
-      otpFieldVisible: false,
-      otpSent: false,
-      errorMessage: "",
-      successMessage: "",
-    });
-  };
-
-  const handlePopup = async (output) => {
-    if (output) {
-      const newUser = { userName: "Temp", mobileNumber: formData.mobileNumber };
-      const addUserResponse = await fetch('https://server-lmhc.onrender.com/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newUser),
-      });
-
-      if (addUserResponse.ok) {
-        const userData = await addUserResponse.json();
-        setFormData({ userID: userData._id });
-
-        const otp = generateOtp();
-        updateFormData({ otp });
-
-        try {
-          const response = await axios.post(`https://server-lmhc.onrender.com/send-otp`, {
-            mobileNumber: formData.mobileNumber,
-            otp,
-          });
-
-          if (response.status === 200) {
-            updateFormData({
-              successMessage: "OTP sent successfully via Voice OTP.",
-              otpFieldVisible: true,
-              otpSent: true,
-            });
-            sessionStorage.setItem("whatsappOtp", otp);
-            sessionStorage.setItem("User/Admin", false);
-          } else {
-            updateFormData({ errorMessage: "Failed to send OTP. Please try again." });
-          }
-        } catch (error) {
-          updateFormData({ errorMessage: "Failed to send OTP. Please try again." });
-        }
-      } else {
-        const errorData = await addUserResponse.json();
-        console.error("Error registering user:", errorData.message);
-      }
-    }
-    updateFormData({ isUser: false, mobileNumber: "" });
   };
 
   const {
@@ -196,7 +124,7 @@ const LoginPage = () => {
     otpSent,
     errorMessage,
     successMessage,
-    loginWithWhatsapp,
+    loginWith,
   } = formData;
 
   return (
@@ -209,7 +137,7 @@ const LoginPage = () => {
           </div>
           <form onSubmit={enteredOtp ? handleSubmitOtp : handleSendOtp}>
             <div className="user-panel__message">
-              {errorMessage && !loginWithWhatsapp && <p className="error">{errorMessage}</p>}
+              {errorMessage && !loginWith && <p className="error">{errorMessage}</p>}
               {successMessage && <p className="success">{successMessage}</p>}
             </div>
 
@@ -253,13 +181,13 @@ const LoginPage = () => {
             </p>
 
             <div className="user-panel__other-login">
-              {!loginWithWhatsapp ? (
-                <button className="button button--whatsapp" onClick={handleLoginWithWhatsapp}>
+              {loginWith === 'whatsapp' ? (
+                <button className="button button--whatsapp" onClick={() => handleLoginMode('voice')}>
                   <img src="https://cdn-icons-png.flaticon.com/128/3670/3670051.png" alt="Whatsapp Logo" className="icon" />
                   <span>Login with WhatsApp</span>
                 </button>
               ) : (
-                <button className="button button--voice" onClick={handleVoiceOtpLoginClick}>
+                <button className="button button--voice" onClick={() => handleLoginMode('whatsapp')}>
                   <img src="https://cdn-icons-png.flaticon.com/128/3616/3616215.png" alt="Call Logo" className="icon" />
                   <span>Login with Voice OTP</span>
                 </button>

@@ -1,0 +1,14 @@
+// _variables.scss
+$primary-color: #007bff;
+$secondary-color: #666;
+$light-bg: #f9f9f9;
+$border-radius: 8px;
+
+// _mixins.scss
+@mixin button-hover($bg-color, $text-color) {
+  transition: all 0.3s;
+  &:hover {
+    background-color: $bg-color;
+    color: $text-color;
+  }
+}

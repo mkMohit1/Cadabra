@@ -1,0 +1,185 @@
+.blog-section {
+    font-family: "Arial, sans-serif";
+    padding: 2rem;
+    margin: 0 auto;
+    max-width: 1200px;
+  
+    // Featured Blog Section
+    .featured-section {
+      display: flex;
+      margin-bottom: 4rem;
+      background-color: #f9f9f9;
+  
+      .featured-content {
+        display: flex;
+        flex-wrap: wrap;
+  
+        .text-content {
+          flex: 1 1 50%;
+          padding: 2rem;
+        }
+  
+        .image-content img {
+          width: 100%;
+          height: auto;
+        }
+      }
+    }
+  
+    // Trending Blogs
+    .trending-section {
+      text-align: center;
+  
+      .blogs-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+  
+        .blog-card {
+          background: white;
+          padding: 1rem;
+          border-radius: 10px;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+          .blog-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            margin-bottom: 1rem;
+          }
+        }
+      }
+      .see-more-btn {
+        display: inline-block;
+        margin: 2rem auto 0;
+        background-color: #f95d78;
+        color: #fff;
+        padding: 0.8rem 2rem;
+        border: none;
+        font-size: 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+  
+        &:hover {
+          background-color: #e14b66;
+        }
+      }
+    }
+  
+    // Featured Videos
+    .featured-videos {
+      margin-top: 4rem;
+  
+      .video-container {
+        display: flex;
+        gap: 1.5rem;
+  
+        .video-main {
+          flex: 2;
+  
+          img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+          }
+        }
+  
+        .video-list {
+          flex: 1;
+  
+          .video-item {
+            background: #fff;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+  
+            &:hover {
+              transform: scale(1.02);
+            }
+  
+            .video-title {
+              font-weight: bold;
+              margin-bottom: 0.5rem;
+            }
+  
+            .video-meta {
+              font-size: 0.9rem;
+              color: #777;
+            }
+          }
+        }
+      }
+    }
+  
+    // Subscription Section
+    .subscription-section {
+      display: flex;
+      margin-top: 4rem;
+      background-color: #f9f9f9;
+      border-radius: 10px;
+      overflow: hidden;
+  
+      .subscription-content {
+        flex: 1;
+        padding: 2rem;
+  
+        h3 {
+          font-size: 1.8rem;
+          margin-bottom: 1rem;
+        }
+  
+        p {
+          font-size: 1rem;
+          margin-bottom: 1.5rem;
+          color: #666;
+        }
+  
+        .subscription-form {
+          display: flex;
+          gap: 0.5rem;
+  
+          input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+          }
+  
+          button {
+            background-color: #f95d78;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+  
+            &:hover {
+              background-color: #e14b66;
+            }
+          }
+        }
+      }
+  
+      .subscription-image img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+      }
+    }
+  
+    // Responsive Design
+    @media (max-width: 768px) {
+      .video-container,
+      .subscription-section {
+        flex-direction: column;
+      }
+  
+      .blogs-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+  

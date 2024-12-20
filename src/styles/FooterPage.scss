@@ -1,0 +1,67 @@
+.footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  background-color: #fff;
+  font-family: 'Inter', 'sans-serif';
+  color: #000;
+  width: 80%;
+    margin: 10px auto 100px;
+    padding-bottom: 0;
+  &-section {
+    max-width: 300px;
+
+    .footer-logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .footer-text {
+      margin: 10px 0;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .footer-copyright {
+      font-size: 0.8rem;
+      color: #aaa;
+    }
+  }
+
+  &-links {
+    display: flex;
+    gap: 40px;
+    width: 50%;
+    justify-content: space-evenly;
+    .footer-column {
+      display: flex;
+      flex-direction: column;
+
+      .footer-heading {
+        font-weight: bold;
+        margin-bottom: 0px;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+
+        li {
+          margin: 5px 0;
+          line-height: 25px;
+          font-size: 0.9rem;
+          color: #444;
+
+          .hiring-badge {
+            background-color: #65e4a3;
+            color: white;
+            font-size: 0.8rem;
+            padding: 2px 6px;
+            border-radius: 12px;
+            margin-left: 5px;
+          }
+        }
+      }
+    }
+  }
+}

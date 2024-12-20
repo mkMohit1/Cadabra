@@ -1,0 +1,45 @@
+.logos-section {
+  display: flex;
+  justify-content: space-evenly;
+  gap: 2rem;
+  font-family: 'Inter', 'sans-serif';
+  margin: 2rem auto;
+  color: #0a2640;
+  width: 80%;
+  
+  /* Add gradient effect at the left and right edges */
+  position: relative;
+  padding: 0 1rem; /* Add some padding to give space for the gradient effect */
+  
+  /* The gradient on the edges */
+  ::before, ::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50px; /* Adjust the width of the shadow */
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0));
+    z-index: 1;
+  }
+
+  ::before {
+    left: 0;
+  }
+
+  ::after {
+    right: 0;
+  }
+
+  .logo-item {
+    font-size: 1.5rem;
+    font-weight: bold;
+    transition: transform 0.3s, color 0.3s;
+    position: relative;
+    z-index: 2; /* Ensure logos appear above the gradient */
+    
+    &:hover {
+      transform: scale(1.1);
+      color: #007bff;
+    }
+  }
+}

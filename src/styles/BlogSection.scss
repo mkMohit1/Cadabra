@@ -1,0 +1,135 @@
+.blog-section {
+  text-align: center;
+  padding: 50px 20px;
+
+  .header {
+    margin-bottom: 30px;
+
+    h3 {
+      font-size: 1rem;
+      color: #555;
+      opacity: 0.6;
+    }
+
+    h2 {
+      font-size: 2rem;
+      font-weight: 400;
+      color: #222;
+      margin-top: 10px;
+    }
+  }
+
+  .blog-slider {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    .blog-cards-container {
+      overflow: hidden;
+      width: 70%;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .blog-cards {
+      display: flex;
+      transition: transform 0.3s ease-in-out;
+
+      .blog-card {
+        flex: 0 0 calc(100% / 3); /* Show 3 cards at a time */
+        margin: 0 10px;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        text-align: left;
+
+        .blog-image {
+          width: 100%; /* Maintain full width for images */
+          height: 200px; /* Maintain existing height */
+          object-fit: cover;
+        }
+
+        .blog-content {
+          padding: 15px;
+
+          .category {
+            font-size: 0.9rem;
+            color: #888;
+            margin-bottom: 10px;
+
+            span {
+              color: #555;
+            }
+          }
+
+          .title {
+            margin: 0px;
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: #333;
+            margin-bottom: 10px;
+          }
+
+          .author {
+            font-size: 0.9rem;
+            color: #555;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            .author-image {
+              width: 50px;
+              height: 50px;
+              margin-right: 10px;
+              display: flex;
+              flex-direction: row;
+              span{
+                text-wrap-mode: nowrap;
+                display: flex;
+                align-items: center;
+                margin: 0 10px;
+              }
+              img {
+                width: 100%;
+                border-radius: 50%;
+              }
+              
+            }
+            .read-btn{
+              font-size: 40px;
+            }
+          }
+        }
+      }
+    }
+
+    .nav-button {
+      background: transparent;
+      border: none;
+      font-size: 110px;
+      color: #333;
+      cursor: pointer;
+      transition: color 0.3s;
+
+      &:hover {
+        color: #0a2640;
+      }
+
+      &:disabled {
+        color: #ccc;
+        cursor: not-allowed;
+      }
+
+      &.prev {
+        position: absolute;
+        left: 106px; /* Adjust based on layout */
+      }
+
+      &.next {
+        position: absolute;
+        right: 80px; /* Adjust based on layout */
+      }
+    }
+  }
+}

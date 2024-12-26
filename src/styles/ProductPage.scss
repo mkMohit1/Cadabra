@@ -1,0 +1,252 @@
+// src/pages/ProductPage/ProductPage.scss
+.product-page {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  
+    // Product List Styles
+    .product-list {
+      &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+  
+        h1 {
+          font-size: 24px;
+          margin: 0;
+        }
+      }
+  
+      &__filters {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
+    }
+  
+    .product-table {
+      width: 100%;
+      border-collapse: collapse;
+      
+      th, td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+      }
+  
+      th {
+        background-color: #f8f9fa;
+        font-weight: 600;
+      }
+  
+      .product-cell {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+  
+        img {
+          width: 40px;
+          height: 40px;
+          object-fit: cover;
+          border-radius: 4px;
+        }
+      }
+  
+      .action-cell {
+        display: flex;
+        gap: 8px;
+      }
+  
+      .status-badge {
+        padding: 4px 8px;
+        border-radius: 4px;
+        background-color: #e8f5e9;
+        color: #2e7d32;
+        font-size: 12px;
+        text-transform: capitalize;
+      }
+    }
+  
+    // Create Product Styles
+    .create-product {
+      form {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 24px;
+      }
+  
+      &__main {
+        background: white;
+        padding: 24px;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+  
+      &__sidebar {
+        background: white;
+        padding: 24px;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        height: fit-content;
+      }
+    }
+  
+    // Form Styles
+    .form-group {
+      margin-bottom: 20px;
+  
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+      }
+  
+      input, select, textarea {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+  
+        &:focus {
+          outline: none;
+          border-color: #0066ff;
+        }
+      }
+    }
+  
+    .media-upload {
+      margin-bottom: 20px;
+  
+      .upload-box {
+        border: 2px dashed #ddd;
+        padding: 40px;
+        text-align: center;
+        border-radius: 4px;
+        cursor: pointer;
+  
+        &:hover {
+          border-color: #0066ff;
+        }
+      }
+    }
+  
+    .form-actions {
+      grid-column: 1 / -1;
+      display: flex;
+      gap: 12px;
+      justify-content: flex-start;
+      padding: 20px 0;
+      border-top: 1px solid #eee;
+    }
+  
+    // Rich Text Editor Styles
+    .rich-text-editor {
+      border: 1px solid #ddd;
+      border-radius: 4px;
+  
+      .toolbar {
+        padding: 8px;
+        border-bottom: 1px solid #ddd;
+        display: flex;
+        gap: 8px;
+  
+        button {
+          padding: 4px 8px;
+          background: none;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          cursor: pointer;
+  
+          &:hover {
+            background: #f5f5f5;
+          }
+        }
+  
+        select {
+          padding: 4px 8px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+        }
+      }
+  
+      textarea {
+        width: 100%;
+        min-height: 200px;
+        padding: 12px;
+        border: none;
+        resize: vertical;
+  
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+  
+    // Common Button Styles
+    .btn-primary {
+      background-color: #0066ff;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+  
+      &:hover {
+        background-color: #0052cc;
+      }
+    }
+  
+    .btn-secondary {
+      background-color: white;
+      color: #333;
+      border: 1px solid #ddd;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+  
+      &:hover {
+        background-color: #f5f5f5;
+      }
+    }
+  
+    .btn-reset {
+      @extend .btn-secondary;
+    }
+  
+    .btn-icon {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      font-size: 16px;
+  
+      &:hover {
+        opacity: 0.8;
+      }
+  
+      &.edit {
+        color: #2196f3;
+      }
+  
+      &.delete {
+        color: #f44336;
+      }
+    }
+  
+    .search-input {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      width: 200px;
+      font-size: 14px;
+  
+      &:focus {
+        outline: none;
+        border-color: #0066ff;
+      }
+    }
+  }

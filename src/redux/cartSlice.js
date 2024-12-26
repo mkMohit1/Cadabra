@@ -4,7 +4,8 @@ const initialState = {
   totalCartCount: 0, // Holds the count of items in the cart
   cartItem: [],      // Items in the cart for renting
   sellCartItem: [],  // Items in the cart for selling
-  cartMode: 'rent'   // Default cart mode is 'rent'
+  cartMode: 'rent',   // Default cart mode is 'rent' ['CartItem','AddressContainer','Shipping']
+  currentContainer:'CartItem'
 };
 
 const cartSlice = createSlice({
@@ -29,6 +30,9 @@ const cartSlice = createSlice({
         state.cartItem.push(updatedItem);
       }
       state.totalCartCount += 1;
+    },
+    updateCurrentContainer: (state, action) => {
+      state.currentContainer = action.payload; // Corrected spelling
     },
     updateSellCartCount: (state, action) => {
       const updatedItem = action.payload;
@@ -60,7 +64,8 @@ export const {
   updateCartItem,
   updateSellCartCount,
   removeCartItem,
-  removeSellCartItem
+  removeSellCartItem,
+  updateCurrentContainer
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

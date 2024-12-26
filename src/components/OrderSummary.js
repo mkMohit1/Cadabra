@@ -2,11 +2,16 @@ import React, { useState } from "react";
 import "../styles/OrderSummary.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faXmark, faTags } from "@fortawesome/free-solid-svg-icons";
-import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { updateCurrentContainer } from "../redux/cartSlice";
 
 const OrderSummary = ({currentCart,currentMode}) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [openMoreMap, setOpenMoreMap] = useState({}); // Track open state for each item
   const isAuthenticated = useSelector((state)=>state.auth.isAuthenticated); 
+    const currentContainer = useSelector((state) => state.cart.currentContainer);
 
   const toggleMore = (id) => {
     setOpenMoreMap((prevState) => ({
@@ -30,13 +35,22 @@ const OrderSummary = ({currentCart,currentMode}) => {
   };
 
   const handleCheckout = ()=>{
-    if(!isAuthenticated){
-      navigator('/login');
-    }else{
-      navigator('/checkout');
-    }
+    // if(!isAuthenticated){
+    //   navigate('/login');
+    // }else{
+      //console.log('AddressContainer');
+      if(currentContainer =='CartItem'){
+        dispatch(updateCurrentContainer('AddressContainer'));
+      }
+      if(currentContainer =='AddressContainer'){
+        dispatch(updateCurrentContainer('Shipping'));
+      }
+      
+    // }
   }
 
+  const temp = useSelector((state)=>state.cart.currentContainer);
+  console.log(temp);
   const total = calculateTotal();
 
   return (

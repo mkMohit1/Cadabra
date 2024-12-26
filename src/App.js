@@ -1,71 +1,111 @@
-import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
+import React, { useState, useEffect, use } from "react";
+import { BrowserRouter as Router, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import HomePage from "./Pages/HomePage";
 import BlogPost from "./Pages/BlogPost";
 import RentPage from "./Pages/RentPage";
 import Navbar from "./components/Navbar";
-import FooterPage from './components/FooterPage';
+import FooterPage from "./components/FooterPage";
 import "./App.scss";
-import { Provider } from "react-redux";
-import store from "./redux/store";
 import ShoppingCart from "./Pages/ShoppingCart";
 import LoginPage from "./Pages/LoginPage";
+import AdminDashboard from "./Pages/AdminDashboard";
+import { useDispatch,useSelector } from "react-redux";
+import { login } from "./redux/authSlice";
 
 function App() {
   const [blogs, setBlogs] = useState(null);
-
-  // Fetch blogs when the app loads
+  const dispatch = useDispatch();
+ const user = useSelector((state) => state.auth.user);
+  
+  // Fetching user data from localStorage and updating state
   useEffect(() => {
-    const fetchBlogs = async () => {
-      try {
-        const response = await fetch("https://server-lmhc.onrender.com/blogs");
-        const blogsData = await response.json();
-        setBlogs(blogsData);
-      } catch (error) {
-        console.error("Error fetching blogs:", error);
-      }
-    };
+    const storedUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    console.log("Stored User:", storedUser); // Debugging line to check stored user
+    if (storedUser) {
+      dispatch(login(storedUser)); // Restore user state on refresh
+    }
+  }, [dispatch]);
 
-    fetchBlogs();
-  }, []);
+  // useEffect(() => {
+  //   const fetchBlogs = async () => {
+  //     try {
+  //       const response = await fetch("https://server-lmhc.onrender.com/blogs");
+  //       const blogsData = await response.json();
+  //       setBlogs(blogsData);
+  //     } catch (error) {
+  //       console.error("Error fetching blogs:", error);
+  //     }
+  //   };
 
-  if (!blogs || blogs.length === 0) {
-    return <div>Loading...</div>; // Display loading text until blogs are fetched
-  }
+  //   fetchBlogs();
+  // }, []);
 
   return (
     <Router>
-      {/* Router wraps the entire app */}
-      <Provider store={store}>
-        
-      <AppWithRouter blogs={blogs}/>
-      </Provider>
+      { <AppRoutes blogs={blogs} user={user} /> }
     </Router>
   );
 }
 
-function AppWithRouter({ blogs }) {
+function AppRoutes({ blogs, user }) {
   const location = useLocation();
-  const isLoginPage = location.pathname === "/login"; 
+  const navigate = useNavigate();
+
+  const isAdminPage = location.pathname === "/admin";
+
+  // Redirect user to admin dashboard or login page based on admin status
+  useEffect(() => {
+    if (isAdminPage) {
+      if (!user) {
+        navigate("/admin-login");
+      } else if (!["SupperAdmin", "SaleAdmin", "ProductAdmin"].includes(user.isAdmin)) {
+        navigate("/admin-login");
+      }
+    }
+  }, [user, isAdminPage, navigate]);
+
+  // Redirect user after login based on their role
+  useEffect(() => {
+    if (user) {
+      if (user.isAdmin && ["SupperAdmin", "SaleAdmin", "ProductAdmin",'SaleManager'].includes(user.isAdmin)) {
+        navigate("/admin"); // Redirect admin users to admin dashboard
+      } else if (location.pathname === "/login" || location.pathname === "/admin-login") {
+        navigate("/"); // Redirect regular users to home page
+      }
+    }
+  }, [user, location.pathname, navigate]);
+
+  // Handle unauthenticated user visiting the app
+  useEffect(() => {
+    if (!user && location.pathname !== "/login" && location.pathname !== "/admin-login") {
+      navigate("/");
+    }
+  }, [user, location.pathname, navigate]);
+
+  const showNavbarFooter = !["/login", "/admin", "/admin-login"].includes(location.pathname);
+
   return (
     <>
-      {!isLoginPage && <Navbar />}
+      {showNavbarFooter && <Navbar />}
       <Routes>
-        {/* Login Rout */}
-        <Route path="/login" element={<LoginPage/>}/>
-        {/* HomePage route */}
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/admin-login" element={<LoginPage />} />
         <Route path="/" element={<HomePage blogs={blogs} />} />
-
-        {/* BlogPost route */}
         <Route path="/blog/:id" element={<BlogPost blogs={blogs} />} />
-
-        {/* RentPage route */}
-        <Route path="/Rent" element={<RentPage/>} />
-
-        {/* Cart route */}
-        <Route path="/Cart" element={<ShoppingCart/>} />
+        <Route path="/Rent" element={<RentPage />} />
+        <Route path="/Cart" element={<ShoppingCart />} />
+        <Route
+          path="/admin"
+          element={
+            user && ["SupperAdmin", "SaleAdmin", "ProductAdmin",'SaleManager'].includes(user.isAdmin) ? (
+              <AdminDashboard />
+            ) : (
+              <LoginPage />
+            )
+          }
+        />
       </Routes>
-      {!isLoginPage && <FooterPage />}
+      {showNavbarFooter && <FooterPage />}
     </>
   );
 }

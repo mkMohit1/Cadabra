@@ -1,0 +1,232 @@
+// AddressSelector.scss
+.address-container {
+    max-width: 42rem;
+    margin: 0 auto;
+    padding: 1.5rem;
+  
+    .progress-bar {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+  
+      &__step {
+        font-weight: 500;
+        
+        &--active {
+          color: #000;
+        }
+        
+        &--inactive {
+          color: #9ca3af;
+        }
+      }
+  
+      &__separator {
+        color: #9ca3af;
+      }
+    }
+  
+    .address-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+  
+    .address-card {
+      padding: 1rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 0.5rem;
+      transition: border-color 0.2s;
+  
+      &--selected {
+        border-color: #3b82f6;
+      }
+  
+      &__content {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+      }
+  
+      &__info {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+  
+        &-details {
+          .name-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+  
+            .badge {
+              font-size: 0.75rem;
+              padding: 0.125rem 0.5rem;
+              background-color: #f3f4f6;
+              border-radius: 0.25rem;
+            }
+          }
+  
+          .address-text, .contact-text {
+            color: #4b5563;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+          }
+        }
+      }
+  
+      &__actions {
+        .edit-btn, .remove-btn {
+          font-size: 0.875rem;
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 0.25rem 0.5rem;
+  
+          &:hover {
+            opacity: 0.8;
+          }
+        }
+  
+        .edit-btn {
+          color: #2563eb;
+        }
+  
+        .remove-btn {
+          color: #dc2626;
+          margin-left: 0.5rem;
+        }
+      }
+    }
+  
+    .add-address-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #2563eb;
+      background: none;
+      border: none;
+      cursor: pointer;
+      margin-top: 1rem;
+      padding: 0.5rem;
+  
+      &:hover {
+        opacity: 0.8;
+      }
+  
+      svg {
+        width: 1rem;
+        height: 1rem;
+      }
+    }
+  }
+  
+  .modal {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+  
+    &__content {
+      background-color: white;
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+      width: 100%;
+      max-width: 28rem;
+    }
+  
+    &__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+  
+      &-title {
+        font-size: 1.125rem;
+        font-weight: 500;
+      }
+  
+      &-close {
+        color: #6b7280;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.25rem;
+  
+        &:hover {
+          color: #374151;
+        }
+  
+        svg {
+          width: 1rem;
+          height: 1rem;
+        }
+      }
+    }
+  
+    &__form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+  
+      .form-group {
+        label {
+          display: block;
+          font-size: 0.875rem;
+          font-weight: 500;
+          margin-bottom: 0.25rem;
+        }
+  
+        input, select {
+          width: 100%;
+          padding: 0.5rem;
+          border: 1px solid #d1d5db;
+          border-radius: 0.375rem;
+  
+          &:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 1px #3b82f6;
+          }
+        }
+      }
+    }
+  
+    &__footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+  
+      button {
+        padding: 0.5rem 1rem;
+        border-radius: 0.375rem;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 0.2s;
+  
+        &.cancel-btn {
+          background-color: white;
+          border: 1px solid #d1d5db;
+  
+          &:hover {
+            background-color: #f9fafb;
+          }
+        }
+  
+        &.add-btn {
+          background-color: #2563eb;
+          color: white;
+          border: none;
+  
+          &:hover {
+            background-color: #1d4ed8;
+          }
+        }
+      }
+    }
+  }

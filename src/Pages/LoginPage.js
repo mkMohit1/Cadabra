@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "../styles/LoginPage.scss";
 import { normalImages as images } from "../ImagePath";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/authSlice";
+import { toast } from "react-toastify";
 
 const LoginPage = () => {
+  const location = useLocation();
   const [formData, setFormData] = useState({
     mobileNumber: "",
     enteredOtp: "",
@@ -19,6 +21,7 @@ const LoginPage = () => {
     otpSent: false,
     loginWith: "whatsapp", // Default login method
   });
+  const [user, setUser] = useState(null);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -38,25 +41,32 @@ const LoginPage = () => {
   const handleSendOtp = async (event) => {
     event.preventDefault();
     const { mobileNumber, loginWith } = formData;
-
     // Validate mobile number format
     if (!/^\d{10}$/.test(mobileNumber)) {
       updateFormData({ errorMessage: "Please enter a valid mobile number." });
       return;
     }
-
     // Check if the user exists
     const allUsers = await (await fetch('https://server-lmhc.onrender.com/users')).json();
-    const existingUser = allUsers.find((user) => user.mobileNumber === mobileNumber);
-    if (!existingUser) {
-      updateFormData({ isUser: true });
+    console.log(allUsers.length);
+    const existingUser = allUsers.length !=undefined && allUsers.find((user) => user.mobileNumber === mobileNumber);
+    console.log(existingUser);
+     // Conditional message handling with Toastify
+     if (location.pathname === '/admin-login' && existingUser && existingUser.type === 'commonUser') {
+      toast.error("You are not an Admin. Please login as a user.");  // Use Toastify for error message
+      return;
+    } else if (location.pathname === '/login' && existingUser && existingUser.type !== 'commonUser') {
+      toast.error("You are an Admin. Please login as an Admin.");  // Use Toastify for error message
       return;
     }
-
+    if (!existingUser) {
+      toast.error("User not found. Please register first.");  // Use Toastify for error message
+      return;
+    }
     // Generate OTP
     const otp = generateOtp();
     updateFormData({ otp });
-
+    console.log("otp:", otp);
     // Send OTP based on selected method (WhatsApp or Voice)
     try {
       const response = await axios.post(`https://server-lmhc.onrender.com/send-otp`, {
@@ -64,17 +74,14 @@ const LoginPage = () => {
         otp,
         type: loginWith,  // Passing the selected login method
       });
-
-      if (response.status === 200) {
+      if (response.status === 200) {  
         updateFormData({
           successMessage: `OTP sent successfully via ${loginWith}.`,
           otpFieldVisible: true,
           otpSent: true,
         });
-
-        // Store OTP and user details in sessionStorage
-        sessionStorage.setItem(`${loginWith}Otp`, otp);
-        sessionStorage.setItem("User/Admin", existingUser.isAdmin);
+        setUser({ mobileNumber, isAdmin: existingUser.type, userID: existingUser._id });
+        // Store OTP and user details in localStorage
         updateFormData({ userID: existingUser._id });
       } else {
         updateFormData({ errorMessage: "Failed to send OTP. Please try again." });
@@ -90,17 +97,15 @@ const LoginPage = () => {
 
     if (enteredOtp === otp) {
       const formattedMobileNumber = mobileNumber.replace(/^(\+91|91|0)/, "");
-      sessionStorage.setItem("loggedInUserMobileNumber", formattedMobileNumber);
+      toast.success("Login successful!");  // Use Toastify for success message
       setFormData({ successMessage: "Login successful!", errorMessage: "" });
-
-      const isAdmin = sessionStorage.getItem("User/Admin");
-      dispatch(login({
-        mobileNumber: formattedMobileNumber,
-        isAdmin: isAdmin === 'true',
-        userID: formData.userID,
-      }));
-
-      navigate("/");  // Redirect after login
+      dispatch(login(user));
+      if(user.isAdmin !== 'commonUser') {
+        navigate("/admin");  // Redirect after login
+      }else{
+        navigate("/");  // Redirect after login
+      }
+      
     } else {
       updateFormData({ errorMessage: "Invalid OTP. Please try again.", successMessage: "" });
     }

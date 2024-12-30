@@ -6,9 +6,10 @@ import { toast } from 'react-toastify';
 
 const SaleAdmin = () => {
   const [showModal, setShowModal] = useState(false);
+  const [editingAdmin, setEditingAdmin] = useState(null); // To store the admin being edited
   const currentUser = useSelector((state) => state.auth.user);
   const [searchTerm, setSearchTerm] = useState('');
-  const [admins, setAdmins] = useState([]); // Ideally, fetch this data from an API
+  const [admins, setAdmins] = useState([]); // List of all admins
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -23,10 +24,10 @@ const SaleAdmin = () => {
 
   // Filter admins based on search
   const filteredAdmins = admins && admins.filter((admin) =>
-    admin.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    admin.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    admin.phone.includes(searchTerm) ||
-    admin.type.toLowerCase().includes(searchTerm.toLowerCase())
+    (admin.name && admin.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (admin.email && admin.email.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (admin.mobileNumber && admin.mobileNumber.includes(searchTerm)) ||
+    (admin.type && admin.type.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   // Reset search field
@@ -42,38 +43,82 @@ const SaleAdmin = () => {
     });
   };
 
-  // Handle form submission
+  // Handle form submission (add or update admin)
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('Form Data:', formData);
-    // Send the new admin to the backend
-    try {
-      const response = await fetch('https://server-lmhc.onrender.com/admin/addAdmin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ ...formData, supperAdminID: currentUser.userID }),
-      });
-      if (!response.ok) {
-        toast.error('Failed to add new manager');
-        return;
+
+    // If editing an admin, update them
+    if (editingAdmin) {
+      try {
+        const response = await fetch(`http://localhost:5000/admin/updateAdmin/${editingAdmin._id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+          toast.error(data.error || "Failed to update manager");
+          return;
+        }
+
+        toast.success('Manager updated successfully');
+        setAdmins((prevAdmins) =>
+          prevAdmins.map((admin) =>
+            admin._id === editingAdmin._id ? { ...admin, ...formData } : admin
+          )
+        );
+
+        // Reset form data and close modal
+        setFormData({
+          name: '',
+          email: '',
+          mobileNumber: '',
+          type: 'SaleManager',
+        });
+        setEditingAdmin(null);
+        setShowModal(false);
+      } catch (error) {
+        console.error('Failed to update manager:', error);
+        toast.error('Failed to update manager');
       }
-      const data = await response.json();
-      console.log(data);
-        // Add new admin to the UI (this part is only for local display, adjust as needed)
-    const newAdmin = {
-        ...data.newUser
-    };
-    toast.success('New Manager added successfully');
-    setAdmins([...admins, newAdmin]);
-    } catch (error) {
-      console.error('Failed to add new manager:', error);
-      toast.error('Failed to add new manager');
+    } else {
+      // Add new admin
+      try {
+        const response = await fetch('http://localhost:5000/admin/addAdmin', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ ...formData, supperAdminID: currentUser.userID }),
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+          toast.error(data.error || "Failed to add new manager");
+          return;
+        }
+
+        toast.success('New Manager added successfully');
+        const newAdmin = { ...data.newSaleManager };
+        setAdmins([...admins, newAdmin]);
+
+        // Reset form data and close modal
+        setFormData({
+          name: '',
+          email: '',
+          mobileNumber: '',
+          type: 'SaleManager',
+        });
+        setShowModal(false);
+      } catch (error) {
+        console.error('Failed to add new manager:', error);
+        toast.error('Failed to add new manager');
+      }
     }
-      
-    setFormData({ name: '', email: '', mobileNumber: '', type: 'SaleManager' }); // Reset the form
-    setShowModal(false);
   };
 
   // Handle delete action
@@ -98,7 +143,6 @@ const SaleAdmin = () => {
   };
 
   // Fetch Sale Manager from the backend
-
   useEffect(() => {
     const fetchAdmins = async () => {
       try {
@@ -116,6 +160,18 @@ const SaleAdmin = () => {
     };
     fetchAdmins();
   }, [currentUser.mobileNumber]);
+
+  // Open modal for editing
+  const handleEdit = (admin) => {
+    setEditingAdmin(admin);
+    setFormData({
+      name: admin.name,
+      email: admin.email,
+      mobileNumber: admin.mobileNumber,
+      type: admin.type,
+    });
+    setShowModal(true);
+  };
 
   return (
     <div className="admin-page">
@@ -153,35 +209,35 @@ const SaleAdmin = () => {
             </tr>
           </thead>
           <tbody>
-  {filteredAdmins && filteredAdmins.map((admin) => (
-    <tr key={admin._id}> {/* Use _id for the key */}
-      <td>{admin.name}</td>
-      <td>{admin.mobileNumber}</td>
-      <td>{admin.email}</td>
-      <td>{admin.type}</td>
-      <td>
-        <div className="action-buttons">
-          <button className="edit-btn">
-            <Edit size={16} />
-          </button>
-          <button
-            className="delete-btn"
-            onClick={() => handleDelete(admin._id, admin.type)} // Pass _id to handleDelete
-          >
-            <Trash size={16} />
-          </button>
-        </div>
-      </td>
-    </tr>
-  ))}
-</tbody>
+            {filteredAdmins && filteredAdmins.map((admin) => (
+              <tr key={admin._id}>
+                <td>{admin.name}</td>
+                <td>{admin.mobileNumber}</td>
+                <td>{admin.email}</td>
+                <td>{admin.type}</td>
+                <td>
+                  <div className="action-buttons">
+                    <button className="edit-btn" onClick={() => handleEdit(admin)}>
+                      <Edit size={16} />
+                    </button>
+                    <button
+                      className="delete-btn"
+                      onClick={() => handleDelete(admin._id, admin.type)} // Pass _id to handleDelete
+                    >
+                      <Trash size={16} />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
         </table>
       </div>
 
       {showModal && (
         <div className="modal-overlay">
           <div className="modal">
-            <h2>Add Sales Manager</h2>
+            <h2>{editingAdmin ? 'Update Sales Manager' : 'Add Sales Manager'}</h2>
             <form onSubmit={handleSubmit}>
               <div className="form-group">
                 <label>Name</label>
@@ -229,7 +285,7 @@ const SaleAdmin = () => {
                 <button type="button" onClick={() => setShowModal(false)}>
                   Cancel
                 </button>
-                <button type="submit" >Add Sales Manager</button>
+                <button type="submit">{editingAdmin ? 'Update Sales Manager' : 'Add Sales Manager'}</button>
               </div>
             </form>
           </div>

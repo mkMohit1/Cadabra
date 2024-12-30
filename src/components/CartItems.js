@@ -12,16 +12,16 @@ const CartItems = ({currentCart}) => {
 
      const handleQuantityChange = (id, delta) => {
         const updatedCart = currentMode === "rent" ? (cartItem || []) : (sellCartItem || []);
-        const updatedItem = updatedCart.find((item) => item.id === id);
+        const updatedItem = updatedCart.find((item) => item._id === id);
     
         if (updatedItem) {
-            const currentQuantity = currentMode === "rent" ? updatedItem.rentquantity : updatedItem.sellQuantity;
+            const currentQuantity = currentMode === "rent" ? updatedItem.rentQuantity : updatedItem.saleQuantity;
             const updatedQuantity = Math.max(1, currentQuantity + delta);
     
             if (currentMode === "rent") {
-                dispatch(updateCartItem({ ...updatedItem, rentquantity: updatedQuantity }));
+                dispatch(updateCartItem({ ...updatedItem, rentQuantity: updatedQuantity }));
             } else {
-                dispatch(updateSellCartCount({ ...updatedItem, sellQuantity: updatedQuantity }));
+                dispatch(updateSellCartCount({ ...updatedItem, saleQuantity: updatedQuantity }));
             }
         }
     };
@@ -33,7 +33,7 @@ const CartItems = ({currentCart}) => {
     <div className="cart-items">
             {currentCart.map((item) => (
               <CartCard
-                key={item.id}
+                key={item._id}
                 item={item}
                 currentMode={currentMode}
                 handleQuantityChange={handleQuantityChange}

@@ -1,8 +1,8 @@
-// src/pages/ProductPage/components/CreateProduct.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import RichTextEditor from './RichTextEditor';
+import { toast } from 'react-toastify';  // Ensure to import toast for error messages
 
-const CreateProduct = ({ onSubmit, onCancel }) => {
+const CreateProduct = ({ onSubmit, onCancel, product }) => {
   const [formData, setFormData] = useState({
     title: '',
     slug: '',
@@ -13,8 +13,38 @@ const CreateProduct = ({ onSubmit, onCancel }) => {
     discount: ''
   });
 
+  useEffect(() => {
+    if (product) {
+      setFormData({
+        title: product.title,
+        slug: product.slug,
+        description: product.description,
+        category: product.category,
+        status: product.status,
+        mrp: product.mrp,
+        discount: product.discount
+      });
+    }
+  }, [product]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Validation check: Ensure all fields except the image are filled
+    if (
+      !formData.title ||
+      !formData.slug ||
+      !formData.description ||
+      !formData.category ||
+      !formData.status ||
+      !formData.mrp ||
+      !formData.discount
+    ) {
+      toast.error("All fields are required.");
+      return;  // Prevent form submission if validation fails
+    }
+
+    // If all validations are passed, submit the form
     onSubmit(formData);
   };
 
@@ -36,7 +66,7 @@ const CreateProduct = ({ onSubmit, onCancel }) => {
               onChange={handleChange}
             />
           </div>
-          
+
           <div className="form-group">
             <label>Slug</label>
             <input
@@ -53,13 +83,6 @@ const CreateProduct = ({ onSubmit, onCancel }) => {
               value={formData.description}
               onChange={(value) => handleChange({ target: { name: 'description', value } })}
             />
-          </div>
-
-          <div className="media-upload">
-            <label>Media</label>
-            <div className="upload-box">
-              <p>Drop files here or click to upload.</p>
-            </div>
           </div>
 
           <div className="form-group">
@@ -99,12 +122,15 @@ const CreateProduct = ({ onSubmit, onCancel }) => {
               <option value="">Select a category</option>
               <option value="electronics">Electronics</option>
               <option value="security">Security</option>
+              <option value="CCTV">CCTV</option>
             </select>
           </div>
         </div>
 
         <div className="form-actions">
-          <button type="submit" className="btn-primary">Create</button>
+          <button type="submit" className="btn-primary">
+            {product ? 'Update' : 'Create'}
+          </button>
           <button type="button" className="btn-secondary" onClick={onCancel}>
             Cancel
           </button>

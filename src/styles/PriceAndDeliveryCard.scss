@@ -1,0 +1,252 @@
+.price-delivery-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    width: 300px;
+    font-family: Arial, sans-serif;
+    background-color: #fff;
+    .price-section {
+      margin-bottom: 16px;
+  
+      .final-price {
+        font-size: 24px;
+        color: #2e8b57;
+        font-weight: bold;
+        margin: 0;
+        span {
+          font-size: 14px;
+          color: #666;
+        }
+      }
+  
+      .gst {
+        font-size: 14px;
+        color: #888;
+        margin: 4px 0;
+      }
+  
+      .mrp {
+        font-size: 14px;
+        color: #888;
+  
+        span {
+          margin-left: 4px;
+  
+          &:first-child {
+            text-decoration: line-through;
+          }
+  
+          &.discount {
+            color: #d9534f;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  
+    .quantity-section {
+      margin-bottom: 16px;
+      align-items: baseline;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+  
+      p {
+        margin: 0 0 8px 0;
+        font-size: 20px;
+      }
+  
+      .quantity-controls {
+        display: flex;
+        align-items: center;
+  
+        button {
+            width: 45px;
+            height: 45px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            font-size: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+  
+          &:hover {
+            background-color: #eee;
+          }
+        }
+  
+        input {
+          width: 50px;
+          font-size: 34px;
+          text-align: center;
+          border: 1px solid #ddd;
+          margin: 0 8px;
+        }
+      }
+    }
+  
+    .action-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      flex-direction: column;
+  
+      button {
+        flex: 1;
+        padding: 10px 16px;
+        font-size: 25px;
+        margin: 5px 0;
+        width: 100%;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+  
+        &:first-child {
+          margin-right: 8px;
+          background-color: #007bff;
+  
+          &:hover {
+            background-color: #0056b3;
+          }
+        }
+  
+        &:last-child, &:nth-child(2) {
+          background-color: #d9534f;
+  
+          &:hover {
+            background-color: #b52e27;
+          }
+        }
+      }
+    }
+  
+    .delivery-section {
+      p {
+        font-weight: bold;
+        margin-bottom: 8px;
+      }
+  
+      .pincode-input {
+        display: flex;
+        margin-bottom: 8px;
+  
+        input {
+          flex: 1;
+          padding: 8px;
+          border: 1px solid #ddd;
+          border-radius: 4px 0 0 4px;
+        }
+  
+        button {
+          padding: 8px 16px;
+          background-color: #007bff;
+          color: #fff;
+          border: none;
+          border-radius: 0 4px 4px 0;
+          cursor: pointer;
+  
+          &:hover {
+            background-color: #0056b3;
+          }
+        }
+      }
+  
+      .delivery-message {
+        font-size: 14px;
+        color: #d9534f;
+        margin-bottom: 8px;
+      }
+  
+      .delivery-info {
+        list-style: none;
+        padding: 0;
+  
+        li {
+          font-size: 14px;
+          color: #888;
+          margin-bottom: 4px;
+        }
+      }
+    }
+  }
+
+  .delivery-card {
+    width: 300px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    background: linear-gradient(to bottom, #fff, #ffe3e3);
+    font-family: Arial, sans-serif;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+
+    .title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+  
+    .pincode-section {
+      display: flex;
+      margin-bottom: 8px;
+  
+      .pincode-input {
+        flex: 1;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px 0 0 4px;
+        outline: none;
+        font-size: 14px;
+      }
+  
+      .check-button {
+        padding: 8px 16px;
+        background-color: #ff5f5f;
+        color: #fff;
+        border: none;
+        border-radius: 0 4px 4px 0;
+        cursor: pointer;
+        font-size: 14px;
+  
+        &:hover {
+          background-color: #cc4949;
+        }
+      }
+    }
+  
+    .check-note {
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 16px;
+    }
+  
+    .serviceability-info {
+      font-size: 14px;
+      line-height: 1.6;
+  
+      .not-eligible,
+      .shipping,
+      .delivery-time,
+      .prepaid {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+  
+        span {
+          margin-right: 6px;
+        }
+      }
+    }
+  
+    .no-info {
+      font-size: 12px;
+      color: #888;
+      text-align: center;
+      margin-top: 16px;
+    }
+  }
+  
+  

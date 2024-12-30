@@ -11,6 +11,7 @@ import LoginPage from "./Pages/LoginPage";
 import AdminDashboard from "./Pages/AdminDashboard";
 import { useDispatch,useSelector } from "react-redux";
 import { login } from "./redux/authSlice";
+import { SingleProductPage } from "./components/SingleProductPage";
 
 function App() {
   const [blogs, setBlogs] = useState(null);
@@ -75,12 +76,12 @@ function AppRoutes({ blogs, user }) {
     }
   }, [user, location.pathname, navigate]);
 
-  // Handle unauthenticated user visiting the app
-  useEffect(() => {
-    if (!user && location.pathname !== "/login" && location.pathname !== "/admin-login") {
-      navigate("/");
-    }
-  }, [user, location.pathname, navigate]);
+  // // Handle unauthenticated user visiting the app
+  // useEffect(() => {
+  //   if (!user && location.pathname !== "/login" && location.pathname !== "/admin-login") {
+  //     navigate("/");
+  //   }
+  // }, [user, location.pathname, navigate]);
 
   const showNavbarFooter = !["/login", "/admin", "/admin-login"].includes(location.pathname);
 
@@ -90,10 +91,11 @@ function AppRoutes({ blogs, user }) {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/admin-login" element={<LoginPage />} />
+        <Route path="/Rent" element={<RentPage />} />
         <Route path="/" element={<HomePage blogs={blogs} />} />
         <Route path="/blog/:id" element={<BlogPost blogs={blogs} />} />
-        <Route path="/Rent" element={<RentPage />} />
         <Route path="/Cart" element={<ShoppingCart />} />
+        <Route path="/products/:id" element ={<SingleProductPage/>}/>
         <Route
           path="/admin"
           element={

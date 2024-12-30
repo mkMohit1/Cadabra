@@ -18,6 +18,7 @@
     "jquery": "^3.7.1",
     "jquery-ui-dist": "^1.13.3",
     "lucide-react": "^0.469.0",
+    "my-awesome-rich-text-editor": "^1.1.0",
     "react": "^18.3.1",
     "react-calendar": "^5.1.0",
     "react-dom": "^18.3.1",

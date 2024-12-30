@@ -47,7 +47,7 @@ const LoginPage = () => {
       return;
     }
     // Check if the user exists
-    const allUsers = await (await fetch('https://server-lmhc.onrender.com/users')).json();
+    const allUsers = await (await fetch('http://localhost:5000/users')).json();
     console.log(allUsers.length);
     const existingUser = allUsers.length !=undefined && allUsers.find((user) => user.mobileNumber === mobileNumber);
     console.log(existingUser);
@@ -69,7 +69,7 @@ const LoginPage = () => {
     console.log("otp:", otp);
     // Send OTP based on selected method (WhatsApp or Voice)
     try {
-      const response = await axios.post(`https://server-lmhc.onrender.com/send-otp`, {
+      const response = await axios.post(`http://localhost:5000/send-otp`, {
         mobileNumber,
         otp,
         type: loginWith,  // Passing the selected login method
@@ -107,6 +107,7 @@ const LoginPage = () => {
       }
       
     } else {
+      toast.error("Invalid OTP. Please try again.");
       updateFormData({ errorMessage: "Invalid OTP. Please try again.", successMessage: "" });
     }
   };

@@ -27,9 +27,8 @@ const OrderSummary = ({currentCart,currentMode}) => {
     }
 
     return currentCart.reduce((total, item) => {
-      const priceString = currentMode === "rent" ? item.rentprice : item.sellprice;
-      const price = parseFloat(priceString.replace(/[^0-9.]/g, "")) || 0;
-      const quantity = currentMode === "rent" ? item.rentquantity : item.sellQuantity;
+      const price = currentMode === "rent" ? item.mrp : item.mrp;
+      const quantity = currentMode === "rent" ? item.rentQuantity : item.saleQuantity;
       return total + quantity * price;
     }, 0);
   };
@@ -59,16 +58,17 @@ const OrderSummary = ({currentCart,currentMode}) => {
       <div className="order-summary__items">
         {currentCart && currentCart.length > 0 ? (
           currentCart.map((item) => {
-            const priceString = currentMode === "rent" ? item.rentprice : item.sellprice;
-            const price = parseFloat(priceString.replace(/[^0-9.]/g, "")) || 0;
+            console.log(item);
+             
+            const price = currentMode === "rent" ? item.mrp : item.mrp;
             const isOpen = openMoreMap[item.id] || false; // Check if this item's "more info" is open
-            const quantity = currentMode === "rent" ? item.rentquantity : item.sellQuantity;
+            const quantity = currentMode === "rent" ? item.rentQuantity : item.saleQuantity;
             console.log(price);
             return (
               <div className="order-summary__items__item" key={item.id}>
                 <div className="order-summary__item__details">
-                  <span className="item-label">{item.name}</span>
-                  <span className="item-quantity">{quantity}x</span>
+                  <span className="item-label">{item.title}</span>
+                  <span className="item-quantity">{1}x</span>
                   <span className="item-value">${(quantity * price).toFixed(2)}</span>
                   <div
                     className="more-item"

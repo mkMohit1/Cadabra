@@ -11,7 +11,7 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const cartCount = useSelector((state) => state.cart?.totalCartCount || 0);  // Use optional chaining
 
-  // Initialize useNavigate hook
+  // Initialize useNavigate hook for the login button
   const navigate = useNavigate();
 
   // Function to toggle menu
@@ -21,7 +21,7 @@ const Navbar = () => {
 
   // Function to handle log in button click
   const handleLoginClick = () => {
-    navigate("/login"); // Correct navigation method
+    navigate("/login"); // Correct navigation method for login
   };
 
   return (

@@ -20,7 +20,7 @@ const cartSlice = createSlice({
     },
     updateCartItem: (state, action) => {
       const updatedItem = action.payload;
-      const existingItemIndex = state.cartItem.findIndex(item => item.id === updatedItem.id);
+      const existingItemIndex = state.cartItem.findIndex(item => item._id === updatedItem._id);
 
       if (existingItemIndex !== -1) {
         // Update quantity if item already exists
@@ -36,7 +36,7 @@ const cartSlice = createSlice({
     },
     updateSellCartCount: (state, action) => {
       const updatedItem = action.payload;
-      const existingItemIndex = state.sellCartItem.findIndex(item => item.id === updatedItem.id);
+      const existingItemIndex = state.sellCartItem.findIndex(item => item._id === updatedItem._id);
 
       if (existingItemIndex !== -1) {
         // Update quantity if item already exists
@@ -47,8 +47,8 @@ const cartSlice = createSlice({
       }
     },
     removeCartItem: (state, action) => {
-      const currentID = action.payload.id;
-      state.cartItem = state.cartItem.filter(item => item.id !== currentID);
+      const currentID = action.payload._id;
+      state.cartItem = state.cartItem.filter(item => item._id !== currentID);
       state.totalCartCount -= 1;
     },
     removeSellCartItem: (state, action) => {

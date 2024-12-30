@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "../styles/RentPage.scss";
 import { rentImage, normalImages } from "../ImagePath";
 import ProductCard from '../components/ProductCard';
 import FilterProduct from "../components/FilterProduct";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from 'react-toastify';
+import { fetchProducts } from "../redux/rentProductSlice";
 
 export default function RentPage() {
+  const dispatch = useDispatch();
   const products = useSelector((state) => state.product.rentProduct);
   const cartItem = useSelector((state) => state.cart.cartItem);
   const locationNames = useSelector((state) => state.product.indiaStatesAndUTs);
@@ -39,10 +41,15 @@ export default function RentPage() {
 
   const renderProductCards = (products) => {
     return products.map((product) => {
-      const isInCart = cartItem.some((item) => item.id === product.id);
+      const isInCart = cartItem.some((item) => item._id === product._id);
+      console.log(cartItem);
       return <ProductCard key={product.id} product={product} isInCart={isInCart} />;
     });
   };
+
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, [dispatch]);
 
   return (
     <div className="rentPage">
@@ -164,7 +171,6 @@ export default function RentPage() {
           </div>
         </div>
       )}
-      <ToastContainer />
     </div>
   );
 }

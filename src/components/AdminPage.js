@@ -1,4 +1,4 @@
-import React, {  useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Edit, Trash } from 'lucide-react';
 import '../styles/AdminPage.scss';
 import { useSelector } from 'react-redux';
@@ -6,6 +6,9 @@ import { toast } from 'react-toastify';
 
 const AdminPage = () => {
   const [showModal, setShowModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showUpdateSaleAdminModal, setShowUpdateSaleAdminModal] = useState(false);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
   const currentUser = useSelector((state) => state.auth.user);
   const [searchTerm, setSearchTerm] = useState('');
   const [admins, setAdmins] = useState([]);
@@ -15,34 +18,42 @@ const AdminPage = () => {
     mobileNumber: '',
     type: ''
   });
+  const [saleAdminToDelete, setSaleAdminToDelete] = useState(null);
+  const [updatedSaleAdminId, setUpdatedSaleAdminId] = useState('');
+  const [otherAdmins, setOtherAdmins] = useState(null);
+  const [selectedAdmin, setSelectedAdmin] = useState(null);
+  const [updateFormData, setUpdateFormData] = useState({
+    name: '',
+    email: '',
+    mobileNumber: '',
+    type: ''
+  });
+  useEffect(() => {
+    fetchAdmins();
+  }, [currentUser]);
 
-   useEffect(() => {
-      const fetchAdmins = async () => {
-        try {
-          const response = await fetch(`https://server-lmhc.onrender.com/admin/getAdmins/${currentUser.mobileNumber}`);
-          if (!response.ok) {
-            toast.error('Failed to fetch managers');
-            return;
-          }
-          const data = await response.json();
-          //console.log('Admins:', data);
-          setAdmins(data);
-        } catch (error) {
-          console.error('Failed to fetch managers:', error);
-          toast.error('Failed to fetch managers');
-        }
-      };
-      fetchAdmins();
-    },[]);
-
+  const fetchAdmins = async () => {
+    try {
+      const response = await fetch(`http://localhost:5000/admin/getAdmins/${currentUser.mobileNumber}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch managers');
+      }
+      const data = await response.json();
+      setAdmins(data);
+    } catch (error) {
+      console.error('Failed to fetch managers:', error);
+      toast.error('Failed to fetch managers');
+    }
+  };
+console.log(admins);
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
 
-  const filteredAdmins = admins.filter(admin => 
+  const filteredAdmins = admins.filter(admin =>
     admin.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     admin.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    admin.phone.includes(searchTerm) ||
+    admin.mobileNumber.includes(searchTerm) ||
     admin.type.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -57,34 +68,187 @@ const AdminPage = () => {
     });
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+  
     const newAdmin = {
-      id: admins.length + 1,
-      ...formData
+      ...formData,
+      supperAdminID: currentUser.userID // Ensure to pass this correctly
     };
-    console.log(formData);
-    const response = await fetch('https://server-lmhc.onrender.com/admin/addAdmin',{
+  
+    try {
+      const response = await fetch('http://localhost:5000/admin/addAdmin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newAdmin),
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        toast.error(`Failed to add new admin: ${errorData.error || 'Unknown error'}`);
+        return;
+      }
+  
+      const data = await response.json();
+      toast.success('New admin added successfully');
+      setAdmins([...admins, data.newUser]); // Use the newUser from the response
+      setFormData({ name: '', email: '', mobileNumber: '', type: '' });
+      setShowModal(false);
+  
+    } catch (error) {
+      toast.error('Error adding admin');
+      console.error('Error in handleSubmit:', error);
+    }
+  };
+  
+
+const handleDelete = async (id, type) => {
+  console.log("mnk",id);
+    const response = await fetch(`http://localhost:5000/admin/deleteAdmin/${type}/${id}`, {
+        method: 'DELETE',
+    });
+
+    if (response.ok) {
+        setAdmins(admins.filter(admin => admin._id !== id));
+        toast.success('Admin deleted successfully');
+    } else {
+        toast.error('Error while deleting the admin');
+    }
+};
+
+
+const confirmDeleteAdmin = async (admin) => {
+  setSaleAdminToDelete(admin);
+  const getDefaultAdmin = admins.find(item => 
+    (admin.type === 'SaleAdmin' && item.name === 'Default Sale Admin') ||
+    (admin.type === 'ProductAdmin' && item.name === 'Default Product Admin')
+);
+  console.log(getDefaultAdmin._id);
+  if (admin.type === 'SaleAdmin') {
+    const response = await fetch(`http://localhost:5000/admin/checkSaleManagers/${admin._id}`);
+    const data = await response.json();
+    
+    if (data.saleManagers.length > 0) {
+      if (data.saleAdmins.length > 0) {
+        setOtherAdmins([...data.saleAdmins]);
+        setUpdatedSaleAdminId(getDefaultAdmin._id); // set Default Sale Admin ID
+      } else {
+        toast.info('Please add another sales admin before deleting');
+        setShowDeleteModal(false);
+        return;
+      }
+    } else {
+      handleDelete(admin._id, admin.type); // Delete immediately if no managers
+    }
+  }
+
+  if (admin.type === 'ProductAdmin') {
+    const response = await fetch(`http://localhost:5000/admin/checkProduct/${admin._id}`);
+    const data = await response.json();
+    
+    if (data.product.length > 0) {
+      if (data.otherProductAdmin.length > 0) {
+        setOtherAdmins([...data.otherProductAdmin]);
+        setUpdatedSaleAdminId(getDefaultAdmin._id); // set Default Product Admin ID
+      } else {
+        toast.info('Please add another product admin before deleting');
+        setShowDeleteModal(false);
+        return;
+      }
+    } else {
+      handleDelete(admin._id, admin.type); // Delete immediately if no products
+    }
+  }
+  setShowDeleteModal(false);
+};
+
+
+  const handleUpdateSaleAdmin = async () => {
+    if (!updatedSaleAdminId) {
+      toast.error('Please select a Sale Admin');
+      return;
+    }
+    const response = await fetch(`http://localhost:5000/admin/updateSaleAdmin`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({...formData, supperAdminID:currentUser.userID })
+      body: JSON.stringify({
+        [saleAdminToDelete.type === 'SaleAdmin' ? 'saleAdminId' : 'productAdminId']: saleAdminToDelete._id,
+        [saleAdminToDelete.type === 'SaleAdmin' ? 'newSaleAdminId' : 'newProductAdminId']:updatedSaleAdminId,
+        type: saleAdminToDelete.type
+      })
     });
-    if(!response.ok) {
-      toast.error('Failed to add new admin');
-      return;
+
+    if (response.ok) {
+      handleDelete(saleAdminToDelete._id, saleAdminToDelete.type);
+    } else {
+      toast.error('Error updating Sale Admin');
     }
-      toast.success('New admin added successfully');
-    setAdmins([...admins, newAdmin]);
-    setFormData({ name: '', email: '', mobileNumber: '', type: '' });
-    setShowModal(false);
+    setShowUpdateSaleAdminModal(false);
   };
 
-  const handleDelete = (id) => {
-    setAdmins(admins.filter(admin => admin.id !== id));
+  const handleUpdateClick = (admin) => {
+    setSelectedAdmin(admin);
+    setUpdateFormData({
+      name: admin.name,
+      email: admin.email,
+      mobileNumber: admin.mobileNumber,
+      type: admin.type
+    });
+    setShowUpdateModal(true);
   };
 
+  const handleUpdateInputChange = (e) => {
+    setUpdateFormData({
+      ...updateFormData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleUpdateSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(`http://localhost:5000/admin/updateAdmin/${selectedAdmin._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          ...updateFormData,
+          supperAdminID: currentUser.userID
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update admin');
+      }
+
+      const updatedAdmin = await response.json();
+      setAdmins(admins.map(admin =>
+        admin._id === selectedAdmin._id ? updatedAdmin : admin
+      ));
+      
+      toast.success('Admin updated successfully');
+      setShowUpdateModal(false);
+    } catch (error) {
+      console.error('Error updating admin:', error);
+      toast.error('Failed to update admin');
+    }
+  };
+
+  const handleDeleteClick = (admin) => {
+    setSaleAdminToDelete(admin);
+    setShowDeleteModal(true);
+  };
+
+  useEffect(() => {
+    if (updatedSaleAdminId) {
+      handleUpdateSaleAdmin();
+    }
+  }, [updatedSaleAdminId]);
   return (
     <div className="admin-page">
       <div className="admin-header">
@@ -122,23 +286,25 @@ const AdminPage = () => {
           </thead>
           <tbody>
             {filteredAdmins.map(admin => (
-              <tr key={admin.id}>
+              <tr key={admin._id}>
                 <td>{admin.name}</td>
                 <td>{admin.mobileNumber}</td>
                 <td>{admin.email}</td>
                 <td>{admin.type}</td>
                 <td>
-                  <div className="action-buttons">
-                    <button className="edit-btn">
+                  {admin.name ==='Default Product Admin' || admin.name ==='Default Sale Admin'?null
+                  :<div className="action-buttons">
+                    <button className="edit-btn" onClick={() => handleUpdateClick(admin)}>
                       <Edit size={16} />
                     </button>
-                    <button 
+                    <button
                       className="delete-btn"
-                      onClick={() => handleDelete(admin.id)}
+                      onClick={() => handleDeleteClick(admin)}
                     >
                       <Trash size={16} />
                     </button>
                   </div>
+                  }
                 </td>
               </tr>
             ))}
@@ -190,20 +356,111 @@ const AdminPage = () => {
                   required
                 >
                   <option value="">Select Type</option>
-                  <option value="SaleAdmin">Sales Admin</option>
+                  <option value="ProductAdmin">Product Admin</option>
+                  <option value="SaleAdmin">Sale Admin</option>
+                </select>
+              </div>
+              <div className="btn-NewAdmin">
+              <button type="submit">Save Admin</button>
+              <button onClick={() => setShowModal(false)}>Close</button>
+              </div>              
+            </form>
+          </div>
+        </div>
+      )}
+
+      {showUpdateModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h2>Update Admin</h2>
+            <form onSubmit={handleUpdateSubmit}>
+              <div className="form-group">
+                <label>Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={updateFormData.name}
+                  onChange={handleUpdateInputChange}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={updateFormData.email}
+                  onChange={handleUpdateInputChange}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Phone Number</label>
+                <input
+                  type="tel"
+                  name="mobileNumber"
+                  value={updateFormData.mobileNumber}
+                  onChange={handleUpdateInputChange}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Admin Type</label>
+                <select
+                  name="type"
+                  defaultValue={updateFormData.type}
+                  disabled 
+                >
+                  <option value="">Select Type</option>
+                  <option value="SaleAdmin">Sale Admin</option>
                   <option value="ProductAdmin">Product Admin</option>
                 </select>
               </div>
-              <div className="modal-actions">
-                <button type="button" onClick={() => setShowModal(false)}>
-                  Cancel
-                </button>
-                <button type="submit">Add Admin</button>
+              <div className="btn-UpdateAdmin">
+                <button type="submit">Update Admin</button>
+                <button onClick={() => setShowUpdateModal(false)}>Close</button>
               </div>
             </form>
           </div>
         </div>
       )}
+
+      {showDeleteModal && (
+        <div className="modal-overlay">
+          <div className="modal modal-delete">
+            <h2>Are you sure you want to delete this admin?</h2>
+            <div className="btn-delete">
+              <button onClick={() => confirmDeleteAdmin(saleAdminToDelete)}>Yes</button>
+              <button onClick={() => setShowDeleteModal(false)}>No</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* {showUpdateSaleAdminModal && (
+        <div className="modal-overlay">
+          <div className="modal UpdateAdmin-modal">
+            <h2>Update {saleAdminToDelete.type}</h2>
+            <select
+                  name="type"
+                  value={updatedSaleAdminId}
+                  onChange={(e) => setUpdatedSaleAdminId(e.target.value)}
+                  required
+                >
+                  <option value="">Select Type</option>
+                  {otherAdmins.map((admin)=>{
+                    return(
+                      <option key={`admin-${admin._id}`} value={admin._id}>{admin.name}</option>
+                    )
+                  })}
+                </select>
+                <div className="btn-update">
+                <button onClick={handleUpdateSaleAdmin}>Update</button>
+                <button onClick={() => setShowUpdateSaleAdminModal(false)}>Cancel</button>
+                </div>
+          </div>
+        </div>
+      )} */}
     </div>
   );
 };

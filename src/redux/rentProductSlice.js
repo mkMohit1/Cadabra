@@ -1,71 +1,64 @@
-import { createSlice } from "@reduxjs/toolkit";
-import serviceImg from "../ImagePath";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 
-const initialState ={
-    rentProduct:[
-        { id: 1, rentquantity: 1, sellQuantity:1, name: "White Shirt", rentprice: "$24.45", sellprice: '$60.80', days: "5 days", image: serviceImg[0] },
-        { id: 2, rentquantity: 1, sellQuantity:1, name: "Channel", rentprice: "$24.45", sellprice: '$60.80', days: "5 days", image: serviceImg[1] },
-        { id: 3, rentquantity: 1, sellQuantity:1, name: "Running Sneaker", rentprice: "$24.45", sellprice: '$60.80', days: "5 days", image: serviceImg[2] },
-        { id: 4, rentquantity: 1, sellQuantity:1, name: "Red Shirt", rentprice: "$24.45", sellprice: '$60.80', days: "5 days", image: serviceImg[0] },
-        { id: 5, rentquantity: 1, sellQuantity:1, name: "Gold Watch", rentprice: "$24.45", sellprice: '$60.80', days: "5 days", image: serviceImg[1] },
-        { id: 6, rentquantity: 1, sellQuantity:1, name: "Green Blazers", rentprice: "$24.45", sellprice: '$60.80', days: "5 days", image: serviceImg[2] },
-        { id: 7, rentquantity: 1, sellQuantity:1, name: "Shorts", rentprice: "$24.45", sellprice: '$60.80', days: "5 days", image: serviceImg[0] },
-        { id: 8, rentquantity: 1, sellQuantity:1, name: "Red Shirt", rentprice: "$24.45", sellprice: '$60.80', days: "5 days", image: serviceImg[1] },
-        { id: 9, rentquantity: 1, sellQuantity:1, name: "Gold Watch", rentprice: "$24.45", sellprice: '$60.80', days: "5 days", image: serviceImg[2] },
-        { id: 10, rentquantity: 1, sellQuantity:1, name: "Green Blazers", rentprice: "$24.45", sellprice: '$60.80', days: "5 days", image: serviceImg[0] },
-        { id: 11, rentquantity: 1, sellQuantity:1, name: "Shorts", rentprice: "$24.45", sellprice: '$60.80', days: "5 days", image: serviceImg[2] },
-      ],
-      indiaStatesAndUTs: [
-        "Andhra Pradesh",
-        "Arunachal Pradesh",
-        "Assam",
-        "Bihar",
-        "Chhattisgarh",
-        "Goa",
-        "Gujarat",
-        "Haryana",
-        "Himachal Pradesh",
-        "Jharkhand",
-        "Karnataka",
-        "Kerala",
-        "Madhya Pradesh",
-        "Maharashtra",
-        "Manipur",
-        "Meghalaya",
-        "Mizoram",
-        "Nagaland",
-        "Odisha",
-        "Punjab",
-        "Rajasthan",
-        "Sikkim",
-        "Tamil Nadu",
-        "Telangana",
-        "Tripura",
-        "Uttar Pradesh",
-        "Uttarakhand",
-        "West Bengal",
-        "Jammu and Kashmir",
-        "Ladakh",
-        "Andaman and Nicobar Islands",
-        "Chandigarh",
-        "Dadra and Nagar Haveli and Daman and Diu",
-        "Lakshadweep",
-        "Delhi",
-        "Puducherry"
-      ],
-      serviceProvideIn:['Delhi']
+// Initial state
+const initialState = {
+  rentProduct: [],
+  indiaStatesAndUTs: [
+    "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", 
+    "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", 
+    "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", 
+    "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", 
+    "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal", "Jammu and Kashmir", 
+    "Ladakh", "Andaman and Nicobar Islands", "Chandigarh", "Dadra and Nagar Haveli and Daman and Diu", 
+    "Lakshadweep", "Delhi", "Puducherry"
+  ],
+  serviceProvideIn: ['Delhi'],
+  loading: false,
+  error: null
 };
 
-  const productSlice = createSlice({
-    name: 'rentProduct',
-    initialState,
-    reducers:{
-        currentRentProduct: (state, action)=>{
-            state.rentProduct = action.payload;
-        }, 
+// Async thunk to fetch products
+export const fetchProducts = createAsyncThunk("product/fetchProduct", async () => {
+  try {
+    const response = await fetch("http://localhost:5000/products/allproducts");
+    if (!response.ok) {
+      throw new Error("Error fetching products");
     }
-  });
+    const data = await response.json(); // Parse the JSON response
+    return data.products; // Return the products from the response
+  } catch (error) {
+    toast.error("Error while fetching the product");
+    throw error; // Rethrow the error so it can be caught in the extraReducers
+  }
+});
 
-  export const {currentRentProduct} = productSlice.actions;
+// Product slice
+const productSlice = createSlice({
+  name: 'rentProduct',
+  initialState,
+  reducers: {
+    currentRentProduct: (state, action) => {
+      state.rentProduct = action.payload;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchProducts.pending, (state) => {
+        state.loading = true; // Set loading to true when the request is pending
+        state.error = null; // Clear any previous errors
+      })
+      .addCase(fetchProducts.fulfilled, (state, action) => {
+        state.loading = false; // Set loading to false when the request is successful
+        state.rentProduct = action.payload; // Set the fetched products to state
+      })
+      .addCase(fetchProducts.rejected, (state, action) => {
+        state.loading = false; // Set loading to false when the request fails
+        state.error = action.error.message; // Set the error message in state
+      });
+  },
+});
 
-  export default productSlice.reducer;
+export const { currentRentProduct } = productSlice.actions;
+
+export default productSlice.reducer;

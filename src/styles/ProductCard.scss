@@ -14,8 +14,9 @@
   
     .product-image {
       width: 100%;
-      height: auto;
+      height: 200px;
       object-fit: contain;
+      cursor: pointer;
     }
   
     .product-name {
@@ -23,6 +24,7 @@
       font-size: 1.2rem;
       color: #333;
       font-weight: bold;
+      cursor: pointer;
     }
   
     .product-price {
@@ -64,5 +66,21 @@
       font-size: 1.2rem;
       z-index: 5;
     }
+  }
+  
+
+  .see-more-btn {
+    background-color: transparent;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+  
+  .see-more-btn:hover {
+    text-decoration: none;
   }
   

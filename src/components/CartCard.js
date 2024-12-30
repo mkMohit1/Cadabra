@@ -14,22 +14,22 @@ const CartCard = ({ item, handleQuantityChange, currentMode }) => {
   };
 
   // Ensure price is displayed with a currency symbol, for example ₹ or $.
-  const price = currentMode === 'rent' ? item.rentprice : item.sellprice;
-  const quantity = currentMode === "rent" ? item.rentquantity : item.sellQuantity;
+  const price = currentMode === 'rent' ? item.mrp : item.mrp;
+  const quantity = currentMode === "rent" ? item.rentQuantity : item.saleQuantity;
   return (
     <div className="cart-item">
       <div className="cart-item-content">
         <div className="item-details">
-          <img src={item.image} alt={item.name} className="item-image" />
+          <img src={item.productImage} alt={item.title} className="item-image" />
           <div>
-            <h4>{item.name}</h4>
+            <h4>{item.title}</h4>
             <p>{item.description}</p>
           </div>
         </div>
         <div className="quantity-controls">
-          <button onClick={() => handleQuantityChange(item.id, -1)}>◄</button>
+          <button onClick={() => handleQuantityChange(item._id, -1)}>◄</button>
           <span>{quantity}</span>
-          <button onClick={() => handleQuantityChange(item.id, 1)}>►</button>
+          <button onClick={() => handleQuantityChange(item._id, 1)}>►</button>
         </div>
         <div className="item-actions">
           <span className="price">{price}</span>
@@ -47,7 +47,7 @@ const CartCard = ({ item, handleQuantityChange, currentMode }) => {
             className="more-item"
             onClick={toggleMore}
             aria-expanded={openMore}
-            aria-controls={`more-content-${item.id}`}
+            aria-controls={`more-content-${item._id}`}
           >
             <span className="icon">
               {openMore ? <FontAwesomeIcon icon={faXmark} /> : <FontAwesomeIcon icon={faPlus} />}
@@ -56,7 +56,7 @@ const CartCard = ({ item, handleQuantityChange, currentMode }) => {
         </div>
       </div>
       {openMore && (
-        <div id={`more-content-${item.id}`} className="more-content">
+        <div id={`more-content-${item._id}`} className="more-content">
           {/* Placeholder for additional content */}
           <span>Additional Information</span>
         </div>

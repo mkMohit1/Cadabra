@@ -1,4 +1,3 @@
-// src/pages/ProductPage/ProductPage.jsx
 import React, { useEffect, useState } from 'react';
 import ProductList from '../components/ProductList';
 import CreateProduct from '../components/CreateProduct';
@@ -10,50 +9,9 @@ const ProductPage = () => {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const currentUser = useSelector((state) => state.auth.user);
   const [products, setProducts] = useState([]);
-  const [productToEdit, setProductToEdit] = useState(null); // For handling the edit mode 
-  
-  const handleNewProduct = () => {
-    setProductToEdit(null); // Reset product to edit
-    setShowCreateForm(true);
-  };
+  const [productToEdit, setProductToEdit] = useState(null);
 
-  const handleEditProduct = (product) => {
-    setProductToEdit(product); // Set the product to be edited
-    setShowCreateForm(true);
-  };
-
-  const handleCreateOrUpdateProduct = async (productData) => {
-    let response;
-    if (productToEdit) {
-      // Update existing product
-      response = await fetch(`http://localhost:5000/admin/updateProduct/${productToEdit.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ ...productData, userID: currentUser.userID })
-      });
-      toast.success('Product updated successfully');
-    } else {
-      // Create new product
-      response = await fetch('http://localhost:5000/admin/addProduct', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ ...productData, userID: currentUser.userID })
-      });
-      toast.success('Product added successfully');
-    }
-
-    if (response.ok) {
-      setShowCreateForm(false);
-      fetchProducts(); // Refresh products list
-    } else {
-      toast.error('Failed to save product');
-    }
-  };
-
+  // Fetch products when user ID is available
   const fetchProducts = async () => {
     const response = await fetch(`http://localhost:5000/admin/getProducts/${currentUser.userID}`);
     const data = await response.json();
@@ -66,13 +24,29 @@ const ProductPage = () => {
     }
   }, [currentUser?.userID]);
 
+  const handleProductEdit=(product)=>{
+    setProductToEdit(product);
+    console.log("mksdfs",product);
+    setShowCreateForm(true);
+  }
 
   return (
     <div className="product-page">
       {!showCreateForm ? (
-        <ProductList products={products} onNewProduct={handleNewProduct}  onEditProduct={handleEditProduct}/>
+        <ProductList 
+          products={products} 
+          onNewProduct={() => { setProductToEdit(null); setShowCreateForm(true); }} 
+          onEditProduct={handleProductEdit} 
+          fetchProducts={fetchProducts}
+        />
       ) : (
-        <CreateProduct onSubmit={handleCreateOrUpdateProduct} onCancel={() => setShowCreateForm(false)}  product={productToEdit} />
+        <CreateProduct 
+          onCancel={() => setShowCreateForm(false)} 
+          product={productToEdit} 
+          setShowCreateForm={setShowCreateForm} 
+          fetchProducts={fetchProducts} 
+          userID={currentUser.userID} 
+        />
       )}
     </div>
   );

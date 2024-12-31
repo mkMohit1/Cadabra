@@ -361,8 +361,8 @@ const confirmDeleteAdmin = async (admin) => {
                 </select>
               </div>
               <div className="btn-NewAdmin">
-              <button type="submit">Save Admin</button>
-              <button onClick={() => setShowModal(false)}>Close</button>
+              <button type="submit" className='add-admin-btn'>Save Admin</button>
+              <button onClick={() => setShowModal(false)} className='add-admin-btn'>Close</button>
               </div>              
             </form>
           </div>
@@ -417,8 +417,8 @@ const confirmDeleteAdmin = async (admin) => {
                 </select>
               </div>
               <div className="btn-UpdateAdmin">
-                <button type="submit">Update Admin</button>
-                <button onClick={() => setShowUpdateModal(false)}>Close</button>
+                <button type="submit" className='add-admin-btn'>Update Admin</button>
+                <button onClick={() => setShowUpdateModal(false)} className='add-admin-btn'>Close</button>
               </div>
             </form>
           </div>
@@ -430,8 +430,8 @@ const confirmDeleteAdmin = async (admin) => {
           <div className="modal modal-delete">
             <h2>Are you sure you want to delete this admin?</h2>
             <div className="btn-delete">
-              <button onClick={() => confirmDeleteAdmin(saleAdminToDelete)}>Yes</button>
-              <button onClick={() => setShowDeleteModal(false)}>No</button>
+              <button onClick={() => confirmDeleteAdmin(saleAdminToDelete)} className='add-admin-btn'>Yes</button>
+              <button onClick={() => setShowDeleteModal(false)} className='add-admin-btn'>No</button>
             </div>
           </div>
         </div>

@@ -59,7 +59,7 @@ const SaleAdmin = () => {
           body: JSON.stringify(formData),
         });
         const data = await response.json();
-
+        console.log(data);
         if (!response.ok) {
           toast.error(data.error || "Failed to update manager");
           return;

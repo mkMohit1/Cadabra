@@ -1,21 +1,24 @@
-// src/pages/ProductPage/components/ProductList.jsx
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-const ProductList = ({products, onNewProduct, onEditProduct }) => {
-  //console.log(products);
+const ProductList = ({ products, fetchProducts, onNewProduct, onEditProduct }) => {
 
-  const handleDeleteProduct = async() => {
-    const response = await fetch('http://localhost:5000/admin/deleteProduct', {
+  const handleDeleteProduct = async (productId) => {
+    const response = await fetch(`http://localhost:5000/admin/deleteProduct/${productId}`, {
       method: 'DELETE',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({products})
     });
-    const data = await response.json();
-    console.log(data);
+
+    if (response.ok) {
+      toast.success('Product deleted successfully');
+      //Optionally, you can refetch the products list after deletion
+      fetchProducts();
+    } else {
+      toast.error('Failed to delete product');
+    }
   };
 
   return (
@@ -43,22 +46,22 @@ const ProductList = ({products, onNewProduct, onEditProduct }) => {
           </tr>
         </thead>
         <tbody>
-          {products.map((product,index) => (
+          {products.map((product, index) => (
             <tr key={product.id}>
-              <td>{index+1}</td>
+              <td>{index + 1}</td>
               <td className="product-cell">
-                <img src={product.productImage} alt={product.title} />
+                <img src={`http://localhost:5000${product.productImage}`} alt={product.title} />
                 <span>{product.title}</span>
               </td>
               <td>{product.mrp}₹</td>
               <td>{product.discount}%</td>
-              <td>{ (product.mrp - (product.mrp * (product.discount / 100))).toFixed(2)} ₹</td>
+              <td>{(product.mrp - (product.mrp * (product.discount / 100))).toFixed(2)} ₹</td>
               <td>
-                <span className="status-badge">{product.stauts}</span>
+                <span className="status-badge">{product.status}</span>
               </td>
               <td className="action-cell">
                 <button className="btn-icon edit" onClick={() => onEditProduct(product)}>✏️</button>
-                <button className="btn-icon delete" onClick={handleDeleteProduct}>🗑️</button>
+                <button className="btn-icon delete" onClick={() => handleDeleteProduct(product._id)}>🗑️</button>
               </td>
             </tr>
           ))}

@@ -2,19 +2,22 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-family: "Inter", "sans-serif";
+  font-family: "Inter", sans-serif;
   padding: 0.2rem 2rem 0;
   color: #0a2640;
+  position: relative;  // For positioning the mobile menu
 
   .logo {
     font-size: 1.5rem;
     font-weight: bold;
+    color: #0a2640;
   }
 
   .nav-links {
     display: flex;
     gap: 1.5rem;
     align-items: center;
+
     ul {
       display: flex;
       gap: 1.5rem;
@@ -26,68 +29,63 @@
       a {
         text-decoration: none;
         color: #0a2640;
+        display: flex;
+        align-items: center;
+        height: 30px;
+        border-radius: 15px;
+        padding: 5px 10px;
+        position: relative;
+
         &.active {
           font-weight: bold;
           color: white;
-          font-size: 18px;
           background-color: #007bff;
-          padding: 5px 3px;
-          width: 100px;
-          display: flex;
-          height: 30px;
-          border-radius: 15px;
-          flex-direction: row;
-          align-items: center;
-          justify-content: center;
-          .totalCounter{
-            top: -15px;
-            right: 15px;
-            width: 30px;
-            height: 30px;
-          }
+          padding: 5px 10px;
         }
+
         &:hover {
-          color: #0a2640;
+          color: #007bff;
         }
       }
+
       cursor: pointer;
-      transition: color 0.3s;
-    }
-    li:nth-child(3){
-      a{
+      transition: color 0.3s ease;
+
+      &.cart {
         position: relative;
-      }
-      .totalCounter{
-        position: absolute;
-        width: 20px;
-        height: 20px;
-        background-color: orangered;
-        border-radius: 50%;
-        color: white;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        top: -17px;
-        right: -15px;
+
+        .totalCounter {
+          position: absolute;
+          top: -17px;
+          right: -15px;
+          width: 20px;
+          height: 20px;
+          background-color: orangered;
+          border-radius: 50%;
+          color: white;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 12px;
+        }
       }
     }
   }
-  
 
   .login-btn {
     padding: 5px 10px;
     border: 1px solid #0a2640;
     background: transparent;
     border-radius: 15px;
-    font-family: "Inter", "sans-serif";
+    font-family: "Inter", sans-serif;
     height: 40px;
     width: 100px;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
 
     &:hover {
       background-color: #0a2640;
-      color: #fff;
+      color: white;
     }
   }
 
@@ -96,27 +94,76 @@
     font-size: 1.5rem;
     cursor: pointer;
   }
+
+  .user-info {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    .avatar-img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    .username {
+      color: #0a2640;
+      font-weight: bold;
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 45px;
+      right: 0;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 200px;
+
+      .dropdown-item {
+        padding: 5px 0;
+      }
+
+      .logout-btn {
+        padding: 8px 15px;
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+
+        &:hover {
+          background-color: #c82333;
+        }
+      }
+    }
+  }
 }
 
 @media (max-width: 768px) {
+  .navbar {
+    padding: 0.5rem 1rem;
+  }
+
   .nav-links {
-        position: absolute;
-        display: flex !important;
-        flex-direction: column;
-        top: 40px;
-        right: 10px;
-        width: 45%;
-        background-color: white;
-        z-index: 1000;
-        text-align: center;
-        padding: 20px 0;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 80%;
+    background-color: white;
+    z-index: 1000;
+    text-align: center;
+    padding: 20px 0;
+    display: none;  // Hide by default
+    flex-direction: column;
+    gap: 10px;
   }
 
   .nav-links.open {
-    display: none; /* Show the menu when it's open */
-  }
-  .nav-links.close {
-    display: block; /* Show the menu when it's open */
+    display: flex;  // Show when menu is open
   }
 
   .nav-links ul {
@@ -126,13 +173,16 @@
   }
 
   .nav-links li {
-    border-bottom: 1px solid lightgray;
-    padding-bottom: 8px;
+    border-bottom: 1px solid #ddd;
+    padding: 8px 0;
     width: 100%;
-    margin: 10px 0;
   }
 
   .hamburger {
-    display: block !important; /* Show the hamburger icon on mobile */
+    display: block;  // Show hamburger on small screens
+  }
+
+  .hamburger svg {
+    color: #0a2640;
   }
 }

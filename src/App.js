@@ -56,6 +56,11 @@ function AppRoutes({ blogs, user }) {
 
   // Redirect user to admin dashboard or login page based on admin status
   useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const userparam = urlParams.get("user");
+    // if(userparam){
+    //   localStorage.setItem("loggedInUser",JSON.stringify({userID: formData.userID, isAdmin: existingUser.type}))
+    // }
     if (isAdminPage) {
       if (!user) {
         navigate("/admin-login");
@@ -76,12 +81,6 @@ function AppRoutes({ blogs, user }) {
     }
   }, [user, location.pathname, navigate]);
 
-  // // Handle unauthenticated user visiting the app
-  // useEffect(() => {
-  //   if (!user && location.pathname !== "/login" && location.pathname !== "/admin-login") {
-  //     navigate("/");
-  //   }
-  // }, [user, location.pathname, navigate]);
 
   const showNavbarFooter = !["/login", "/admin", "/admin-login"].includes(location.pathname);
 

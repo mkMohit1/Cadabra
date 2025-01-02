@@ -3,13 +3,13 @@ import '../styles/ServicesSection.scss';
 import serviceImg from '../ImagePath';
 
 const services = [
-  {
-    title: 'CCTV Surveillance',
+    {
+    title: 'Alarm Systems',
     subText: 'For Homes & Businesses',
     description: 'Explore page',
   },
   {
-    title: 'Alarm Systems',
+    title: 'CCTV Surveillance',
     subText: 'For Homes & Businesses',
     description: 'Explore page',
   },

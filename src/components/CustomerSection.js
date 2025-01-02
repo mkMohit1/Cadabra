@@ -34,7 +34,7 @@ const CustomerSection = () => {
               <li><FontAwesomeIcon icon={faCheckCircle} style={{color:"#0a2640"}} className='faicon'/>Accept Rental, Tenure & Agreement.</li>
               <li><FontAwesomeIcon icon={faCheckCircle} style={{color:"#0a2640"}} className='faicon'/>Work Order processed at our hub.</li>
             </ul>
-            <button className="start-btn">Try now</button>
+            <button className="start-btn">Rent now</button>
           </div>
         </div>
 

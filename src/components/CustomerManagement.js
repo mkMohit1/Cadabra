@@ -27,6 +27,34 @@ const CustomerManagement = () => {
     fetchCustomers();
   }, []);
 
+  const handleEdit = (customer) => {
+    // Logic to handle edit, e.g., show a form pre-filled with customer details
+    console.log("Edit customer:", customer);
+    setSelectedCustomer(customer); // Optionally set customer details for editing
+  };
+  
+  const handleDelete = async (customerId) => {
+    // Logic to handle delete, e.g., call API to delete customer
+    const confirmDelete = window.confirm("Are you sure you want to delete this customer?");
+    if (confirmDelete) {
+      try {
+        const response = await fetch(`http://localhost:5000/admin/deleteCustomer/${customerId}`, {
+          method: 'DELETE',
+        });
+        if (response.ok) {
+          toast.success("Customer deleted successfully!");
+          fetchCustomers(); // Refresh the customer list
+        } else {
+          const error = await response.json();
+          toast.error(error.message);
+        }
+      } catch (err) {
+        console.error("Error deleting customer:", err);
+        toast.error("Failed to delete customer.");
+      }
+    }
+  };
+
   // Customer List Component
   const CustomerList = () => (
     <div className="customer-list">
@@ -61,11 +89,12 @@ const CustomerManagement = () => {
             </tr>
           </thead>
           <tbody>
-            {customers.map((customer) => (
+          {Array.isArray(customers) && customers.length > 0 ? (
+            customers.map((customer) => (
               <tr key={customer.id}>
                 <td>{customer.id}</td>
                 <td>{customer.name}</td>
-                <td>{customer.addresses.occupation}</td>
+                <td>{customer.addresses?.occupation}</td>
                 <td>{customer.mobileNumber}</td>
                 <td>
                   <span className={`kyc-status ${customer.kycStatus ? 'verified' : 'pending'}`}>
@@ -87,7 +116,12 @@ const CustomerManagement = () => {
                   </div>
                 </td>
               </tr>
-            ))}
+            ))
+          ) : (
+            <tr>
+              <td colSpan="7">No customers found.</td>
+            </tr>
+          )}
           </tbody>
         </table>
       </div>
@@ -96,22 +130,80 @@ const CustomerManagement = () => {
 
   // Customer Detail Component - This will display when a customer is selected
   const CustomerDetail = ({ customer }) => (
-    <div className="customer-detail">
-      <h2>Customer Details</h2>
-      <button onClick={() => setSelectedCustomer(null)}>Back to List</button>
+    <div className="popup-overlay">
+      <div className="popup-content">
+        <div className="popup-header">
+          <h2>Customer Details</h2>
+          <button onClick={() => setSelectedCustomer(null)}>X</button>
+         
+        </div>
 
-      <div className="detail-info">
-        <p><strong>Name:</strong> {customer.name}</p>
-        <p><strong>Email:</strong> {customer.email}</p>
-        <p><strong>Occupation:</strong> {customer.occupation}</p>
-        <p><strong>Phone Number:</strong> {customer.mobileNumber}</p>
-        <p><strong>KYC Status:</strong> {customer.kycStatus ? 'Verified' : 'Pending'}</p>
-        <h3>Address</h3>
-              <p><strong>Address Type:</strong> {customer.addressType}</p>
-              <p><strong>Street:</strong> {customer.street}</p>
-              <p><strong>City:</strong> {customer.district}</p>
-              <p><strong>State:</strong> {customer.state}</p>
-              <p><strong>Zip Code:</strong> {customer.zipCode}</p>
+        <div className="popup-body">
+          <div className="form-section">
+            <div className="form-field">
+              <label>Name</label>
+              <input type="text" value={customer.name} readOnly />
+            </div>
+
+            <div className="form-field">
+              <label>Email</label>
+              <input type="email" value={customer.email} readOnly />
+            </div>
+
+            <div className="form-field">
+              <label>Occupation</label>
+              <input type="text" value={customer.addresses.occupation} readOnly />
+            </div>
+
+            <div className="form-field">
+              <label>Phone Number</label>
+              <input type="text" value={customer.mobileNumber} readOnly />
+            </div>
+
+            <div className="form-field">
+              <label>KYC Status</label>
+              <input 
+                type="text" 
+                value={customer.kycStatus ? 'Verified' : 'Pending'} 
+                readOnly 
+              />
+            </div>
+
+            <div className="address-section">
+              <h3>Address</h3>
+              
+              <div className="form-field">
+                <label>Address Type</label>
+                <input type="text" value={customer.addresses.addressType} readOnly />
+              </div>
+
+              <div className="form-field">
+                <label>Street</label>
+                <input type="text" value={customer.addresses.street} readOnly />
+              </div>
+
+
+              <div className="form-field">
+                <label>District</label>
+                <input type="text" value={customer.addresses.district} readOnly />
+              </div>
+              <div className="form-field">
+                <label>Sub-district</label>
+                <input type="text" value={customer.addresses.subDistrict} readOnly />
+              </div>
+
+              <div className="form-field">
+                <label>State</label>
+                <input type="text" value={customer.addresses.state} readOnly />
+              </div>
+
+              <div className="form-field">
+                <label>Zip Code</label>
+                <input type="text" value={customer.addresses.zipCode} readOnly />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

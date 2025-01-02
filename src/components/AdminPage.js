@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Search, Edit, Trash } from 'lucide-react';
 import '../styles/AdminPage.scss';
 import { useSelector } from 'react-redux';
@@ -7,7 +7,6 @@ import { toast } from 'react-toastify';
 const AdminPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showUpdateSaleAdminModal, setShowUpdateSaleAdminModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const currentUser = useSelector((state) => state.auth.user);
   const [searchTerm, setSearchTerm] = useState('');
@@ -18,9 +17,8 @@ const AdminPage = () => {
     mobileNumber: '',
     type: ''
   });
-  const [saleAdminToDelete, setSaleAdminToDelete] = useState(null);
+  const [adminToDelete, setAdminToDelete] = useState(null);
   const [updatedSaleAdminId, setUpdatedSaleAdminId] = useState('');
-  const [otherAdmins, setOtherAdmins] = useState(null);
   const [selectedAdmin, setSelectedAdmin] = useState(null);
   const [updateFormData, setUpdateFormData] = useState({
     name: '',
@@ -28,34 +26,39 @@ const AdminPage = () => {
     mobileNumber: '',
     type: ''
   });
+
   useEffect(() => {
-    fetchAdmins();
+    if (currentUser) {
+      fetchAdmins();
+    }
   }, [currentUser]);
 
   const fetchAdmins = async () => {
     try {
       const response = await fetch(`http://localhost:5000/admin/getAdmins/${currentUser.mobileNumber}`);
       if (!response.ok) {
-        throw new Error('Failed to fetch managers');
+        throw new Error('Failed to fetch admins');
       }
       const data = await response.json();
       setAdmins(data);
     } catch (error) {
-      console.error('Failed to fetch managers:', error);
-      toast.error('Failed to fetch managers');
+      console.error('Error fetching admins:', error);
+      toast.error('Failed to fetch admins');
     }
   };
-console.log(admins);
+
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
 
-  const filteredAdmins = admins.filter(admin =>
-    admin.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    admin.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    admin.mobileNumber.includes(searchTerm) ||
-    admin.type.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredAdmins = useMemo(() => {
+    return admins.filter(admin =>
+      admin.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      admin.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      admin.mobileNumber.includes(searchTerm) ||
+      admin.type.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [admins, searchTerm]);
 
   const handleReset = () => {
     setSearchTerm('');
@@ -93,7 +96,7 @@ console.log(admins);
   
       const data = await response.json();
       toast.success('New admin added successfully');
-      setAdmins([...admins, data.newUser]); // Use the newUser from the response
+      setAdmins((prevAdmins) => [...prevAdmins, data.newUser]); // Use the newUser from the response
       setFormData({ name: '', email: '', mobileNumber: '', type: '' });
       setShowModal(false);
   
@@ -102,92 +105,24 @@ console.log(admins);
       console.error('Error in handleSubmit:', error);
     }
   };
-  
 
-const handleDelete = async (id, type) => {
-  console.log("mnk",id);
-    const response = await fetch(`http://localhost:5000/admin/deleteAdmin/${type}/${id}`, {
+  const handleDelete = async (id, type) => {
+    try {
+      const response = await fetch(`http://localhost:5000/admin/deleteAdmin/${type}/${id}`, {
         method: 'DELETE',
-    });
+      });
 
-    if (response.ok) {
-        setAdmins(admins.filter(admin => admin._id !== id));
+      if (response.ok) {
+        setAdmins((prevAdmins) => prevAdmins.filter(admin => admin._id !== id));
         toast.success('Admin deleted successfully');
-    } else {
-        toast.error('Error while deleting the admin');
-    }
-};
-
-
-const confirmDeleteAdmin = async (admin) => {
-  setSaleAdminToDelete(admin);
-  const getDefaultAdmin = admins.find(item => 
-    (admin.type === 'SaleAdmin' && item.name === 'Default Sale Admin') ||
-    (admin.type === 'ProductAdmin' && item.name === 'Default Product Admin')
-);
-  console.log(getDefaultAdmin._id);
-  if (admin.type === 'SaleAdmin') {
-    const response = await fetch(`http://localhost:5000/admin/checkSaleManagers/${admin._id}`);
-    const data = await response.json();
-    
-    if (data.saleManagers.length > 0) {
-      if (data.saleAdmins.length > 0) {
-        setOtherAdmins([...data.saleAdmins]);
-        setUpdatedSaleAdminId(getDefaultAdmin._id); // set Default Sale Admin ID
       } else {
-        toast.info('Please add another sales admin before deleting');
-        setShowDeleteModal(false);
-        return;
+        const errorData = await response.json();
+        toast.error(`Error while deleting the admin: ${errorData.message || 'Unknown error'}`);
       }
-    } else {
-      handleDelete(admin._id, admin.type); // Delete immediately if no managers
+    } catch (error) {
+      toast.error('Error while deleting the admin');
+      console.error('Error in handleDelete:', error);
     }
-  }
-
-  if (admin.type === 'ProductAdmin') {
-    const response = await fetch(`http://localhost:5000/admin/checkProduct/${admin._id}`);
-    const data = await response.json();
-    
-    if (data.product.length > 0) {
-      if (data.otherProductAdmin.length > 0) {
-        setOtherAdmins([...data.otherProductAdmin]);
-        setUpdatedSaleAdminId(getDefaultAdmin._id); // set Default Product Admin ID
-      } else {
-        toast.info('Please add another product admin before deleting');
-        setShowDeleteModal(false);
-        return;
-      }
-    } else {
-      handleDelete(admin._id, admin.type); // Delete immediately if no products
-    }
-  }
-  setShowDeleteModal(false);
-};
-
-
-  const handleUpdateSaleAdmin = async () => {
-    if (!updatedSaleAdminId) {
-      toast.error('Please select a Sale Admin');
-      return;
-    }
-    const response = await fetch(`http://localhost:5000/admin/updateSaleAdmin`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        [saleAdminToDelete.type === 'SaleAdmin' ? 'saleAdminId' : 'productAdminId']: saleAdminToDelete._id,
-        [saleAdminToDelete.type === 'SaleAdmin' ? 'newSaleAdminId' : 'newProductAdminId']:updatedSaleAdminId,
-        type: saleAdminToDelete.type
-      })
-    });
-
-    if (response.ok) {
-      handleDelete(saleAdminToDelete._id, saleAdminToDelete.type);
-    } else {
-      toast.error('Error updating Sale Admin');
-    }
-    setShowUpdateSaleAdminModal(false);
   };
 
   const handleUpdateClick = (admin) => {
@@ -227,9 +162,11 @@ const confirmDeleteAdmin = async (admin) => {
       }
 
       const updatedAdmin = await response.json();
-      setAdmins(admins.map(admin =>
-        admin._id === selectedAdmin._id ? updatedAdmin : admin
-      ));
+      setAdmins((prevAdmins) =>
+        prevAdmins.map(admin =>
+          admin._id === selectedAdmin._id ? updatedAdmin : admin
+        )
+      );
       
       toast.success('Admin updated successfully');
       setShowUpdateModal(false);
@@ -240,15 +177,17 @@ const confirmDeleteAdmin = async (admin) => {
   };
 
   const handleDeleteClick = (admin) => {
-    setSaleAdminToDelete(admin);
+    setAdminToDelete(admin);
     setShowDeleteModal(true);
   };
 
-  useEffect(() => {
-    if (updatedSaleAdminId) {
-      handleUpdateSaleAdmin();
+  const confirmDeleteAdmin = async () => {
+    if (adminToDelete) {
+      await handleDelete(adminToDelete._id, adminToDelete.type);
+      setShowDeleteModal(false);
     }
-  }, [updatedSaleAdminId]);
+  };
+
   return (
     <div className="admin-page">
       <div className="admin-header">
@@ -292,18 +231,15 @@ const confirmDeleteAdmin = async (admin) => {
                 <td>{admin.email}</td>
                 <td>{admin.type}</td>
                 <td>
-                  {admin.name ==='Default Product Admin' || admin.name ==='Default Sale Admin'?null
-                  :<div className="action-buttons">
-                    <button className="edit-btn" onClick={() => handleUpdateClick(admin)}>
-                      <Edit size={16} />
-                    </button>
-                    <button
-                      className="delete-btn"
-                      onClick={() => handleDeleteClick(admin)}
-                    >
-                      <Trash size={16} />
-                    </button>
-                  </div>
+                  {admin.name === 'Default Product Admin' || admin.name === 'Default Sale Admin' ? null :
+                    <div className="action-buttons">
+                      <button className="edit-btn" onClick={() => handleUpdateClick(admin)}>
+                        <Edit size={16} />
+                      </button>
+                      <button className="delete-btn" onClick={() => handleDeleteClick(admin)}>
+                        <Trash size={16} />
+                      </button>
+                    </div>
                   }
                 </td>
               </tr>
@@ -361,9 +297,9 @@ const confirmDeleteAdmin = async (admin) => {
                 </select>
               </div>
               <div className="btn-NewAdmin">
-              <button type="submit" className='add-admin-btn'>Save Admin</button>
-              <button onClick={() => setShowModal(false)} className='add-admin-btn'>Close</button>
-              </div>              
+                <button type="submit" className="add-admin-btn">Save Admin</button>
+                <button onClick={() => setShowModal(false)} className="add-admin-btn">Close</button>
+              </div>
             </form>
           </div>
         </div>
@@ -406,19 +342,14 @@ const confirmDeleteAdmin = async (admin) => {
               </div>
               <div className="form-group">
                 <label>Admin Type</label>
-                <select
-                  name="type"
-                  defaultValue={updateFormData.type}
-                  disabled 
-                >
-                  <option value="">Select Type</option>
+                <select name="type" value={updateFormData.type} disabled>
                   <option value="SaleAdmin">Sale Admin</option>
                   <option value="ProductAdmin">Product Admin</option>
                 </select>
               </div>
               <div className="btn-UpdateAdmin">
-                <button type="submit" className='add-admin-btn'>Update Admin</button>
-                <button onClick={() => setShowUpdateModal(false)} className='add-admin-btn'>Close</button>
+                <button type="submit" className="add-admin-btn">Update Admin</button>
+                <button onClick={() => setShowUpdateModal(false)} className="add-admin-btn">Close</button>
               </div>
             </form>
           </div>
@@ -430,37 +361,12 @@ const confirmDeleteAdmin = async (admin) => {
           <div className="modal modal-delete">
             <h2>Are you sure you want to delete this admin?</h2>
             <div className="btn-delete">
-              <button onClick={() => confirmDeleteAdmin(saleAdminToDelete)} className='add-admin-btn'>Yes</button>
-              <button onClick={() => setShowDeleteModal(false)} className='add-admin-btn'>No</button>
+              <button onClick={confirmDeleteAdmin} className="add-admin-btn">Yes</button>
+              <button onClick={() => setShowDeleteModal(false)} className="add-admin-btn">No</button>
             </div>
           </div>
         </div>
       )}
-
-      {/* {showUpdateSaleAdminModal && (
-        <div className="modal-overlay">
-          <div className="modal UpdateAdmin-modal">
-            <h2>Update {saleAdminToDelete.type}</h2>
-            <select
-                  name="type"
-                  value={updatedSaleAdminId}
-                  onChange={(e) => setUpdatedSaleAdminId(e.target.value)}
-                  required
-                >
-                  <option value="">Select Type</option>
-                  {otherAdmins.map((admin)=>{
-                    return(
-                      <option key={`admin-${admin._id}`} value={admin._id}>{admin.name}</option>
-                    )
-                  })}
-                </select>
-                <div className="btn-update">
-                <button onClick={handleUpdateSaleAdmin}>Update</button>
-                <button onClick={() => setShowUpdateSaleAdminModal(false)}>Cancel</button>
-                </div>
-          </div>
-        </div>
-      )} */}
     </div>
   );
 };

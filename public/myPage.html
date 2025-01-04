@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-US">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      img:is([sizes="auto" i], [sizes^="auto," i]) {
+        contain-intrinsic-size: 3000px 1500px;
+      }
+    </style>
+
+    <title>Cadabra</title>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <style id="classic-theme-styles-inline-css">
+      .wp-block-button__link {
+        color: #fff;
+        background-color: #32373c;
+        border-radius: 9999px;
+        box-shadow: none;
+        text-decoration: none;
+        padding: calc(0.667em + 2px) calc(1.333em + 2px);
+        font-size: 1.125em;
+      }
+      .wp-block-file__button {
+        background: #32373c;
+        color: #fff;
+        text-decoration: none;
+      }
+    </style>
+    <style id="global-styles-inline-css">
+      :root {
+        --wp--preset--aspect-ratio--square: 1;
+        --wp--preset--aspect-ratio--4-3: 4/3;
+        --wp--preset--aspect-ratio--3-4: 3/4;
+        --wp--preset--aspect-ratio--3-2: 3/2;
+        --wp--preset--aspect-ratio--2-3: 2/3;
+        --wp--preset--aspect-ratio--16-9: 16/9;
+        --wp--preset--aspect-ratio--9-16: 9/16;
+        --wp--preset--color--black: #000000;
+        --wp--preset--color--cyan-bluish-gray: #abb8c3;
+        --wp--preset--color--white: #ffffff;
+        --wp--preset--color--pale-pink: #f78da7;
+        --wp--preset--color--vivid-red: #cf2e2e;
+        --wp--preset--color--luminous-vivid-orange: #ff6900;
+        --wp--preset--color--luminous-vivid-amber: #fcb900;
+        --wp--preset--color--light-green-cyan: #7bdcb5;
+        --wp--preset--color--vivid-green-cyan: #00d084;
+        --wp--preset--color--pale-cyan-blue: #8ed1fc;
+        --wp--preset--color--vivid-cyan-blue: #0693e3;
+        --wp--preset--color--vivid-purple: #9b51e0;
+        --wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(
+          135deg,
+          rgba(6, 147, 227, 1) 0%,
+          rgb(155, 81, 224) 100%
+        );
+        --wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(
+          135deg,
+          rgb(122, 220, 180) 0%,
+          rgb(0, 208, 130) 100%
+        );
+        --wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(
+          135deg,
+          rgba(252, 185, 0, 1) 0%,
+          rgba(255, 105, 0, 1) 100%
+        );
+        --wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(
+          135deg,
+          rgba(255, 105, 0, 1) 0%,
+          rgb(207, 46, 46) 100%
+        );
+        --wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(
+          135deg,
+          rgb(238, 238, 238) 0%,
+          rgb(169, 184, 195) 100%
+        );
+        --wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(
+          135deg,
+          rgb(74, 234, 220) 0%,
+          rgb(151, 120, 209) 20%,
+          rgb(207, 42, 186) 40%,
+          rgb(238, 44, 130) 60%,
+          rgb(251, 105, 98) 80%,
+          rgb(254, 248, 76) 100%
+        );
+        --wp--preset--gradient--blush-light-purple: linear-gradient(
+          135deg,
+          rgb(255, 206, 236) 0%,
+          rgb(152, 150, 240) 100%
+        );
+        --wp--preset--gradient--blush-bordeaux: linear-gradient(
+          135deg,
+          rgb(254, 205, 165) 0%,
+          rgb(254, 45, 45) 50%,
+          rgb(107, 0, 62) 100%
+        );
+        --wp--preset--gradient--luminous-dusk: linear-gradient(
+          135deg,
+          rgb(255, 203, 112) 0%,
+          rgb(199, 81, 192) 50%,
+          rgb(65, 88, 208) 100%
+        );
+        --wp--preset--gradient--pale-ocean: linear-gradient(
+          135deg,
+          rgb(255, 245, 203) 0%,
+          rgb(182, 227, 212) 50%,
+          rgb(51, 167, 181) 100%
+        );
+        --wp--preset--gradient--electric-grass: linear-gradient(
+          135deg,
+          rgb(202, 248, 128) 0%,
+          rgb(113, 206, 126) 100%
+        );
+        --wp--preset--gradient--midnight: linear-gradient(
+          135deg,
+          rgb(2, 3, 129) 0%,
+          rgb(40, 116, 252) 100%
+        );
+        --wp--preset--font-size--small: 13px;
+        --wp--preset--font-size--medium: 20px;
+        --wp--preset--font-size--large: 36px;
+        --wp--preset--font-size--x-large: 42px;
+        --wp--preset--spacing--20: 0.44rem;
+        --wp--preset--spacing--30: 0.67rem;
+        --wp--preset--spacing--40: 1rem;
+        --wp--preset--spacing--50: 1.5rem;
+        --wp--preset--spacing--60: 2.25rem;
+        --wp--preset--spacing--70: 3.38rem;
+        --wp--preset--spacing--80: 5.06rem;
+        --wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);
+        --wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);
+        --wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);
+        --wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1),
+          6px 6px rgba(0, 0, 0, 1);
+        --wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);
+      }
+      :where(.is-layout-flex) {
+        gap: 0.5em;
+      }
+      :where(.is-layout-grid) {
+        gap: 0.5em;
+      }
+      body .is-layout-flex {
+        display: flex;
+      }
+      .is-layout-flex {
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .is-layout-flex > :is(*, div) {
+        margin: 0;
+      }
+      body .is-layout-grid {
+        display: grid;
+      }
+      .is-layout-grid > :is(*, div) {
+        margin: 0;
+      }
+      :where(.wp-block-columns.is-layout-flex) {
+        gap: 2em;
+      }
+      :where(.wp-block-columns.is-layout-grid) {
+        gap: 2em;
+      }
+      :where(.wp-block-post-template.is-layout-flex) {
+        gap: 1.25em;
+      }
+      :where(.wp-block-post-template.is-layout-grid) {
+        gap: 1.25em;
+      }
+      .has-black-color {
+        color: var(--wp--preset--color--black) !important;
+      }
+      .has-cyan-bluish-gray-color {
+        color: var(--wp--preset--color--cyan-bluish-gray) !important;
+      }
+      .has-white-color {
+        color: var(--wp--preset--color--white) !important;
+      }
+      .has-pale-pink-color {
+        color: var(--wp--preset--color--pale-pink) !important;
+      }
+      .has-vivid-red-color {
+        color: var(--wp--preset--color--vivid-red) !important;
+      }
+      .has-luminous-vivid-orange-color {
+        color: var(--wp--preset--color--luminous-vivid-orange) !important;
+      }
+      .has-luminous-vivid-amber-color {
+        color: var(--wp--preset--color--luminous-vivid-amber) !important;
+      }
+      .has-light-green-cyan-color {
+        color: var(--wp--preset--color--light-green-cyan) !important;
+      }
+      .has-vivid-green-cyan-color {
+        color: var(--wp--preset--color--vivid-green-cyan) !important;
+      }
+      .has-pale-cyan-blue-color {
+        color: var(--wp--preset--color--pale-cyan-blue) !important;
+      }
+      .has-vivid-cyan-blue-color {
+        color: var(--wp--preset--color--vivid-cyan-blue) !important;
+      }
+      .has-vivid-purple-color {
+        color: var(--wp--preset--color--vivid-purple) !important;
+      }
+      .has-black-background-color {
+        background-color: var(--wp--preset--color--black) !important;
+      }
+      .has-cyan-bluish-gray-background-color {
+        background-color: var(--wp--preset--color--cyan-bluish-gray) !important;
+      }
+      .has-white-background-color {
+        background-color: var(--wp--preset--color--white) !important;
+      }
+      .has-pale-pink-background-color {
+        background-color: var(--wp--preset--color--pale-pink) !important;
+      }
+      .has-vivid-red-background-color {
+        background-color: var(--wp--preset--color--vivid-red) !important;
+      }
+      .has-luminous-vivid-orange-background-color {
+        background-color: var(
+          --wp--preset--color--luminous-vivid-orange
+        ) !important;
+      }
+      .has-luminous-vivid-amber-background-color {
+        background-color: var(
+          --wp--preset--color--luminous-vivid-amber
+        ) !important;
+      }
+      .has-light-green-cyan-background-color {
+        background-color: var(--wp--preset--color--light-green-cyan) !important;
+      }
+      .has-vivid-green-cyan-background-color {
+        background-color: var(--wp--preset--color--vivid-green-cyan) !important;
+      }
+      .has-pale-cyan-blue-background-color {
+        background-color: var(--wp--preset--color--pale-cyan-blue) !important;
+      }
+      .has-vivid-cyan-blue-background-color {
+        background-color: var(--wp--preset--color--vivid-cyan-blue) !important;
+      }
+      .has-vivid-purple-background-color {
+        background-color: var(--wp--preset--color--vivid-purple) !important;
+      }
+      .has-black-border-color {
+        border-color: var(--wp--preset--color--black) !important;
+      }
+      .has-cyan-bluish-gray-border-color {
+        border-color: var(--wp--preset--color--cyan-bluish-gray) !important;
+      }
+      .has-white-border-color {
+        border-color: var(--wp--preset--color--white) !important;
+      }
+      .has-pale-pink-border-color {
+        border-color: var(--wp--preset--color--pale-pink) !important;
+      }
+      .has-vivid-red-border-color {
+        border-color: var(--wp--preset--color--vivid-red) !important;
+      }
+      .has-luminous-vivid-orange-border-color {
+        border-color: var(
+          --wp--preset--color--luminous-vivid-orange
+        ) !important;
+      }
+      .has-luminous-vivid-amber-border-color {
+        border-color: var(--wp--preset--color--luminous-vivid-amber) !important;
+      }
+      .has-light-green-cyan-border-color {
+        border-color: var(--wp--preset--color--light-green-cyan) !important;
+      }
+      .has-vivid-green-cyan-border-color {
+        border-color: var(--wp--preset--color--vivid-green-cyan) !important;
+      }
+      .has-pale-cyan-blue-border-color {
+        border-color: var(--wp--preset--color--pale-cyan-blue) !important;
+      }
+      .has-vivid-cyan-blue-border-color {
+        border-color: var(--wp--preset--color--vivid-cyan-blue) !important;
+      }
+      .has-vivid-purple-border-color {
+        border-color: var(--wp--preset--color--vivid-purple) !important;
+      }
+      .has-vivid-cyan-blue-to-vivid-purple-gradient-background {
+        background: var(
+          --wp--preset--gradient--vivid-cyan-blue-to-vivid-purple
+        ) !important;
+      }
+      .has-light-green-cyan-to-vivid-green-cyan-gradient-background {
+        background: var(
+          --wp--preset--gradient--light-green-cyan-to-vivid-green-cyan
+        ) !important;
+      }
+      .has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background {
+        background: var(
+          --wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange
+        ) !important;
+      }
+      .has-luminous-vivid-orange-to-vivid-red-gradient-background {
+        background: var(
+          --wp--preset--gradient--luminous-vivid-orange-to-vivid-red
+        ) !important;
+      }
+      .has-very-light-gray-to-cyan-bluish-gray-gradient-background {
+        background: var(
+          --wp--preset--gradient--very-light-gray-to-cyan-bluish-gray
+        ) !important;
+      }
+      .has-cool-to-warm-spectrum-gradient-background {
+        background: var(
+          --wp--preset--gradient--cool-to-warm-spectrum
+        ) !important;
+      }
+      .has-blush-light-purple-gradient-background {
+        background: var(--wp--preset--gradient--blush-light-purple) !important;
+      }
+      .has-blush-bordeaux-gradient-background {
+        background: var(--wp--preset--gradient--blush-bordeaux) !important;
+      }
+      .has-luminous-dusk-gradient-background {
+        background: var(--wp--preset--gradient--luminous-dusk) !important;
+      }
+      .has-pale-ocean-gradient-background {
+        background: var(--wp--preset--gradient--pale-ocean) !important;
+      }
+      .has-electric-grass-gradient-background {
+        background: var(--wp--preset--gradient--electric-grass) !important;
+      }
+      .has-midnight-gradient-background {
+        background: var(--wp--preset--gradient--midnight) !important;
+      }
+      .has-small-font-size {
+        font-size: var(--wp--preset--font-size--small) !important;
+      }
+      .has-medium-font-size {
+        font-size: var(--wp--preset--font-size--medium) !important;
+      }
+      .has-large-font-size {
+        font-size: var(--wp--preset--font-size--large) !important;
+      }
+      .has-x-large-font-size {
+        font-size: var(--wp--preset--font-size--x-large) !important;
+      }
+      :where(.wp-block-post-template.is-layout-flex) {
+        gap: 1.25em;
+      }
+      :where(.wp-block-post-template.is-layout-grid) {
+        gap: 1.25em;
+      }
+      :where(.wp-block-columns.is-layout-flex) {
+        gap: 2em;
+      }
+      :where(.wp-block-columns.is-layout-grid) {
+        gap: 2em;
+      }
+      :root :where(.wp-block-pullquote) {
+        font-size: 1.5em;
+        line-height: 1.6;
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      id="app-css"
+      href="https://sullivannyc.com/wp-content/themes/sullivan/dist/styles/app.css?ver=1.91"
+      media="all"
+    />
+    <script src="./app.js" id="app-js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script> <!-- Font Awesome CDN -->
+
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "UA-21272635-1");
+    </script>
+
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-WKMGRT");
+    </script>
+
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-WKMGRT");
+    </script>
+  </head>
+  <body>
+    <!-- Navbar -->
+  <nav id="navbar" style="display: flex; justify-content: space-between; align-items: center; padding: 0.2rem 2rem 0; color: #4fe8a4; position: fixed; width: 100vw; z-index: 100; backdrop-filter: blur(10px); transition: background-color 0.3s ease;">
+    <div class="logo" style="padding: 0; perspective: 1000px;">
+      <img id="logo" src="./images/mainLogo2.png" alt="Logo" class="main-logo" style="width: min-content; height: 70px; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; backface-visibility: hidden;">
+    </div>
+
+    <div id="nav-links" class="nav-links" style="display: flex; gap: 1.5rem; align-items: center;">
+      <ul style="display: flex; gap: 1.5rem; list-style: none; align-items: center; margin: 0;">
+        <li><a href="/" id="homeLink" style="text-decoration: none; color: black; font-weight: 300; padding: 5px 10px; font-size: 14px; text-transform: uppercase; transition: all 0.3s ease;">Home</a></li>
+        <li><a href="/about" id="aboutLink" style="text-decoration: none; color: black; font-weight: 300; padding: 5px 10px; font-size: 14px; text-transform: uppercase; transition: all 0.3s ease;">About</a></li>
+        <li><a href="/contact" id="contactLink" style="text-decoration: none; color: black; font-weight: 300; padding: 5px 10px; font-size: 14px; text-transform: uppercase; transition: all 0.3s ease;">Contact</a></li>
+        <li><a href="/rent" id="rentLink" style="text-decoration: none; color: black; font-weight: 300; padding: 5px 10px; font-size: 14px; text-transform: uppercase; transition: all 0.3s ease;">Rent</a></li>
+        <li>
+          <a href="/cart" id="cartLink" style="text-decoration: none; color: black; font-weight: 300; padding: 5px 10px; font-size: 14px; text-transform: uppercase; position: relative; transition: all 0.3s ease;">
+            <i class="fa-solid fa-cart-shopping" style="font-size: 20px;"></i>
+            <span id="cartCount" class="totalCounter" style="position: absolute; top: -5px; right: -5px; background-color: red; color: white; border-radius: 50%; font-size: 12px; padding: 3px 6px;">0</span>
+          </a>
+        </li>
+        <li><a href="/login" id="loginLink" style="text-decoration: none; color: black; font-weight: 300; padding: 5px 10px; font-size: 14px; text-transform: uppercase; transition: all 0.3s ease;">Login</a></li>
+      </ul>
+    </div>
+
+    <div id="hamburger" class="hamburger" style="display: none; font-size: 1.5rem; cursor: pointer;">
+      <i id="hamburgerIcon" class="fas fa-bars" style="color: #4fe8a4;"></i>
+    </div>
+  </nav>
+  <script>
+    // JavaScript for dynamic navbar behavior
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const navbar = document.getElementById('navbar');
+      const logo = document.getElementById('logo');
+      const navLinks = document.getElementById('nav-links');
+      const children = Array.from(navLinks.children[0].children);
+
+      const hamburger = document.getElementById('hamburger');
+      const cartCount = document.getElementById('cartCount');
+      const hamburgerIcon = document.getElementById('hamburgerIcon');
+      let menuOpen = false;
+      let intervalId = null;
+      let isFlipping = false;
+      let topH1 = document.getElementsByClassName('bg-root');
+
+      // Check if there's at least one element with the class 'bg-root'
+      if (topH1.length > 0) {
+        topH1[0].style.paddingTop = "70px"; // Modify the style of the first element in the collection
+      }
+      // Simulate a cart count
+      let cartItems = 0; // Replace this with actual cart data if necessary
+      cartCount.textContent = cartItems > 0 ? cartItems : "";
+      let currentScrollY = window.scrollY;
+      if(currentScrollY < 100){
+        navbar.style.backgroundColor = "white";
+      }      
+      // Toggle mobile menu
+      hamburger.addEventListener("click", () => {
+        menuOpen = !menuOpen;
+        if (menuOpen) {
+          navLinks.style.display = "flex";
+          hamburgerIcon.classList.replace("fa-bars", "fa-times");
+        } else {
+          navLinks.style.display = "none";
+          hamburgerIcon.classList.replace("fa-times", "fa-bars");
+        }
+      });
+      
+      // Scroll effect on navbar
+      window.addEventListener("scroll", () => {
+        let currentScrollY = window.scrollY;
+
+        if (currentScrollY >= 100) {
+          navbar.style.backgroundColor = "hsla(0deg, 0%, 7%, 46%)";
+          // Use forEach to iterate through the elements
+          children.forEach((link) => {
+            link.children[0].style.color = "white"; // Set the style of the first child
+          });
+          logo.src = "./images/mainLogo1.png"; // Replace with the actual logo URL
+          if (currentScrollY >= 250) {
+            // Flip logo every 10 seconds
+            if (!intervalId) {
+              intervalId = setInterval(() => {
+                isFlipping = true;
+                logo.classList.add("flip-animation");
+                setTimeout(() => {
+                  isFlipping = false;
+                  logo.classList.remove("flip-animation");
+                }, 500);
+              }, 10000);
+            }
+          }
+        } else {
+          navbar.style.backgroundColor = "white";
+          logo.src = "./images/mainLogo2.png"; // Replace with the actual logo URL
+          // Use forEach to iterate through the elements
+          children.forEach((link) => {
+            link.children[0].style.color = "black"; // Set the style of the first child
+          });
+          if (intervalId) {
+            clearInterval(intervalId);
+            intervalId = null;
+          }
+        }
+      });
+    });
+  </script>
+    <div  class="page-template page-template-page-about page-template-page-about-php page page-id-95">
+    <div class="main-content" data-js-component="ScrollFx">
+      <div
+        class="aboutBanner"
+        data-js-component="ExpandingBg"
+        data-nav-color="dark"
+        data-right-offset="146"
+      >
+        <div class="pageWrap" data-nav-color="dark">
+          <div class="bg"></div>
+          <h1 class="h1 bg-root">UNRAVELLING <br>THE THREADS OF POSSIBILITIES</h1>
+        </div>
+      </div>
+      <section class="twoCol" data-nav-color="dark">
+        <div class="pageWrap">
+          <div class="twoCol-grid grid">
+            <div class="twoCol-block">
+              <h2 class="h6">SURVEILLANCE</h2>
+              <p>
+                We tackle complex security problems, developing and implementing
+                lasting solutions. At the basis of all our Surveillance related
+                solutions, our approach to solutions is predominantly based on
+                maintaining the right equilibrium of technology and logical
+                analysis.
+              </p>
+
+            </div>
+
+            <div class="twoCol-block">
+              <h2 class="h6">BURGLARY</h2>
+              <p>
+                We are India's premier provider of burglary solutions, serving
+                both residential and commercial clients with real-time
+                prevention via our dedicated command and control center.
+              </p>
+
+            
+            </div>
+
+            <div class="twoCol-block">
+              <h2 class="h6">INTELLIGENCE</h2>
+              <p>
+                AI is the core technology used by the Security Solution for
+                pixel assessment, management, and control. We strongly believe
+                that AI is going to be the core of Security tech. We maintain a
+                collaborative network of more than 50 global AI firms dedicated
+                to security intelligence.
+              </p>
+
+
+            </div>
+
+            <div class="twoCol-block">
+              <h2 class="h6">CONTROL CENTERS</h2>
+              <p>
+                Cadabra's network of command and control centers in India
+                enables us to provide cutting-edge proactive security for homes
+                and commercial spaces. We differentiate ourselves through our
+                unwavering dedication to providing preventative solutions.
+              </p>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div
+        class="accordionWrapper pageWrap"
+        data-js-component="Accordion"
+        data-nav-color="dark"
+      >
+        <h3 class="accordion-title h2">Clientele</h3>
+        <div class="accordion">
+          <div class="accordion-panel accordion-expanded">
+            <h4 class="accordion-header h6">
+              Financial Services
+              <span
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fill="#000"
+                    fill-rule="evenodd"
+                    d="M7 7V0h2v7h7v2H9v7H7V9H0V7h7z"
+                  />
+                </svg>
+              </span>
+            </h4>
+            <div class="accordion-body">
+              <div class="accordion-panel-column">
+                <p>AllianceBernstein</p>
+                <p>Allianz Global Investors</p>
+                <p>American Express</p>
+                <p>Ameriprise</p>
+                <p>
+                  <a href="" class="" title="AXA" target="">AXA</a>
+                </p>
+                <p>Ayco</p>
+                <p>Bessemer Trust</p>
+                <p>BlackRock</p>
+                <p>Bloomberg</p>
+                <p>Brookfield</p>
+                <p>BNY Mellon</p>
+                <p>Bridge Investment Group</p>
+                <p>Broadridge</p>
+                <p>Calvert Investments</p>
+                <p>
+                  <a href="" class="" title="Capital Group" target=""
+                    >Capital Group</a
+                  >
+                </p>
+                <p>Calamus Investments</p>
+                <p>Charles Schwab</p>
+              </div>
+              <div class="accordion-panel-column">
+                <p>Citi</p>
+                <p>Columbia Threadneedle</p>
+                <p>Credit Suisse</p>
+                <p>Deutsche Bank</p>
+                <p>Fidelity</p>
+                <p>First Data</p>
+                <p>Global Atlantic</p>
+                <p>Goldman Sachs</p>
+                <p>Guardian Life</p>
+                <p>
+                  <a href="" class="" title="Insight Partners" target=""
+                    >Insight Partners</a
+                  >
+                </p>
+                <p>Institutional Shareholder Services</p>
+                <p>J.P. Morgan</p>
+                <p>KKR</p>
+                <p>Liquidnet</p>
+                <p>Lord Abbett</p>
+                <p>MassMutual</p>
+                <p>MetLife</p>
+              </div>
+              <div class="accordion-panel-column">
+                <p>MissionSquare</p>
+                <p>Navient</p>
+                <p>OppenheimerFunds</p>
+                <p>
+                  <a href="" class="" title="Osaic" target="">Osaic</a>
+                </p>
+                <p>Pantheon Ventures</p>
+                <p>Providence Equity</p>
+                <p>Sands Capital Management</p>
+                <p>Standish</p>
+                <p>TD Ameritrade</p>
+                <p>Thomas H. Lee Partners</p>
+                <p>TIAA</p>
+                <p>Wellington Management</p>
+                <p>Wells Fargo</p>
+                <p>Wilmington Trust</p>
+                <p>WorldQuant</p>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-panel">
+            <h4 class="accordion-header h6">
+              Technology
+              <span
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fill="#000"
+                    fill-rule="evenodd"
+                    d="M7 7V0h2v7h7v2H9v7H7V9H0V7h7z"
+                  />
+                </svg>
+              </span>
+            </h4>
+            <div class="accordion-body">
+              <div class="accordion-panel-column">
+                <p>ADP</p>
+                <p>Bloomberg</p>
+                <p>Broadridge</p>
+                <p>Chainalysis</p>
+                <p>
+                  <a href="" class="" title="Cognizant" target="">Cognizant</a>
+                </p>
+                <p>Collective</p>
+                <p>Convergex</p>
+                <p>
+                  <a href="" class="" title="Crown Castle" target=""
+                    >Crown Castle</a
+                  >
+                </p>
+                <p>CQ-Roll Call</p>
+                <p>Diligent</p>
+              </div>
+              <div class="accordion-panel-column">
+                <p>EPAM</p>
+                <p>Intersection</p>
+                <p>
+                  <a href="" class="" title="Insight Partners" target=""
+                    >Insight Partners</a
+                  >
+                </p>
+                <p>LexisNexis</p>
+                <p>LinkedIn</p>
+                <p>Liquidnet</p>
+                <p>Nasdaq</p>
+                <p>Newfold Digital</p>
+                <p>NICE Systems</p>
+                <p>PhotoShelter</p>
+                <p>Stairwell</p>
+              </div>
+              <div class="accordion-panel-column">
+                <p>Shutterstock</p>
+                <p>
+                  <a href="" class="" title="Tierpoint" target="">Tierpoint</a>
+                </p>
+                <p>TOA Technologies</p>
+                <p>Tradeweb</p>
+                <p>
+                  <a href="" class="" title="TWITTER" target="">Twitter</a>
+                </p>
+                <p>United Imaging</p>
+                <p>Verizon</p>
+                <p>WebMD</p>
+                <p>Yahoo!</p>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-panel">
+            <h4 class="accordion-header h6">
+              Higher Education
+              <span
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fill="#000"
+                    fill-rule="evenodd"
+                    d="M7 7V0h2v7h7v2H9v7H7V9H0V7h7z"
+                  />
+                </svg>
+              </span>
+            </h4>
+            <div class="accordion-body">
+              <div class="accordion-panel-column">
+                <p>American University</p>
+                <p>Barnes & Noble</p>
+                <p>Bermuda Institute of Ocean Sciences</p>
+                <p>
+                  <a href="" class="" title="Brown University" target=""
+                    >Brown University</a
+                  >
+                </p>
+                <p>
+                  <a href="" class="" title="COLUMBIA LAW" target=""
+                    >Columbia Law School</a
+                  >
+                </p>
+                <p>Columbia SIPA</p>
+                <p>
+                  <a href="" class="" title="CORNELL TECH" target=""
+                    >Cornell Tech</a
+                  >
+                </p>
+                <p>Cornell University</p>
+                <p>Cornell University College of Business</p>
+                <p>Dartmouth College</p>
+              </div>
+              <div class="accordion-panel-column">
+                <p>Duke Nicholas School of the Environment</p>
+                <p>Duke Fuqua School of Business</p>
+                <p>
+                  <a href="" class="" title="DUKE FORWARD" target=""
+                    >Duke University</a
+                  >
+                </p>
+                <p>The George Washington University</p>
+                <p>Institute at Brown for Environment & Society</p>
+                <p>Kenyon College</p>
+                <p>Lehigh University</p>
+                <p>Manhattan School of Music</p>
+                <p>NYU School of Professional Studies</p>
+                <p>NYU Stern School of Business</p>
+              </div>
+              <div class="accordion-panel-column">
+                <p>Stanford Graduate School of Business</p>
+                <p>
+                  <a href="" class="" title="STANFORD HAI" target=""
+                    >Stanford HAI</a
+                  >
+                </p>
+                <p>Stony Brook University</p>
+                <p>UC Berkeley</p>
+                <p>Virginia Commonwealth University School of the Arts</p>
+                <p>Virginia Tech</p>
+                <p>Weill Cornell Medicine</p>
+                <p>Yale School of Music</p>
+                <p>Yale University</p>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-panel">
+            <h4 class="accordion-header h6">
+              Professional Services
+              <span
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fill="#000"
+                    fill-rule="evenodd"
+                    d="M7 7V0h2v7h7v2H9v7H7V9H0V7h7z"
+                  />
+                </svg>
+              </span>
+            </h4>
+            <div class="accordion-body">
+              <div class="accordion-panel-column">
+                <p>ADP</p>
+                <p>Baker Tilly</p>
+                <p>BerlinRosen</p>
+                <p>Broadridge</p>
+                <p>Business Wire</p>
+              </div>
+              <div class="accordion-panel-column">
+                <p>
+                  <a href="" class="" title="EVERGREEN TRADING" target=""
+                    >Evergreen Trading</a
+                  >
+                </p>
+                <p>HNTB</p>
+                <p>Kearney</p>
+                <p>Level Agency</p>
+                <p>LexisNexis</p>
+              </div>
+              <div class="accordion-panel-column">
+                <p>
+                  <a href="" class="" title="Longfellow" target=""
+                    >Longfellow Real Estate Partners</a
+                  >
+                </p>
+                <p>Thomson Reuters</p>
+                <p>Wolters Kluwer</p>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-panel">
+            <h4 class="accordion-header h6">
+              Industrials
+              <span
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fill="#000"
+                    fill-rule="evenodd"
+                    d="M7 7V0h2v7h7v2H9v7H7V9H0V7h7z"
+                  />
+                </svg>
+              </span>
+            </h4>
+            <div class="accordion-body">
+              <div class="accordion-panel-column">
+                <p>Aligned Energy</p>
+                <p>Arrive Logistics</p>
+                <p>Clean Harbors</p>
+                <p>Corning</p>
+              </div>
+              <div class="accordion-panel-column">
+                <p>
+                  <a href="" class="" title="Crown Castle" target=""
+                    >Crown Castle</a
+                  >
+                </p>
+                <p>Johnson & Johnson</p>
+                <p>Medtronic</p>
+                <p>Pitney Bowes</p>
+              </div>
+              <div class="accordion-panel-column">
+                <p>Tyco</p>
+                <p>UPS</p>
+                <p>Vontier</p>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-panel">
+            <h4 class="accordion-header h6">
+              Not-for-Profit
+              <span
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fill="#000"
+                    fill-rule="evenodd"
+                    d="M7 7V0h2v7h7v2H9v7H7V9H0V7h7z"
+                  />
+                </svg>
+              </span>
+            </h4>
+            <div class="accordion-body">
+              <div class="accordion-panel-column">
+                <p>American College of Veterinary Radiology</p>
+                <p>Break Through Tech</p>
+                <p>Covenant House</p>
+                <p>The Fund for Global Human Rights</p>
+                <p>Hospital for Special Surgery</p>
+                <p>Human Rights Watch</p>
+                <p>The Institute For Functional Medicine</p>
+              </div>
+              <div class="accordion-panel-column">
+                <p>The Joyce Theater Foundation</p>
+                <p>Lincoln Center for the Performing Arts</p>
+                <p>Ms. Foundation</p>
+                <p>Museum of Fine Arts Boston</p>
+                <p>National Baseball Hall of Fame</p>
+                <p>
+                  <a href="" class="" title="NATIONAL WIC ASSOCIATION" target=""
+                    >National WIC Association</a
+                  >
+                </p>
+                <p>Natural Resources Defense Council</p>
+              </div>
+              <div class="accordion-panel-column">
+                <p>PEW Charitable Trusts</p>
+                <p>SAG-AFTRA</p>
+                <p>
+                  <a
+                    href=""
+                    class=""
+                    title="SCHOOL OF AMERICAN BALLET"
+                    target=""
+                    >School of American Ballet</a
+                  >
+                </p>
+                <p>Virginia Cooperative Extension</p>
+                <p>Teach for America</p>
+                <p>The Washington Ballet</p>
+                <p>Weill Cornell Medicine</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section class="featurePanel" data-nav-color="light">
+        <div class="pageWrap"></div>
+      </section>
+
+      <section class="videoColumns">
+        <div class="pageWrap">
+          <h2>At Cadabra we are</h2>
+          <div class="videoColumns-scroll">
+            <div class="video-list">
+              <div class="video-single" data-js-component="Modal">
+                <div class="video-play-container js-modal-trigger">
+                  <div class="poster-image">
+                    <img
+                      class="lazy"
+                      src="/STRATEGISTS.png"
+                      alt="Strategists"
+                    />
+                  </div>
+                </div>
+                <div class="video-copy">
+                  <h5 class="h6">Strategists</h5>
+                  <p class="p-small">
+                    We believe in working at the core of every project—
+                    unlocking effective approaches, unearthing insights and
+                    building strategies around it, managing the user security
+                    needs in the securest possible manner, and owning the work
+                    from start to finish.
+                  </p>
+                </div>
+              </div>
+
+              <div class="video-single" data-js-component="Modal">
+                <div class="video-play-container js-modal-trigger">
+                  <div class="poster-image">
+                    <img class="lazy" src="/BUILDER.png" alt="Builders" />
+                  </div>
+                </div>
+                <div class="video-copy">
+                  <h5 class="h6">Builders</h5>
+                  <p class="p-small">
+                    We build Bespoke solutions to complex challenges—ensuring
+                    technology supports the creative and strategic vision, and
+                    vice versa.
+                  </p>
+                </div>
+              </div>
+              <div class="video-single" data-js-component="Modal">
+                <div class="video-play-container js-modal-trigger">
+                  <div class="poster-image">
+                    <img class="lazy" src="/CREATIVES.png" alt="Creatives" />
+                  </div>
+                </div>
+                <div class="video-copy">
+                  <h5 class="h6">Creatives</h5>
+                  <p class="p-small">
+                    We deliver the big ideas that bring powerful results to life
+                    and push our clients to break down barriers and impact both
+                    business and culture.
+                  </p>
+                </div>
+              </div>
+
+              <div class="video-single" data-js-component="Modal">
+                <div class="video-play-container js-modal-trigger">
+                  <div class="poster-image">
+                    <img class="lazy" src="/PRODUCERS.png" alt="Producers" />
+                  </div>
+                </div>
+                <div class="video-copy">
+                  <h5 class="h6">Producers</h5>
+                  <p class="p-small">
+                    Constantly finding ways to get things done, we’re problem
+                    solvers who can see the big picture while managing the
+                    details that can make or break a complex client need.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="allyship" style="background-color: #4fe8a4;">
+        <div class="pageWrap grid">
+          <div class="allyship-main">
+            <h2 class="h1--alt">our commitment to india</h2>
+            <p>
+              As a woman founded and owned business, we’re invested in advancing
+              diversity and inclusion in our business, and beyond.
+            </p>
+
+            <a class="button read-more lg-only" style="cursor: default">
+              Read more
+              <span class="screen-reader-text"
+                >about Our commitment to allyship</span
+              >
+              <span class="link-arrow" aria-hidden="true">
+                <img src="/arrow-right-white.svg" alt="" />
+              </span>
+            </a>
+          </div>
+
+          <div class="allyship-block" style="border-left: none;">
+            <h1 class="h3--alt">4</h1>
+            <h6 style="margin-bottom: 10px; margin-top: 5px;">STATES</h6>
+            <p style="line-height: 1.0;">
+              We are at rapid growth, adding more and more geographical regions
+              into our service portfolio
+            </p>
+          </div>
+          <div class="allyship-block" style="border-left: none;">
+            <h1 class="h3--alt">9</h1>
+            <h6 style="margin-bottom: 10px; margin-top: 5px;">CITIES</h6>
+            <p style="line-height: 1.0;">
+              Our expansion is not driven by States, but by adding more and more cities
+            </p>
+          </div>
+          <div class="allyship-block" style="border-left: none;">
+            <h1 class="h3--alt">2</h1>
+            <h6 style="margin-bottom: 10px; margin-top: 5px;">COMMAND CENTERS</h6>
+            <p style="line-height: 1.0;">We target a total of 4 command Centers in 2025</p>
+          </div>
+
+
+          <a href="" class="button read-more sm-only">
+            Read more
+            <span class="screen-reader-text"
+              >about Our commitment to allyship</span
+            >
+            <span class="link-arrow">
+              <img src="./arrow-right-white.svg" alt="" />
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- <script type="text/javascript">
+      _linkedin_partner_id = "4896537";
+      window._linkedin_data_partner_ids =
+        window._linkedin_data_partner_ids || [];
+      window._linkedin_data_partner_ids.push(_linkedin_partner_id);
+    </script>
+    <script type="text/javascript">
+      (function (l) {
+        if (!l) {
+          window.lintrk = function (a, b) {
+            window.lintrk.q.push([a, b]);
+          };
+          window.lintrk.q = [];
+        }
+        var s = document.getElementsByTagName("script")[0];
+        var b = document.createElement("script");
+        b.type = "text/javascript";
+        b.async = true;
+        b.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js";
+        s.parentNode.insertBefore(b, s);
+      })(window.lintrk);
+    </script>
+    <noscript>
+      <img
+        height="1"
+        width="1"
+        style="display: none"
+        alt=""
+        src="https://px.ads.linkedin.com/collect/?pid=4896537&fmt=gif"
+      />
+    </noscript>
+
+    <script>
+      (function (v, i, s, a, t) {
+        v[t] =
+          v[t] ||
+          function () {
+            (v[t].v = v[t].v || []).push(arguments);
+          };
+        if (!v._visaSettings) {
+          v._visaSettings = {};
+        }
+        v._visaSettings[a] = { v: "1.0", s: a, a: "1", t: t };
+        var b = i.getElementsByTagName("body")[0];
+        var p = i.createElement("script");
+        p.defer = 1;
+        p.async = 1;
+        p.src = s + "?s=" + a;
+        b.appendChild(p);
+      })(
+        window,
+        document,
+        "//app-worker.visitor-analytics.io/main.js",
+        "eadc782d-2637-11ee-b589-901b0edac50a",
+        "va"
+      );
+    </script> -->
+  </div>
+  </body>
+</html>

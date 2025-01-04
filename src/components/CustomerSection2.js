@@ -1,11 +1,53 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../styles/CustomerSection2.scss"; // Assuming SCSS for styling
 import { normalImages } from "../ImagePath";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleChevronDown, faCircleChevronUp } from "@fortawesome/free-solid-svg-icons";
+import ConsultationPopup from "./ConsultationPopup";
 
 const CustomerSection2 = () => {
   const [openFAQs, setOpenFAQs] = useState([false, false, false]);
+  const [showPopup, setShowPopup] = useState(false);
+  const [imageSectionVisible, setImageSectionVisible] = useState(false); // Track visibility of the image-section
+
+  const imageSectionRef = useRef(null); // Reference to the image section container
+
+  // Create a function to handle visibility change using IntersectionObserver
+  const handleIntersection = (entries, observer) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        setImageSectionVisible(true); // When the image-section comes into view
+        setShowPopup(true); // Show the popup when the image-section becomes visible
+        observer.unobserve(entry.target); // Stop observing once the element is in view
+      } else {
+        setImageSectionVisible(false); // When the image-section leaves the viewport
+      }
+    });
+  };
+
+  // Initialize the IntersectionObserver
+  useEffect(() => {
+    const observer = new IntersectionObserver(handleIntersection, {
+      root: null, // null means the viewport
+      rootMargin: "0px",
+      threshold: 1, // 50% of the element needs to be in view
+    });
+
+    if (imageSectionRef.current) {
+      observer.observe(imageSectionRef.current); // Observe the image-section element
+    }
+
+    return () => {
+      if (imageSectionRef.current) {
+        observer.unobserve(imageSectionRef.current); // Clean up observer
+      }
+    };
+  }, []);
+
+
+  const handleonClose = () => {
+    setShowPopup(false);
+  }
 
   const toggleFAQ = (index) => {
     setOpenFAQs((prevState) =>
@@ -28,7 +70,10 @@ const CustomerSection2 = () => {
   return (
     <div className="customer-section">
       <div className="content-container">
-        <div className="image-section">
+        <div
+          ref={imageSectionRef} // Reference to the image-section
+          className={`image-section ${imageSectionVisible ? "visible" : "hidden"}`} // Apply class based on visibility
+        >
           <img
             src={normalImages.svgImage1} // Replace with actual image path
             alt="Office Environment"
@@ -72,6 +117,9 @@ const CustomerSection2 = () => {
           </div>
         </div>
       </div>
+
+      {/* Show popup when image-section becomes visible */}
+      {showPopup && <ConsultationPopup isOpen={showPopup} onClose ={handleonClose} />}
     </div>
   );
 };

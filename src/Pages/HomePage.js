@@ -18,7 +18,7 @@ import SubscribeSection from '../components/SubscribeSection';
       <LogosSection />
       <ServicesSection />
       <CustomerSection/>
-      <Testimonials/>
+      <Testimonials/> {/* Testimonials component done */}
       <CustomerSection2/>
       <BlogSection blogs={blogs}/>
       <SubscribeSection/>

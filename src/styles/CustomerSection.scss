@@ -78,16 +78,14 @@
   
         .start-btn {
           padding: 0.7rem 1.5rem;
-          background-color: #0a2640;
-          color: #fff;
+          background-color: black;
+          color: #4fe8a4;
           border: none;
+          font-family: 'Inter', 'sans-serif';
           border-radius: 30px;
+          font-weight: 900;
           cursor: pointer;
           transition: background-color 0.3s;
-  
-          &:hover {
-            background-color: #506f8d;
-          }
         }
       }
     }

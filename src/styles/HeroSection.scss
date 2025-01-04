@@ -1,5 +1,6 @@
 .hero-section {
     padding: 2rem;
+    margin-top: 3.5rem;
     text-align: center;
     display: flex;
     font-family: 'Inter', 'sans-serif';
@@ -13,7 +14,7 @@
       margin-bottom: 1rem;
   
       span {
-        color: #007bff;
+        color: #4fe8a4;
       }
     }
   
@@ -39,21 +40,21 @@
         transition: all 0.3s;
         border-radius: 80px;
         .linkRent{
-          color: #fff;
+          color: #4fe8a4;
+          font-weight: 900;
          text-decoration: none;
         }
         &.buy-btn {
-          background-color: #0a2640;
-  
-          &:hover {
-            background-color: #0056b3;
-          }
+          background-color: black;
+          
+          
         }
   
         &.explore-btn {
           background-color: transparent;
-          color: #007bff;
+          color: #4fe8a4;
           font-weight: bold;
+          margin-left: -26px;
         }
       }
     }

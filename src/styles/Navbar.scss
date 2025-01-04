@@ -1,16 +1,31 @@
+/* Navbar Styles */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-family: "Inter", sans-serif;
   padding: 0.2rem 2rem 0;
-  color: #0a2640;
-  position: relative;  // For positioning the mobile menu
+  color: #4fe8a4;
+  position: fixed;
+  width: 95vw;
+  z-index: 100;
+  backdrop-filter: blur(10px);
 
   .logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #0a2640;
+    padding: 0;
+    perspective: 1000px; // Add 3D perspective for rotation
+    
+    .main-logo {
+      width: min-content;
+      height: 70px;
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+      backface-visibility: hidden;
+
+      &.flip-animation {
+        animation: logoFlip 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+    }
   }
 
   .nav-links {
@@ -28,45 +43,22 @@
     li {
       a {
         text-decoration: none;
-        color: #0a2640;
+        color: black;
         display: flex;
         align-items: center;
-        height: 30px;
+        height: 20px;
+        font-weight: 300;
         border-radius: 15px;
         padding: 5px 10px;
         position: relative;
-
-        &.active {
-          font-weight: bold;
-          color: white;
-          background-color: #007bff;
-          padding: 5px 10px;
-        }
-
-        &:hover {
-          color: #007bff;
-        }
-      }
-
-      cursor: pointer;
-      transition: color 0.3s ease;
-
-      &.cart {
-        position: relative;
-
-        .totalCounter {
-          position: absolute;
-          top: -17px;
-          right: -15px;
-          width: 20px;
-          height: 20px;
-          background-color: orangered;
-          border-radius: 50%;
-          color: white;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          font-size: 12px;
+        transition: all 0.3s ease;
+        font-size: 14px;
+        text-transform: uppercase;
+        &:hover{
+          background: url('../images/background.svg');
+          background-size: contain;
+          background-position: center;
+          background-repeat: no-repeat;
         }
       }
     }
@@ -74,8 +66,9 @@
 
   .login-btn {
     padding: 5px 10px;
-    border: 1px solid #0a2640;
+    border: 1px solid #4fe8a4;
     background: transparent;
+    color: #4fe8a4;
     border-radius: 15px;
     font-family: "Inter", sans-serif;
     height: 40px;
@@ -84,13 +77,13 @@
     transition: all 0.3s ease;
 
     &:hover {
-      background-color: #0a2640;
+      background-color: #4fe8a4;
       color: white;
     }
   }
 
   .hamburger {
-    display: none; /* Initially hide the hamburger on larger screens */
+    display: none;
     font-size: 1.5rem;
     cursor: pointer;
   }
@@ -99,6 +92,7 @@
     display: flex;
     align-items: center;
     cursor: pointer;
+    position: relative;
 
     .avatar-img {
       width: 30px;
@@ -108,7 +102,7 @@
     }
 
     .username {
-      color: #0a2640;
+      color: #4fe8a4;
       font-weight: bold;
     }
 
@@ -125,15 +119,18 @@
 
       .dropdown-item {
         padding: 5px 0;
+        color: #333;
       }
 
       .logout-btn {
+        width: 100%;
         padding: 8px 15px;
         background-color: #dc3545;
         color: white;
         border: none;
         border-radius: 5px;
         cursor: pointer;
+        transition: background-color 0.3s ease;
 
         &:hover {
           background-color: #c82333;
@@ -143,46 +140,44 @@
   }
 }
 
+
+@keyframes logoFlip {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(360deg);
+  }
+}
+/* Mobile Responsive Styles */
 @media (max-width: 768px) {
   .navbar {
     padding: 0.5rem 1rem;
-  }
+    
+    .nav-links {
+      position: absolute;
+      top: 60px;
+      right: 0;
+      width: 80%;
+      background-color: white;
+      z-index: 1000;
+      text-align: center;
+      padding: 20px 0;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      
+      &.open {
+        display: flex;
+      }
+    }
 
-  .nav-links {
-    position: absolute;
-    top: 60px;
-    right: 0;
-    width: 80%;
-    background-color: white;
-    z-index: 1000;
-    text-align: center;
-    padding: 20px 0;
-    display: none;  // Hide by default
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .nav-links.open {
-    display: flex;  // Show when menu is open
-  }
-
-  .nav-links ul {
-    display: flex;
-    flex-direction: column;
-    padding: 0;
-  }
-
-  .nav-links li {
-    border-bottom: 1px solid #ddd;
-    padding: 8px 0;
-    width: 100%;
-  }
-
-  .hamburger {
-    display: block;  // Show hamburger on small screens
-  }
-
-  .hamburger svg {
-    color: #0a2640;
+    .hamburger {
+      display: block;
+      
+      svg {
+        color: #4fe8a4;
+      }
+    }
   }
 }

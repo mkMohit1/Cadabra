@@ -28,9 +28,21 @@ import loginPageImg from './images/login_page.gif';
 import loginTxtImg from './images/login_text.png';
 import loginWOtherImg from './images/login_with_Others.png';
 import whatsApp from './images/whatsApp.png';
+import log1 from './images/logo1.png';
+import log2 from './images/logo2.png';
+import log3 from './images/logo3.png';
+import log4 from './images/logo4.png';
+import log5 from './images/logo5.png';
+import log6 from './images/logo6.png';
+import mainLogo1 from './images/mainLogo1.png';
+import mainLogo2 from './images/mainLogo2.png';
+import mainLogo3 from './images/mainLogo3.png';
+import mainLogo4 from './images/mainLogo4.png';
+
+export const mainLogo = {mainLogo1, mainLogo2, mainLogo3, mainLogo4};
 
 const serviceImg =[service1, service2, service3];
-const logoSection = [log1,log2,log3,log4,log5,log6];
+export const logoSection = [log1,log2,log3,log4,log5,log6];
 
 export const normalImages ={
     onPhoneCall: onPhoneCall,

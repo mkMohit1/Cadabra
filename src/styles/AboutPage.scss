@@ -1,0 +1,193 @@
+/* Accordion Styles */
+.accordion {
+    .accordion-panel {
+      border-bottom: 1px solid #ddd;
+      padding: 20px 0;
+  
+      .accordion-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 18px;
+        cursor: pointer;
+        padding: 10px;
+        background-color: #f4f4f4;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+  
+        span {
+          svg {
+            width: 16px;
+            height: 16px;
+          }
+        }
+      }
+  
+      .accordion-body {
+        display: flex;
+        justify-content: space-between;
+        padding: 15px;
+        background-color: #fafafa;
+        border: 1px solid #ddd;
+        border-top: none;
+  
+        .accordion-panel-column {
+          width: 32%;
+          
+          p {
+            margin-bottom: 10px;
+          }
+  
+          a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
+  
+  /* Video Columns Styles */
+  .videoColumns {
+    .pageWrap {
+      padding: 40px 0;
+  
+      h2 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+      }
+  
+      .videoColumns-scroll {
+        display: flex;
+        overflow-x: scroll;
+  
+        .video-list {
+          display: flex;
+  
+          .video-single {
+            margin-right: 20px;
+            max-width: 300px;
+  
+            .video-play-container {
+              cursor: pointer;
+              width: 100%;
+              position: relative;
+  
+              .poster-image {
+                img {
+                  width: 100%;
+                  border-radius: 8px;
+                }
+              }
+            }
+  
+            .video-copy {
+              margin-top: 10px;
+  
+              h5 {
+                font-size: 1.25rem;
+                margin-bottom: 10px;
+              }
+  
+              .p-small {
+                font-size: 1rem;
+                color: #555;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  /* Allyship Styles */
+  .allyship {
+    background-color: #4fe8a4;
+    padding: 60px 0;
+  
+    .pageWrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 30px;
+      text-align: center;
+  
+      .allyship-main {
+        grid-column: span 3;
+        text-align: center;
+  
+        h2 {
+          font-size: 2rem;
+          font-weight: bold;
+          margin-bottom: 20px;
+        }
+  
+        p {
+          font-size: 1.2rem;
+          color: #333;
+          margin-bottom: 20px;
+        }
+  
+        .button {
+          background-color: #ffffff;
+          color: #4fe8a4;
+          padding: 10px 20px;
+          text-transform: uppercase;
+          border-radius: 5px;
+          display: inline-flex;
+          align-items: center;
+          cursor: pointer;
+  
+          .link-arrow {
+            margin-left: 10px;
+          }
+  
+          img {
+            width: 12px;
+          }
+        }
+      }
+  
+      .allyship-block {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  
+        h1 {
+          font-size: 3rem;
+          color: #4fe8a4;
+        }
+  
+        h6 {
+          font-size: 1.2rem;
+          color: #666;
+          margin: 5px 0;
+        }
+  
+        p {
+          font-size: 1rem;
+          color: #333;
+        }
+      }
+  
+      .lg-only {
+        display: none;
+      }
+  
+      .sm-only {
+        display: block;
+      }
+  
+      @media (max-width: 768px) {
+        .lg-only {
+          display: block;
+        }
+  
+        .sm-only {
+          display: none;
+        }
+      }
+    }
+  }
+  

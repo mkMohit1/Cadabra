@@ -1,5 +1,5 @@
 import React, { useState, useEffect, use } from "react";
-import { BrowserRouter as Router, Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, useLocation, useNavigate, redirect } from "react-router-dom";
 import HomePage from "./Pages/HomePage";
 import BlogPost from "./Pages/BlogPost";
 import RentPage from "./Pages/RentPage";
@@ -12,6 +12,7 @@ import AdminDashboard from "./Pages/AdminDashboard";
 import { useDispatch,useSelector } from "react-redux";
 import { login } from "./redux/authSlice";
 import { SingleProductPage } from "./components/SingleProductPage";
+import About from "./Pages/AboutPage";
 
 function App() {
   const [blogs, setBlogs] = useState(null);
@@ -53,6 +54,9 @@ function AppRoutes({ blogs, user }) {
   const navigate = useNavigate();
 
   const isAdminPage = location.pathname === "/admin";
+  if(location.pathname === "/About"){
+    redirect("/myPage.html");
+  }
 
   // Redirect user to admin dashboard or login page based on admin status
   useEffect(() => {
@@ -95,6 +99,7 @@ function AppRoutes({ blogs, user }) {
         <Route path="/blog/:id" element={<BlogPost blogs={blogs} />} />
         <Route path="/Cart" element={<ShoppingCart />} />
         <Route path="/products/:id" element ={<SingleProductPage/>}/>
+        <Route path="/About" element={<About />} />
         <Route
           path="/admin"
           element={

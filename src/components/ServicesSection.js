@@ -6,24 +6,23 @@ const services = [
     {
     title: 'Alarm Systems',
     subText: 'For Homes & Businesses',
-    description: 'Explore page',
+    description: '->',
   },
   {
     title: 'CCTV Surveillance',
     subText: 'For Homes & Businesses',
-    description: 'Explore page',
+    description: '->',
   },
   {
     title: 'Displays & TVs',
     subText: 'For Homes & Businesses',
-    description: 'Explore page',
+    description: '->',
   },
 ];
 
 const ServicesSection = () => {
   return (
     <div className="services-section">
-      <p>Products</p>
       <h2>Thousands of options Ready to Rent!</h2>
       <div className="services-container">
         {services.map((service, index) => (
@@ -32,9 +31,8 @@ const ServicesSection = () => {
             <h3>{service.title}</h3>
             <p>{service.subText}</p>
             <a href="/" className="service-link">
-              {service.description} →
+              {service.description}
             </a>
-            <hr/>
           </div>
         ))}
       </div>

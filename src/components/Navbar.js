@@ -25,15 +25,15 @@ const Navbar = () => {
       setNavbarBackground("hsla(0deg, 0%, 7%, 46%)");
       setCurrentMainLogo(mainLogo.mainLogo1);
       
-      if(currentScrollY>=250 && currentMainLogo !== mainLogo.mainLogo3 && currentMainLogo !== mainLogo.mainLogo4){
-        setCurrentMainLogo(mainLogo.mainLogo3);
-      }
+      // if(currentScrollY>=250 && currentMainLogo !== mainLogo.mainLogo3 && currentMainLogo !== mainLogo.mainLogo4){
+      //   setCurrentMainLogo(mainLogo.mainLogo3);
+      // }
       // Start interval if not already running
       if (!intervalId) {
         const newIntervalId = setInterval(() => {
           setIsFlipping(true);
           setCurrentMainLogo((prev) =>
-            prev === mainLogo.mainLogo3 ? mainLogo.mainLogo4 : mainLogo.mainLogo3
+            prev === mainLogo.mainLogo2 ? mainLogo.mainLogo1 : mainLogo.mainLogo2
           );
           setTimeout(() => setIsFlipping(false), 500);
         }, 10000);  // Flip logo every 10 seconds
@@ -69,13 +69,18 @@ const Navbar = () => {
     };
   }, [intervalId]);
 
+  const NavigatetoHome = () => {
+    if (location.pathname !== "/") {
+      window.location.href = "/";
+    }
+  };  
   return (
     <nav
       className="navbar"
       style={{ backgroundColor: navbarBackground, transition: "background-color 0.3s ease" }}
     >
-      <div className="logo">
-        <img
+      <div className="logo" onClick={NavigatetoHome}>
+        <img 
           src={currentMainLogo}
           alt="Logo"
           className={`main-logo ${isFlipping ? "flip-animation" : ""}`}

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "../styles/FilterProduct.scss";
+import { mainLogo } from "../ImagePath";
 
-const FilterProduct = ({handleCloseQuiz}) => {
+const FilterProduct = ({ handleCloseQuiz, handleData }) => {
   const questions = [
     {
       question: "What type of product are you looking for?",
@@ -18,72 +19,94 @@ const FilterProduct = ({handleCloseQuiz}) => {
   ];
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
-  const [timer, setTimer] = useState(1); // Start with 10 seconds
+  const [nextQuestion, setNextQuestion] = useState(0);
+  const [selectedAnswers, setSelectedAnswers] = useState({});
+  const [isAnimating, setIsAnimating] = useState(false);
 
-  // Handle answer selection
   const handleOptionSelect = (answer) => {
-    setSelectedAnswer(answer);
-    setTimer(1); // Reset timer to 10 seconds
-  };
+    if (isAnimating) return;
 
-  // Auto-move to the next question when the timer reaches 0
-  useEffect(() => {
-    let countdown;
+    setSelectedAnswers(prev => ({
+      ...prev,
+      [currentQuestion]: answer
+    }));
 
-    if (selectedAnswer !== null) {
-      countdown = setInterval(() => {
-        setTimer((prev) => prev - 1);
-      }, 1000);
-    }
-
-    if (timer === 0) {
-      clearInterval(countdown);
-      goToNextQuestion();
-    }
-
-    return () => clearInterval(countdown);
-  }, [timer, selectedAnswer]);
-
-  const goToNextQuestion = () => {
     if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion((prev) => prev + 1);
-      setSelectedAnswer(null);
-      setTimer(10); // Reset timer for next question
+      setNextQuestion(currentQuestion + 1);
+      setIsAnimating(true);
+      
+      setTimeout(() => {
+        setCurrentQuestion(currentQuestion + 1);
+        setIsAnimating(false);
+      }, 400);
     } else {
+      handleData({...selectedAnswers, [currentQuestion]: answer});
       handleCloseQuiz();
-      alert("Quiz completed!");
-      // Perform any action when the quiz ends
     }
   };
 
   return (
     <div className="filterQizContainer">
-      <div className="logo">B Cadabra</div>
+      <div className="logo"><img src={mainLogo.mainLogo2} className="main-logo" alt="logo"/></div>
 
-      <div className="question-text">
-        <h3>{questions[currentQuestion].question}</h3>
-      </div>
+      <div className="question-container">
+        {/* Current Question */}
+        <div
+          key={currentQuestion}
+          className={`question-slide ${isAnimating ? 'slide-next' : 'active'}`}
+        >
+          <div className="question-text">
+            <h3>{questions[currentQuestion].question}</h3>
+          </div>
 
-      <div className="alloptions">
-        {questions[currentQuestion].options.map((option, index) => (
-          <button
-            key={index}
-            className={`option-btn ${
-              selectedAnswer === option ? "selected" : ""
-            }`}
-            onClick={() => handleOptionSelect(option)}
+          <div className="alloptions">
+            {questions[currentQuestion].options.map((option, index) => (
+              <button
+                key={index}
+                className={`option-btn ${
+                  selectedAnswers[currentQuestion] === option ? "selected" : ""
+                }`}
+                onClick={() => handleOptionSelect(option)}
+                disabled={isAnimating}
+              >
+                {option}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Next Question (for smooth transition) */}
+        {isAnimating && currentQuestion < questions.length - 1 && (
+          <div
+            key={`next-${nextQuestion}`}
+            className="question-slide incoming"
           >
-            {option}
-          </button>
-        ))}
+            <div className="question-text">
+              <h3>{questions[nextQuestion].question}</h3>
+            </div>
+
+            <div className="alloptions">
+              {questions[nextQuestion].options.map((option, index) => (
+                <button
+                  key={index}
+                  className="option-btn"
+                  disabled={true}
+                >
+                  {option}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="dashbox">
         {questions.map((_, index) => (
           <div
             key={index}
-            className={`box ${index === currentQuestion ? "active" : ""}`}
+            className={`box ${index === currentQuestion ? "active" : ""} ${
+              index < currentQuestion ? "completed" : ""
+            }`}
           ></div>
         ))}
       </div>

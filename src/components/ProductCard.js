@@ -51,10 +51,10 @@ const ProductCard = ({ product, isInCart }) => {
       />
       <h3 className="product-name" onClick={handleProductPage}>{product.title}</h3>
       <p className="product-description">
-        {product.slug}  
+        {product.subTitle}  
       </p>
       <p className="product-usp">
-      {processedDescription}
+      {product.productUsp}
       </p>
       <p className="product-price">
       <del>{product.mrp}</del> -{/* Crossed out original price */}
@@ -64,7 +64,7 @@ const ProductCard = ({ product, isInCart }) => {
         {selectProduct ? <FontAwesomeIcon icon={faCheck}/> :<FontAwesomeIcon icon={faPlus}/>}
       </button>
       <span className="offer-svg">
-        <SVGComponent discount={40} />
+        <SVGComponent discount={product.discount} />
       </span>
       {/* {selectProduct && (
         <div className="counter">

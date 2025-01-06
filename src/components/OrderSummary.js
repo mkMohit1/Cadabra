@@ -5,13 +5,15 @@ import { faPlus, faXmark, faTags } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { updateCurrentContainer } from "../redux/cartSlice";
+import { toast } from "react-toastify";
 
 const OrderSummary = ({currentCart,currentMode}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [openMoreMap, setOpenMoreMap] = useState({}); // Track open state for each item
   const isAuthenticated = useSelector((state)=>state.auth.isAuthenticated); 
-    const currentContainer = useSelector((state) => state.cart.currentContainer);
+  const currentContainer = useSelector((state) => state.cart.currentContainer);
+  const [showAskNumber, setShowAskNumber] = useState(false);
 
   const toggleMore = (id) => {
     setOpenMoreMap((prevState) => ({
@@ -34,9 +36,12 @@ const OrderSummary = ({currentCart,currentMode}) => {
   };
 
   const handleCheckout = ()=>{
-    // if(!isAuthenticated){
-    //   navigate('/login');
-    // }else{
+    if(!isAuthenticated){
+        setShowAskNumber(true);
+        toast.info("please logged in");
+        return;
+    }
+    // else{
       //console.log('AddressContainer');
       if(currentContainer =='CartItem'){
         dispatch(updateCurrentContainer('AddressContainer'));
@@ -46,6 +51,9 @@ const OrderSummary = ({currentCart,currentMode}) => {
       }
       
     // }
+  }
+  const handleClose = ()=>{
+    setShowAskNumber(false);
   }
 
   const temp = useSelector((state)=>state.cart.currentContainer);
@@ -111,6 +119,15 @@ const OrderSummary = ({currentCart,currentMode}) => {
         </button>
       </div>
       <button className="checkout-btn" onClick={handleCheckout}>Proceed to Checkout</button>
+      {showAskNumber && (
+        <div className="popup">
+          <div className="askNumber">
+            <button className="closePopup" onClick={handleClose}>x</button>
+            <h3>Please log in to proceed</h3>
+            <button onClick={() => navigate("/login")}>Go to Login</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -20,10 +20,10 @@ const CartCard = ({ item, handleQuantityChange, currentMode }) => {
     <div className="cart-item">
       <div className="cart-item-content">
         <div className="item-details">
-          <img src={item.productImage} alt={item.title} className="item-image" />
+          <img src={`http://localhost:5000${item.productImage}`} alt={item.title} className="item-image" />
           <div>
             <h4>{item.title}</h4>
-            <p>{item.description}</p>
+            <p>{item.subTitle}</p>
           </div>
         </div>
         <div className="quantity-controls">

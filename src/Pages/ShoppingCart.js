@@ -40,7 +40,7 @@ const ShoppingCart = () => {
       </p>
       :null}
       {cartItem.length > 0 || sellCartItem.length > 0 ? (
-        <div className="cartsContainer">
+        <div className="cartsContainer" style={currentContainer != 'CartItem' ? { marginTop: '4rem' } : null}>
           {currentContainer == 'AddressContainer' ? (
               <AddressSelector />
             ):currentContainer=='Shipping'? <ShippingMethod/>

@@ -7,11 +7,13 @@ import "../styles/CreateProduct.scss";
 const CreateProduct = ({ product, setShowCreateForm, fetchProducts, userID }) => {
   const [formData, setFormData] = useState({
     title: '',
-    slug: '',
+    subTitle: '',
+    productUsp:'',
     description: '',
     category: '',
     status: '',  // Ensure this is part of the initial state
     mrp: '',
+    inventory:'',
     discount: '',
     productImage: null,
   });
@@ -21,11 +23,13 @@ const CreateProduct = ({ product, setShowCreateForm, fetchProducts, userID }) =>
     if (product) {
       setFormData({
         title: product.title || '',
-        slug: product.slug || '',
+        subTitle: product.subTitle || '',
+        productUsp: product.productUsp|| '',
         description: product.description || '',
         category: product.category || '',
         status: product.status || '', // Ensure status is set
         mrp: product.mrp || '',
+        inventory:product.inventory || '',
         discount: product.discount || '',
         productImage: product.productImage || null,  // Handle image separately if necessary
       });
@@ -36,7 +40,7 @@ const CreateProduct = ({ product, setShowCreateForm, fetchProducts, userID }) =>
     e.preventDefault();
 
     // Validate required fields
-    if (!formData.title || !formData.slug || !formData.description || !formData.category || !formData.status || !formData.mrp || !formData.discount || !formData.productImage) {
+    if (!formData.title || !formData.subTitle || !formData.description || !formData.category || !formData.status || !formData.mrp || !formData.discount || !formData.productImage) {
       toast.error("All fields are required, including the image.");
       return;
     }
@@ -93,10 +97,13 @@ const CreateProduct = ({ product, setShowCreateForm, fetchProducts, userID }) =>
           </div>
 
           <div className="form-group">
-            <label>Slug</label>
-            <input type="text" name="slug" value={formData.slug} onChange={handleChange} />
+            <label>Sub - Title</label>
+            <input type="text" name="subTitle" value={formData.subTitle} onChange={handleChange} />
           </div>
-
+          <div className="form-group">
+            <label>Shot Features</label>
+            <input type="text" name="productUsp" value={formData.productUsp} onChange={handleChange} />
+          </div>
           <div className="form-group">
             <label>Content</label>
             <ReactQuill
@@ -139,6 +146,10 @@ const CreateProduct = ({ product, setShowCreateForm, fetchProducts, userID }) =>
         </div>
 
         <div className="create-product__sidebar">
+        <div className="form-group">
+            <label>Inventory</label>
+            <input type="number" name="inventory" value={formData.inventory} onChange={handleChange} />
+          </div>
           <div className="form-group">
             <label>Product Status</label>
             <select name="status" value={formData.status} onChange={handleChange}>

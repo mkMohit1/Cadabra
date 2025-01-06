@@ -28,6 +28,8 @@
         text-decoration: none;
       }
     </style>
+    
+
     <style id="global-styles-inline-css">
       :root {
         --wp--preset--aspect-ratio--square: 1;
@@ -366,7 +368,12 @@
       media="all"
     />
     <script src="./app.js" id="app-js"></script>
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script> <!-- Font Awesome CDN -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <!-- Font Awesome CDN -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      rel="stylesheet"
+    />
 
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -406,709 +413,1100 @@
   </head>
   <body>
     <!-- Navbar -->
-  <nav id="navbar" style="display: flex; justify-content: space-between; align-items: center; padding: 0.2rem 2rem 0; color: #4fe8a4; position: fixed; width: 100vw; z-index: 100; backdrop-filter: blur(10px); transition: background-color 0.3s ease;">
-    <div class="logo" style="padding: 0; perspective: 1000px;">
-      <img id="logo" src="./images/mainLogo2.png" alt="Logo" class="main-logo" style="width: min-content; height: 70px; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; backface-visibility: hidden;">
-    </div>
+    <nav
+      id="navbar"
+      style="
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.2rem 2rem 0;
+        color: #4fe8a4;
+        position: fixed;
+        width: 100vw;
+        z-index: 100;
+        backdrop-filter: blur(10px);
+        transition: background-color 0.3s ease;
+      "
+    >
+      <div class="logo" style="padding: 0; perspective: 1000px">
+        <img
+          id="logo"
+          src="./images/mainLogo2.png"
+          alt="Logo"
+          class="main-logo"
+          style="
+            width: min-content;
+            height: 70px;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+          "
+        />
+      </div>
 
-    <div id="nav-links" class="nav-links" style="display: flex; gap: 1.5rem; align-items: center;">
-      <ul style="display: flex; gap: 1.5rem; list-style: none; align-items: center; margin: 0;">
-        <li><a href="/" id="homeLink" style="text-decoration: none; color: black; font-weight: 300; padding: 5px 10px; font-size: 14px; text-transform: uppercase; transition: all 0.3s ease;">Home</a></li>
-        <li><a href="/about" id="aboutLink" style="text-decoration: none; color: black; font-weight: 300; padding: 5px 10px; font-size: 14px; text-transform: uppercase; transition: all 0.3s ease;">About</a></li>
-        <li><a href="/contact" id="contactLink" style="text-decoration: none; color: black; font-weight: 300; padding: 5px 10px; font-size: 14px; text-transform: uppercase; transition: all 0.3s ease;">Contact</a></li>
-        <li><a href="/rent" id="rentLink" style="text-decoration: none; color: black; font-weight: 300; padding: 5px 10px; font-size: 14px; text-transform: uppercase; transition: all 0.3s ease;">Rent</a></li>
-        <li>
-          <a href="/cart" id="cartLink" style="text-decoration: none; color: black; font-weight: 300; padding: 5px 10px; font-size: 14px; text-transform: uppercase; position: relative; transition: all 0.3s ease;">
-            <i class="fa-solid fa-cart-shopping" style="font-size: 20px;"></i>
-            <span id="cartCount" class="totalCounter" style="position: absolute; top: -5px; right: -5px; background-color: red; color: white; border-radius: 50%; font-size: 12px; padding: 3px 6px;">0</span>
-          </a>
-        </li>
-        <li><a href="/login" id="loginLink" style="text-decoration: none; color: black; font-weight: 300; padding: 5px 10px; font-size: 14px; text-transform: uppercase; transition: all 0.3s ease;">Login</a></li>
-      </ul>
-    </div>
+      <div
+        id="nav-links"
+        class="nav-links"
+        style="display: flex; gap: 1.5rem; align-items: center"
+      >
+        <ul
+          style="
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+            align-items: center;
+            margin: 0;
+          "
+        >
+          <li>
+            <a
+              href="/"
+              id="homeLink"
+              style="
+                text-decoration: none;
+                color: black;
+                font-weight: 300;
+                padding: 5px 10px;
+                font-size: 14px;
+                text-transform: uppercase;
+                transition: all 0.3s ease;
+              "
+              >Home</a
+            >
+          </li>
+          <li>
+            <a
+              href="/about"
+              id="aboutLink"
+              style="
+                text-decoration: none;
+                color: black;
+                font-weight: 300;
+                padding: 5px 10px;
+                font-size: 14px;
+                text-transform: uppercase;
+                transition: all 0.3s ease;
+              "
+              >About</a
+            >
+          </li>
+          <li>
+            <a
+              href="/contact"
+              id="contactLink"
+              style="
+                text-decoration: none;
+                color: black;
+                font-weight: 300;
+                padding: 5px 10px;
+                font-size: 14px;
+                text-transform: uppercase;
+                transition: all 0.3s ease;
+              "
+              >Contact</a
+            >
+          </li>
+          <li>
+            <a
+              href="/rent"
+              id="rentLink"
+              style="
+                text-decoration: none;
+                color: black;
+                font-weight: 300;
+                padding: 5px 10px;
+                font-size: 14px;
+                text-transform: uppercase;
+                transition: all 0.3s ease;
+              "
+              >Rent</a
+            >
+          </li>
+          <li>
+            <a
+              href="/cart"
+              id="cartLink"
+              style="
+                text-decoration: none;
+                color: black;
+                font-weight: 300;
+                padding: 5px 10px;
+                font-size: 14px;
+                text-transform: uppercase;
+                position: relative;
+                transition: all 0.3s ease;
+              "
+            >
+              <i class="fa-solid fa-cart-shopping" style="font-size: 20px"></i>
+              <span
+                id="cartCount"
+                class="totalCounter"
+                style="
+                  position: absolute;
+                  top: -5px;
+                  right: -5px;
+                  color: white;
+                  border-radius: 50%;
+                  font-size: 12px;
+                  padding: 3px 6px;
+                "
+                >0</span
+              >
+            </a>
+          </li>
+          <li>
+            <a
+              href="/login"
+              id="loginLink"
+              style="
+                text-decoration: none;
+                color: black;
+                font-weight: 300;
+                padding: 5px 10px;
+                font-size: 14px;
+                text-transform: uppercase;
+                transition: all 0.3s ease;
+              "
+              >Login</a
+            >
+          </li>
+        </ul>
+      </div>
 
-    <div id="hamburger" class="hamburger" style="display: none; font-size: 1.5rem; cursor: pointer;">
-      <i id="hamburgerIcon" class="fas fa-bars" style="color: #4fe8a4;"></i>
-    </div>
-  </nav>
-  <script>
-    // JavaScript for dynamic navbar behavior
+      <div
+        id="hamburger"
+        class="hamburger"
+        style="display: none; font-size: 1.5rem; cursor: pointer"
+      >
+        <i id="hamburgerIcon" class="fas fa-bars" style="color: #4fe8a4"></i>
+      </div>
+    </nav>
+    <script>
+      // JavaScript for dynamic navbar behavior
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const navbar = document.getElementById('navbar');
-      const logo = document.getElementById('logo');
-      const navLinks = document.getElementById('nav-links');
-      const children = Array.from(navLinks.children[0].children);
+      document.addEventListener("DOMContentLoaded", () => {
+        const navbar = document.getElementById("navbar");
+        const logo = document.getElementById("logo");
+        const navLinks = document.getElementById("nav-links");
+        const children = Array.from(navLinks.children[0].children);
 
-      const hamburger = document.getElementById('hamburger');
-      const cartCount = document.getElementById('cartCount');
-      const hamburgerIcon = document.getElementById('hamburgerIcon');
-      let menuOpen = false;
-      let intervalId = null;
-      let isFlipping = false;
-      let topH1 = document.getElementsByClassName('bg-root');
+        const hamburger = document.getElementById("hamburger");
+        const cartCount = document.getElementById("cartCount");
+        const hamburgerIcon = document.getElementById("hamburgerIcon");
+        let menuOpen = false;
+        let intervalId = null;
+        let isFlipping = false;
+        let topH1 = document.getElementsByClassName("bg-root");
 
-      // Check if there's at least one element with the class 'bg-root'
-      if (topH1.length > 0) {
-        topH1[0].style.paddingTop = "70px"; // Modify the style of the first element in the collection
-      }
-      // Simulate a cart count
-      let cartItems = 0; // Replace this with actual cart data if necessary
-      cartCount.textContent = cartItems > 0 ? cartItems : "";
-      let currentScrollY = window.scrollY;
-      if(currentScrollY < 100){
-        navbar.style.backgroundColor = "white";
-      }      
-      // Toggle mobile menu
-      hamburger.addEventListener("click", () => {
-        menuOpen = !menuOpen;
-        if (menuOpen) {
-          navLinks.style.display = "flex";
-          hamburgerIcon.classList.replace("fa-bars", "fa-times");
-        } else {
-          navLinks.style.display = "none";
-          hamburgerIcon.classList.replace("fa-times", "fa-bars");
+        // Check if there's at least one element with the class 'bg-root'
+        if (topH1.length > 0) {
+          topH1[0].style.paddingTop = "70px"; // Modify the style of the first element in the collection
         }
-      });
-      
-      // Scroll effect on navbar
-      window.addEventListener("scroll", () => {
+        // Simulate a cart count
+        let cartItems = 0; // Replace this with actual cart data if necessary
+        cartCount.textContent = cartItems > 0 ? cartItems : "";
         let currentScrollY = window.scrollY;
+        if (currentScrollY < 100) {
+          navbar.style.backgroundColor = "white";
+        }
+        // Toggle mobile menu
+        hamburger.addEventListener("click", () => {
+          menuOpen = !menuOpen;
+          if (menuOpen) {
+            navLinks.style.display = "flex";
+            hamburgerIcon.classList.replace("fa-bars", "fa-times");
+          } else {
+            navLinks.style.display = "none";
+            hamburgerIcon.classList.replace("fa-times", "fa-bars");
+          }
+        });
 
-        if (currentScrollY >= 100) {
-          navbar.style.backgroundColor = "hsla(0deg, 0%, 7%, 46%)";
-          // Use forEach to iterate through the elements
-          children.forEach((link) => {
-            link.children[0].style.color = "white"; // Set the style of the first child
-          });
-          logo.src = "./images/mainLogo1.png"; // Replace with the actual logo URL
-          if (currentScrollY >= 250) {
-            // Flip logo every 10 seconds
-            if (!intervalId) {
-              intervalId = setInterval(() => {
-                isFlipping = true;
-                logo.classList.add("flip-animation");
-                setTimeout(() => {
-                  isFlipping = false;
-                  logo.classList.remove("flip-animation");
-                }, 500);
-              }, 10000);
+        // Scroll effect on navbar
+        window.addEventListener("scroll", () => {
+          let currentScrollY = window.scrollY;
+
+          if (currentScrollY >= 100) {
+            navbar.style.backgroundColor = "hsla(0deg, 0%, 7%, 46%)";
+            // Use forEach to iterate through the elements
+            children.forEach((link) => {
+              link.children[0].style.color = "white"; // Set the style of the first child
+            });
+            logo.src = "./images/mainLogo1.png"; // Replace with the actual logo URL
+            if (currentScrollY >= 250) {
+              // Flip logo every 10 seconds
+              if (!intervalId) {
+                intervalId = setInterval(() => {
+                  isFlipping = true;
+                  logo.classList.add("flip-animation");
+                  setTimeout(() => {
+                    isFlipping = false;
+                    logo.classList.remove("flip-animation");
+                  }, 500);
+                }, 10000);
+              }
+            }
+          } else {
+            navbar.style.backgroundColor = "white";
+            logo.src = "./images/mainLogo2.png"; // Replace with the actual logo URL
+            // Use forEach to iterate through the elements
+            children.forEach((link) => {
+              link.children[0].style.color = "black"; // Set the style of the first child
+            });
+            if (intervalId) {
+              clearInterval(intervalId);
+              intervalId = null;
             }
           }
-        } else {
-          navbar.style.backgroundColor = "white";
-          logo.src = "./images/mainLogo2.png"; // Replace with the actual logo URL
-          // Use forEach to iterate through the elements
-          children.forEach((link) => {
-            link.children[0].style.color = "black"; // Set the style of the first child
-          });
-          if (intervalId) {
-            clearInterval(intervalId);
-            intervalId = null;
-          }
-        }
+        });
       });
-    });
-  </script>
-    <div  class="page-template page-template-page-about page-template-page-about-php page page-id-95">
-    <div class="main-content" data-js-component="ScrollFx">
-      <div
-        class="aboutBanner"
-        data-js-component="ExpandingBg"
-        data-nav-color="dark"
-        data-right-offset="146"
-      >
-        <div class="pageWrap" data-nav-color="dark">
-          <div class="bg"></div>
-          <h1 class="h1 bg-root">UNRAVELLING <br>THE THREADS OF POSSIBILITIES</h1>
-        </div>
-      </div>
-      <section class="twoCol" data-nav-color="dark">
-        <div class="pageWrap">
-          <div class="twoCol-grid grid">
-            <div class="twoCol-block">
-              <h2 class="h6">SURVEILLANCE</h2>
-              <p>
-                We tackle complex security problems, developing and implementing
-                lasting solutions. At the basis of all our Surveillance related
-                solutions, our approach to solutions is predominantly based on
-                maintaining the right equilibrium of technology and logical
-                analysis.
-              </p>
-
-            </div>
-
-            <div class="twoCol-block">
-              <h2 class="h6">BURGLARY</h2>
-              <p>
-                We are India's premier provider of burglary solutions, serving
-                both residential and commercial clients with real-time
-                prevention via our dedicated command and control center.
-              </p>
-
-            
-            </div>
-
-            <div class="twoCol-block">
-              <h2 class="h6">INTELLIGENCE</h2>
-              <p>
-                AI is the core technology used by the Security Solution for
-                pixel assessment, management, and control. We strongly believe
-                that AI is going to be the core of Security tech. We maintain a
-                collaborative network of more than 50 global AI firms dedicated
-                to security intelligence.
-              </p>
-
-
-            </div>
-
-            <div class="twoCol-block">
-              <h2 class="h6">CONTROL CENTERS</h2>
-              <p>
-                Cadabra's network of command and control centers in India
-                enables us to provide cutting-edge proactive security for homes
-                and commercial spaces. We differentiate ourselves through our
-                unwavering dedication to providing preventative solutions.
-              </p>
-
-            </div>
+    </script>
+    <div
+      class="page-template page-template-page-about page-template-page-about-php page page-id-95"
+    >
+      <div class="main-content" data-js-component="ScrollFx">
+        <div
+          class="aboutBanner"
+          data-js-component="ExpandingBg"
+          data-nav-color="dark"
+          data-right-offset="146"
+        >
+          <div class="pageWrap" data-nav-color="dark">
+            <div class="bg"></div>
+            <h1 class="h1 bg-root">
+              UNRAVELLING <br />THE THREADS OF POSSIBILITIES
+            </h1>
           </div>
         </div>
-      </section>
+        <section class="twoCol" data-nav-color="dark">
+          <div class="pageWrap">
+            <div class="twoCol-grid grid">
+              <div class="twoCol-block">
+                <h2 class="h6">SURVEILLANCE</h2>
+                <p>
+                  We tackle complex security problems, developing and
+                  implementing lasting solutions. At the basis of all our
+                  Surveillance related solutions, our approach to solutions is
+                  predominantly based on maintaining the right equilibrium of
+                  technology and logical analysis.
+                </p>
+              </div>
 
-      <div
-        class="accordionWrapper pageWrap"
-        data-js-component="Accordion"
-        data-nav-color="dark"
-      >
-        <h3 class="accordion-title h2">Clientele</h3>
-        <div class="accordion">
-          <div class="accordion-panel accordion-expanded">
-            <h4 class="accordion-header h6">
-              Financial Services
-              <span
-                ><svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    fill="#000"
-                    fill-rule="evenodd"
-                    d="M7 7V0h2v7h7v2H9v7H7V9H0V7h7z"
-                  />
-                </svg>
-              </span>
-            </h4>
-            <div class="accordion-body">
-              <div class="accordion-panel-column">
-                <p>AllianceBernstein</p>
-                <p>Allianz Global Investors</p>
-                <p>American Express</p>
-                <p>Ameriprise</p>
+              <div class="twoCol-block">
+                <h2 class="h6">BURGLARY</h2>
                 <p>
-                  <a href="" class="" title="AXA" target="">AXA</a>
+                  We are India's premier provider of burglary solutions, serving
+                  both residential and commercial clients with real-time
+                  prevention via our dedicated command and control center.
                 </p>
-                <p>Ayco</p>
-                <p>Bessemer Trust</p>
-                <p>BlackRock</p>
-                <p>Bloomberg</p>
-                <p>Brookfield</p>
-                <p>BNY Mellon</p>
-                <p>Bridge Investment Group</p>
-                <p>Broadridge</p>
-                <p>Calvert Investments</p>
-                <p>
-                  <a href="" class="" title="Capital Group" target=""
-                    >Capital Group</a
-                  >
-                </p>
-                <p>Calamus Investments</p>
-                <p>Charles Schwab</p>
               </div>
-              <div class="accordion-panel-column">
-                <p>Citi</p>
-                <p>Columbia Threadneedle</p>
-                <p>Credit Suisse</p>
-                <p>Deutsche Bank</p>
-                <p>Fidelity</p>
-                <p>First Data</p>
-                <p>Global Atlantic</p>
-                <p>Goldman Sachs</p>
-                <p>Guardian Life</p>
-                <p>
-                  <a href="" class="" title="Insight Partners" target=""
-                    >Insight Partners</a
-                  >
-                </p>
-                <p>Institutional Shareholder Services</p>
-                <p>J.P. Morgan</p>
-                <p>KKR</p>
-                <p>Liquidnet</p>
-                <p>Lord Abbett</p>
-                <p>MassMutual</p>
-                <p>MetLife</p>
-              </div>
-              <div class="accordion-panel-column">
-                <p>MissionSquare</p>
-                <p>Navient</p>
-                <p>OppenheimerFunds</p>
-                <p>
-                  <a href="" class="" title="Osaic" target="">Osaic</a>
-                </p>
-                <p>Pantheon Ventures</p>
-                <p>Providence Equity</p>
-                <p>Sands Capital Management</p>
-                <p>Standish</p>
-                <p>TD Ameritrade</p>
-                <p>Thomas H. Lee Partners</p>
-                <p>TIAA</p>
-                <p>Wellington Management</p>
-                <p>Wells Fargo</p>
-                <p>Wilmington Trust</p>
-                <p>WorldQuant</p>
-              </div>
-            </div>
-          </div>
-          <div class="accordion-panel">
-            <h4 class="accordion-header h6">
-              Technology
-              <span
-                ><svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    fill="#000"
-                    fill-rule="evenodd"
-                    d="M7 7V0h2v7h7v2H9v7H7V9H0V7h7z"
-                  />
-                </svg>
-              </span>
-            </h4>
-            <div class="accordion-body">
-              <div class="accordion-panel-column">
-                <p>ADP</p>
-                <p>Bloomberg</p>
-                <p>Broadridge</p>
-                <p>Chainalysis</p>
-                <p>
-                  <a href="" class="" title="Cognizant" target="">Cognizant</a>
-                </p>
-                <p>Collective</p>
-                <p>Convergex</p>
-                <p>
-                  <a href="" class="" title="Crown Castle" target=""
-                    >Crown Castle</a
-                  >
-                </p>
-                <p>CQ-Roll Call</p>
-                <p>Diligent</p>
-              </div>
-              <div class="accordion-panel-column">
-                <p>EPAM</p>
-                <p>Intersection</p>
-                <p>
-                  <a href="" class="" title="Insight Partners" target=""
-                    >Insight Partners</a
-                  >
-                </p>
-                <p>LexisNexis</p>
-                <p>LinkedIn</p>
-                <p>Liquidnet</p>
-                <p>Nasdaq</p>
-                <p>Newfold Digital</p>
-                <p>NICE Systems</p>
-                <p>PhotoShelter</p>
-                <p>Stairwell</p>
-              </div>
-              <div class="accordion-panel-column">
-                <p>Shutterstock</p>
-                <p>
-                  <a href="" class="" title="Tierpoint" target="">Tierpoint</a>
-                </p>
-                <p>TOA Technologies</p>
-                <p>Tradeweb</p>
-                <p>
-                  <a href="" class="" title="TWITTER" target="">Twitter</a>
-                </p>
-                <p>United Imaging</p>
-                <p>Verizon</p>
-                <p>WebMD</p>
-                <p>Yahoo!</p>
-              </div>
-            </div>
-          </div>
-          <div class="accordion-panel">
-            <h4 class="accordion-header h6">
-              Higher Education
-              <span
-                ><svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    fill="#000"
-                    fill-rule="evenodd"
-                    d="M7 7V0h2v7h7v2H9v7H7V9H0V7h7z"
-                  />
-                </svg>
-              </span>
-            </h4>
-            <div class="accordion-body">
-              <div class="accordion-panel-column">
-                <p>American University</p>
-                <p>Barnes & Noble</p>
-                <p>Bermuda Institute of Ocean Sciences</p>
-                <p>
-                  <a href="" class="" title="Brown University" target=""
-                    >Brown University</a
-                  >
-                </p>
-                <p>
-                  <a href="" class="" title="COLUMBIA LAW" target=""
-                    >Columbia Law School</a
-                  >
-                </p>
-                <p>Columbia SIPA</p>
-                <p>
-                  <a href="" class="" title="CORNELL TECH" target=""
-                    >Cornell Tech</a
-                  >
-                </p>
-                <p>Cornell University</p>
-                <p>Cornell University College of Business</p>
-                <p>Dartmouth College</p>
-              </div>
-              <div class="accordion-panel-column">
-                <p>Duke Nicholas School of the Environment</p>
-                <p>Duke Fuqua School of Business</p>
-                <p>
-                  <a href="" class="" title="DUKE FORWARD" target=""
-                    >Duke University</a
-                  >
-                </p>
-                <p>The George Washington University</p>
-                <p>Institute at Brown for Environment & Society</p>
-                <p>Kenyon College</p>
-                <p>Lehigh University</p>
-                <p>Manhattan School of Music</p>
-                <p>NYU School of Professional Studies</p>
-                <p>NYU Stern School of Business</p>
-              </div>
-              <div class="accordion-panel-column">
-                <p>Stanford Graduate School of Business</p>
-                <p>
-                  <a href="" class="" title="STANFORD HAI" target=""
-                    >Stanford HAI</a
-                  >
-                </p>
-                <p>Stony Brook University</p>
-                <p>UC Berkeley</p>
-                <p>Virginia Commonwealth University School of the Arts</p>
-                <p>Virginia Tech</p>
-                <p>Weill Cornell Medicine</p>
-                <p>Yale School of Music</p>
-                <p>Yale University</p>
-              </div>
-            </div>
-          </div>
-          <div class="accordion-panel">
-            <h4 class="accordion-header h6">
-              Professional Services
-              <span
-                ><svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    fill="#000"
-                    fill-rule="evenodd"
-                    d="M7 7V0h2v7h7v2H9v7H7V9H0V7h7z"
-                  />
-                </svg>
-              </span>
-            </h4>
-            <div class="accordion-body">
-              <div class="accordion-panel-column">
-                <p>ADP</p>
-                <p>Baker Tilly</p>
-                <p>BerlinRosen</p>
-                <p>Broadridge</p>
-                <p>Business Wire</p>
-              </div>
-              <div class="accordion-panel-column">
-                <p>
-                  <a href="" class="" title="EVERGREEN TRADING" target=""
-                    >Evergreen Trading</a
-                  >
-                </p>
-                <p>HNTB</p>
-                <p>Kearney</p>
-                <p>Level Agency</p>
-                <p>LexisNexis</p>
-              </div>
-              <div class="accordion-panel-column">
-                <p>
-                  <a href="" class="" title="Longfellow" target=""
-                    >Longfellow Real Estate Partners</a
-                  >
-                </p>
-                <p>Thomson Reuters</p>
-                <p>Wolters Kluwer</p>
-              </div>
-            </div>
-          </div>
-          <div class="accordion-panel">
-            <h4 class="accordion-header h6">
-              Industrials
-              <span
-                ><svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    fill="#000"
-                    fill-rule="evenodd"
-                    d="M7 7V0h2v7h7v2H9v7H7V9H0V7h7z"
-                  />
-                </svg>
-              </span>
-            </h4>
-            <div class="accordion-body">
-              <div class="accordion-panel-column">
-                <p>Aligned Energy</p>
-                <p>Arrive Logistics</p>
-                <p>Clean Harbors</p>
-                <p>Corning</p>
-              </div>
-              <div class="accordion-panel-column">
-                <p>
-                  <a href="" class="" title="Crown Castle" target=""
-                    >Crown Castle</a
-                  >
-                </p>
-                <p>Johnson & Johnson</p>
-                <p>Medtronic</p>
-                <p>Pitney Bowes</p>
-              </div>
-              <div class="accordion-panel-column">
-                <p>Tyco</p>
-                <p>UPS</p>
-                <p>Vontier</p>
-              </div>
-            </div>
-          </div>
-          <div class="accordion-panel">
-            <h4 class="accordion-header h6">
-              Not-for-Profit
-              <span
-                ><svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    fill="#000"
-                    fill-rule="evenodd"
-                    d="M7 7V0h2v7h7v2H9v7H7V9H0V7h7z"
-                  />
-                </svg>
-              </span>
-            </h4>
-            <div class="accordion-body">
-              <div class="accordion-panel-column">
-                <p>American College of Veterinary Radiology</p>
-                <p>Break Through Tech</p>
-                <p>Covenant House</p>
-                <p>The Fund for Global Human Rights</p>
-                <p>Hospital for Special Surgery</p>
-                <p>Human Rights Watch</p>
-                <p>The Institute For Functional Medicine</p>
-              </div>
-              <div class="accordion-panel-column">
-                <p>The Joyce Theater Foundation</p>
-                <p>Lincoln Center for the Performing Arts</p>
-                <p>Ms. Foundation</p>
-                <p>Museum of Fine Arts Boston</p>
-                <p>National Baseball Hall of Fame</p>
-                <p>
-                  <a href="" class="" title="NATIONAL WIC ASSOCIATION" target=""
-                    >National WIC Association</a
-                  >
-                </p>
-                <p>Natural Resources Defense Council</p>
-              </div>
-              <div class="accordion-panel-column">
-                <p>PEW Charitable Trusts</p>
-                <p>SAG-AFTRA</p>
-                <p>
-                  <a
-                    href=""
-                    class=""
-                    title="SCHOOL OF AMERICAN BALLET"
-                    target=""
-                    >School of American Ballet</a
-                  >
-                </p>
-                <p>Virginia Cooperative Extension</p>
-                <p>Teach for America</p>
-                <p>The Washington Ballet</p>
-                <p>Weill Cornell Medicine</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      <section class="featurePanel" data-nav-color="light">
-        <div class="pageWrap"></div>
-      </section>
+              <div class="twoCol-block">
+                <h2 class="h6">INTELLIGENCE</h2>
+                <p>
+                  AI is the core technology used by the Security Solution for
+                  pixel assessment, management, and control. We strongly believe
+                  that AI is going to be the core of Security tech. We maintain
+                  a collaborative network of more than 50 global AI firms
+                  dedicated to security intelligence.
+                </p>
+              </div>
 
-      <section class="videoColumns">
-        <div class="pageWrap">
-          <h2>At Cadabra we are</h2>
-          <div class="videoColumns-scroll">
-            <div class="video-list">
-              <div class="video-single" data-js-component="Modal">
-                <div class="video-play-container js-modal-trigger">
-                  <div class="poster-image">
-                    <img
-                      class="lazy"
-                      src="/STRATEGISTS.png"
-                      alt="Strategists"
+              <div class="twoCol-block">
+                <h2 class="h6">CONTROL CENTERS</h2>
+                <p>
+                  Cadabra's network of command and control centers in India
+                  enables us to provide cutting-edge proactive security for
+                  homes and commercial spaces. We differentiate ourselves
+                  through our unwavering dedication to providing preventative
+                  solutions.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div
+          class="accordionWrapper pageWrap"
+          data-js-component="Accordion"
+          data-nav-color="dark"
+        >
+          <h3 class="accordion-title h2">Clientele</h3>
+          <div class="accordion">
+            <div class="accordion-panel accordion-expanded">
+              <h4 class="accordion-header h6">
+                Financial Services
+                <span
+                  ><svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fill="#000"
+                      fill-rule="evenodd"
+                      d="M7 7V0h2v7h7v2H9v7H7V9H0V7h7z"
                     />
-                  </div>
-                </div>
-                <div class="video-copy">
-                  <h5 class="h6">Strategists</h5>
-                  <p class="p-small">
-                    We believe in working at the core of every project—
-                    unlocking effective approaches, unearthing insights and
-                    building strategies around it, managing the user security
-                    needs in the securest possible manner, and owning the work
-                    from start to finish.
+                  </svg>
+                </span>
+              </h4>
+              <div class="accordion-body">
+                <div class="accordion-panel-column">
+                  <p>AllianceBernstein</p>
+                  <p>Allianz Global Investors</p>
+                  <p>American Express</p>
+                  <p>Ameriprise</p>
+                  <p>
+                    <a href="" class="" title="AXA" target="">AXA</a>
                   </p>
+                  <p>Ayco</p>
+                  <p>Bessemer Trust</p>
+                  <p>BlackRock</p>
+                  <p>Bloomberg</p>
+                  <p>Brookfield</p>
+                  <p>BNY Mellon</p>
+                  <p>Bridge Investment Group</p>
+                  <p>Broadridge</p>
+                  <p>Calvert Investments</p>
+                  <p>
+                    <a href="" class="" title="Capital Group" target=""
+                      >Capital Group</a
+                    >
+                  </p>
+                  <p>Calamus Investments</p>
+                  <p>Charles Schwab</p>
+                </div>
+                <div class="accordion-panel-column">
+                  <p>Citi</p>
+                  <p>Columbia Threadneedle</p>
+                  <p>Credit Suisse</p>
+                  <p>Deutsche Bank</p>
+                  <p>Fidelity</p>
+                  <p>First Data</p>
+                  <p>Global Atlantic</p>
+                  <p>Goldman Sachs</p>
+                  <p>Guardian Life</p>
+                  <p>
+                    <a href="" class="" title="Insight Partners" target=""
+                      >Insight Partners</a
+                    >
+                  </p>
+                  <p>Institutional Shareholder Services</p>
+                  <p>J.P. Morgan</p>
+                  <p>KKR</p>
+                  <p>Liquidnet</p>
+                  <p>Lord Abbett</p>
+                  <p>MassMutual</p>
+                  <p>MetLife</p>
+                </div>
+                <div class="accordion-panel-column">
+                  <p>MissionSquare</p>
+                  <p>Navient</p>
+                  <p>OppenheimerFunds</p>
+                  <p>
+                    <a href="" class="" title="Osaic" target="">Osaic</a>
+                  </p>
+                  <p>Pantheon Ventures</p>
+                  <p>Providence Equity</p>
+                  <p>Sands Capital Management</p>
+                  <p>Standish</p>
+                  <p>TD Ameritrade</p>
+                  <p>Thomas H. Lee Partners</p>
+                  <p>TIAA</p>
+                  <p>Wellington Management</p>
+                  <p>Wells Fargo</p>
+                  <p>Wilmington Trust</p>
+                  <p>WorldQuant</p>
                 </div>
               </div>
-
-              <div class="video-single" data-js-component="Modal">
-                <div class="video-play-container js-modal-trigger">
-                  <div class="poster-image">
-                    <img class="lazy" src="/BUILDER.png" alt="Builders" />
-                  </div>
-                </div>
-                <div class="video-copy">
-                  <h5 class="h6">Builders</h5>
-                  <p class="p-small">
-                    We build Bespoke solutions to complex challenges—ensuring
-                    technology supports the creative and strategic vision, and
-                    vice versa.
+            </div>
+            <div class="accordion-panel">
+              <h4 class="accordion-header h6">
+                Technology
+                <span
+                  ><svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fill="#000"
+                      fill-rule="evenodd"
+                      d="M7 7V0h2v7h7v2H9v7H7V9H0V7h7z"
+                    />
+                  </svg>
+                </span>
+              </h4>
+              <div class="accordion-body">
+                <div class="accordion-panel-column">
+                  <p>ADP</p>
+                  <p>Bloomberg</p>
+                  <p>Broadridge</p>
+                  <p>Chainalysis</p>
+                  <p>
+                    <a href="" class="" title="Cognizant" target=""
+                      >Cognizant</a
+                    >
                   </p>
+                  <p>Collective</p>
+                  <p>Convergex</p>
+                  <p>
+                    <a href="" class="" title="Crown Castle" target=""
+                      >Crown Castle</a
+                    >
+                  </p>
+                  <p>CQ-Roll Call</p>
+                  <p>Diligent</p>
+                </div>
+                <div class="accordion-panel-column">
+                  <p>EPAM</p>
+                  <p>Intersection</p>
+                  <p>
+                    <a href="" class="" title="Insight Partners" target=""
+                      >Insight Partners</a
+                    >
+                  </p>
+                  <p>LexisNexis</p>
+                  <p>LinkedIn</p>
+                  <p>Liquidnet</p>
+                  <p>Nasdaq</p>
+                  <p>Newfold Digital</p>
+                  <p>NICE Systems</p>
+                  <p>PhotoShelter</p>
+                  <p>Stairwell</p>
+                </div>
+                <div class="accordion-panel-column">
+                  <p>Shutterstock</p>
+                  <p>
+                    <a href="" class="" title="Tierpoint" target=""
+                      >Tierpoint</a
+                    >
+                  </p>
+                  <p>TOA Technologies</p>
+                  <p>Tradeweb</p>
+                  <p>
+                    <a href="" class="" title="TWITTER" target="">Twitter</a>
+                  </p>
+                  <p>United Imaging</p>
+                  <p>Verizon</p>
+                  <p>WebMD</p>
+                  <p>Yahoo!</p>
                 </div>
               </div>
-              <div class="video-single" data-js-component="Modal">
-                <div class="video-play-container js-modal-trigger">
-                  <div class="poster-image">
-                    <img class="lazy" src="/CREATIVES.png" alt="Creatives" />
-                  </div>
-                </div>
-                <div class="video-copy">
-                  <h5 class="h6">Creatives</h5>
-                  <p class="p-small">
-                    We deliver the big ideas that bring powerful results to life
-                    and push our clients to break down barriers and impact both
-                    business and culture.
+            </div>
+            <div class="accordion-panel">
+              <h4 class="accordion-header h6">
+                Higher Education
+                <span
+                  ><svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fill="#000"
+                      fill-rule="evenodd"
+                      d="M7 7V0h2v7h7v2H9v7H7V9H0V7h7z"
+                    />
+                  </svg>
+                </span>
+              </h4>
+              <div class="accordion-body">
+                <div class="accordion-panel-column">
+                  <p>American University</p>
+                  <p>Barnes & Noble</p>
+                  <p>Bermuda Institute of Ocean Sciences</p>
+                  <p>
+                    <a href="" class="" title="Brown University" target=""
+                      >Brown University</a
+                    >
                   </p>
+                  <p>
+                    <a href="" class="" title="COLUMBIA LAW" target=""
+                      >Columbia Law School</a
+                    >
+                  </p>
+                  <p>Columbia SIPA</p>
+                  <p>
+                    <a href="" class="" title="CORNELL TECH" target=""
+                      >Cornell Tech</a
+                    >
+                  </p>
+                  <p>Cornell University</p>
+                  <p>Cornell University College of Business</p>
+                  <p>Dartmouth College</p>
+                </div>
+                <div class="accordion-panel-column">
+                  <p>Duke Nicholas School of the Environment</p>
+                  <p>Duke Fuqua School of Business</p>
+                  <p>
+                    <a href="" class="" title="DUKE FORWARD" target=""
+                      >Duke University</a
+                    >
+                  </p>
+                  <p>The George Washington University</p>
+                  <p>Institute at Brown for Environment & Society</p>
+                  <p>Kenyon College</p>
+                  <p>Lehigh University</p>
+                  <p>Manhattan School of Music</p>
+                  <p>NYU School of Professional Studies</p>
+                  <p>NYU Stern School of Business</p>
+                </div>
+                <div class="accordion-panel-column">
+                  <p>Stanford Graduate School of Business</p>
+                  <p>
+                    <a href="" class="" title="STANFORD HAI" target=""
+                      >Stanford HAI</a
+                    >
+                  </p>
+                  <p>Stony Brook University</p>
+                  <p>UC Berkeley</p>
+                  <p>Virginia Commonwealth University School of the Arts</p>
+                  <p>Virginia Tech</p>
+                  <p>Weill Cornell Medicine</p>
+                  <p>Yale School of Music</p>
+                  <p>Yale University</p>
                 </div>
               </div>
-
-              <div class="video-single" data-js-component="Modal">
-                <div class="video-play-container js-modal-trigger">
-                  <div class="poster-image">
-                    <img class="lazy" src="/PRODUCERS.png" alt="Producers" />
-                  </div>
+            </div>
+            <div class="accordion-panel">
+              <h4 class="accordion-header h6">
+                Professional Services
+                <span
+                  ><svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fill="#000"
+                      fill-rule="evenodd"
+                      d="M7 7V0h2v7h7v2H9v7H7V9H0V7h7z"
+                    />
+                  </svg>
+                </span>
+              </h4>
+              <div class="accordion-body">
+                <div class="accordion-panel-column">
+                  <p>ADP</p>
+                  <p>Baker Tilly</p>
+                  <p>BerlinRosen</p>
+                  <p>Broadridge</p>
+                  <p>Business Wire</p>
                 </div>
-                <div class="video-copy">
-                  <h5 class="h6">Producers</h5>
-                  <p class="p-small">
-                    Constantly finding ways to get things done, we’re problem
-                    solvers who can see the big picture while managing the
-                    details that can make or break a complex client need.
+                <div class="accordion-panel-column">
+                  <p>
+                    <a href="" class="" title="EVERGREEN TRADING" target=""
+                      >Evergreen Trading</a
+                    >
                   </p>
+                  <p>HNTB</p>
+                  <p>Kearney</p>
+                  <p>Level Agency</p>
+                  <p>LexisNexis</p>
+                </div>
+                <div class="accordion-panel-column">
+                  <p>
+                    <a href="" class="" title="Longfellow" target=""
+                      >Longfellow Real Estate Partners</a
+                    >
+                  </p>
+                  <p>Thomson Reuters</p>
+                  <p>Wolters Kluwer</p>
+                </div>
+              </div>
+            </div>
+            <div class="accordion-panel">
+              <h4 class="accordion-header h6">
+                Industrials
+                <span
+                  ><svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fill="#000"
+                      fill-rule="evenodd"
+                      d="M7 7V0h2v7h7v2H9v7H7V9H0V7h7z"
+                    />
+                  </svg>
+                </span>
+              </h4>
+              <div class="accordion-body">
+                <div class="accordion-panel-column">
+                  <p>Aligned Energy</p>
+                  <p>Arrive Logistics</p>
+                  <p>Clean Harbors</p>
+                  <p>Corning</p>
+                </div>
+                <div class="accordion-panel-column">
+                  <p>
+                    <a href="" class="" title="Crown Castle" target=""
+                      >Crown Castle</a
+                    >
+                  </p>
+                  <p>Johnson & Johnson</p>
+                  <p>Medtronic</p>
+                  <p>Pitney Bowes</p>
+                </div>
+                <div class="accordion-panel-column">
+                  <p>Tyco</p>
+                  <p>UPS</p>
+                  <p>Vontier</p>
+                </div>
+              </div>
+            </div>
+            <div class="accordion-panel">
+              <h4 class="accordion-header h6">
+                Not-for-Profit
+                <span
+                  ><svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fill="#000"
+                      fill-rule="evenodd"
+                      d="M7 7V0h2v7h7v2H9v7H7V9H0V7h7z"
+                    />
+                  </svg>
+                </span>
+              </h4>
+              <div class="accordion-body">
+                <div class="accordion-panel-column">
+                  <p>American College of Veterinary Radiology</p>
+                  <p>Break Through Tech</p>
+                  <p>Covenant House</p>
+                  <p>The Fund for Global Human Rights</p>
+                  <p>Hospital for Special Surgery</p>
+                  <p>Human Rights Watch</p>
+                  <p>The Institute For Functional Medicine</p>
+                </div>
+                <div class="accordion-panel-column">
+                  <p>The Joyce Theater Foundation</p>
+                  <p>Lincoln Center for the Performing Arts</p>
+                  <p>Ms. Foundation</p>
+                  <p>Museum of Fine Arts Boston</p>
+                  <p>National Baseball Hall of Fame</p>
+                  <p>
+                    <a
+                      href=""
+                      class=""
+                      title="NATIONAL WIC ASSOCIATION"
+                      target=""
+                      >National WIC Association</a
+                    >
+                  </p>
+                  <p>Natural Resources Defense Council</p>
+                </div>
+                <div class="accordion-panel-column">
+                  <p>PEW Charitable Trusts</p>
+                  <p>SAG-AFTRA</p>
+                  <p>
+                    <a
+                      href=""
+                      class=""
+                      title="SCHOOL OF AMERICAN BALLET"
+                      target=""
+                      >School of American Ballet</a
+                    >
+                  </p>
+                  <p>Virginia Cooperative Extension</p>
+                  <p>Teach for America</p>
+                  <p>The Washington Ballet</p>
+                  <p>Weill Cornell Medicine</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </section>
 
-      <div class="allyship" style="background-color: #4fe8a4;">
-        <div class="pageWrap grid">
-          <div class="allyship-main">
-            <h2 class="h1--alt">our commitment to india</h2>
-            <p>
-              As a woman founded and owned business, we’re invested in advancing
-              diversity and inclusion in our business, and beyond.
-            </p>
+        <section class="featurePanel" data-nav-color="light">
+          <div class="pageWrap"></div>
+        </section>
 
-            <a class="button read-more lg-only" style="cursor: default">
+        <section class="videoColumns">
+          <div class="pageWrap">
+            <h2>At Cadabra we are</h2>
+            <div class="videoColumns-scroll">
+              <div class="video-list">
+                <div class="video-single" data-js-component="Modal">
+                  <div class="video-play-container js-modal-trigger">
+                    <div class="poster-image">
+                      <img
+                        class="lazy"
+                        src="/STRATEGISTS.png"
+                        alt="Strategists"
+                      />
+                    </div>
+                  </div>
+                  <div class="video-copy">
+                    <h5 class="h6">Strategists</h5>
+                    <p class="p-small">
+                      We believe in working at the core of every project—
+                      unlocking effective approaches, unearthing insights and
+                      building strategies around it, managing the user security
+                      needs in the securest possible manner, and owning the work
+                      from start to finish.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="video-single" data-js-component="Modal">
+                  <div class="video-play-container js-modal-trigger">
+                    <div class="poster-image">
+                      <img class="lazy" src="/BUILDER.png" alt="Builders" />
+                    </div>
+                  </div>
+                  <div class="video-copy">
+                    <h5 class="h6">Builders</h5>
+                    <p class="p-small">
+                      We build Bespoke solutions to complex challenges—ensuring
+                      technology supports the creative and strategic vision, and
+                      vice versa.
+                    </p>
+                  </div>
+                </div>
+                <div class="video-single" data-js-component="Modal">
+                  <div class="video-play-container js-modal-trigger">
+                    <div class="poster-image">
+                      <img class="lazy" src="/CREATIVES.png" alt="Creatives" />
+                    </div>
+                  </div>
+                  <div class="video-copy">
+                    <h5 class="h6">Creatives</h5>
+                    <p class="p-small">
+                      We deliver the big ideas that bring powerful results to
+                      life and push our clients to break down barriers and
+                      impact both business and culture.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="video-single" data-js-component="Modal">
+                  <div class="video-play-container js-modal-trigger">
+                    <div class="poster-image">
+                      <img class="lazy" src="/PRODUCERS.png" alt="Producers" />
+                    </div>
+                  </div>
+                  <div class="video-copy">
+                    <h5 class="h6">Producers</h5>
+                    <p class="p-small">
+                      Constantly finding ways to get things done, we’re problem
+                      solvers who can see the big picture while managing the
+                      details that can make or break a complex client need.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="allyship" style="background-color: #4fe8a4">
+          <div class="pageWrap grid">
+            <div class="allyship-main">
+              <h2 class="h1--alt">our commitment to india</h2>
+              <p>
+                As a woman founded and owned business, we’re invested in
+                advancing diversity and inclusion in our business, and beyond.
+              </p>
+
+              <a class="button read-more lg-only" style="cursor: default">
+                Read more
+                <span class="screen-reader-text"
+                  >about Our commitment to allyship</span
+                >
+                <span class="link-arrow" aria-hidden="true">
+                  <img src="/arrow-right-white.svg" alt="" />
+                </span>
+              </a>
+            </div>
+
+            <div class="allyship-block" style="border-left: none">
+              <h1 class="h3--alt">4</h1>
+              <h6 style="margin-bottom: 10px; margin-top: 5px">STATES</h6>
+              <p style="line-height: 1">
+                We are at rapid growth, adding more and more geographical
+                regions into our service portfolio
+              </p>
+            </div>
+            <div class="allyship-block" style="border-left: none">
+              <h1 class="h3--alt">9</h1>
+              <h6 style="margin-bottom: 10px; margin-top: 5px">CITIES</h6>
+              <p style="line-height: 1">
+                Our expansion is not driven by States, but by adding more and
+                more cities
+              </p>
+            </div>
+            <div class="allyship-block" style="border-left: none">
+              <h1 class="h3--alt">2</h1>
+              <h6 style="margin-bottom: 10px; margin-top: 5px">
+                COMMAND CENTERS
+              </h6>
+              <p style="line-height: 1">
+                We target a total of 4 command Centers in 2025
+              </p>
+            </div>
+
+            <a href="" class="button read-more sm-only">
               Read more
               <span class="screen-reader-text"
                 >about Our commitment to allyship</span
               >
-              <span class="link-arrow" aria-hidden="true">
-                <img src="/arrow-right-white.svg" alt="" />
+              <span class="link-arrow">
+                <img src="./arrow-right-white.svg" alt="" />
               </span>
             </a>
           </div>
-
-          <div class="allyship-block" style="border-left: none;">
-            <h1 class="h3--alt">4</h1>
-            <h6 style="margin-bottom: 10px; margin-top: 5px;">STATES</h6>
-            <p style="line-height: 1.0;">
-              We are at rapid growth, adding more and more geographical regions
-              into our service portfolio
-            </p>
-          </div>
-          <div class="allyship-block" style="border-left: none;">
-            <h1 class="h3--alt">9</h1>
-            <h6 style="margin-bottom: 10px; margin-top: 5px;">CITIES</h6>
-            <p style="line-height: 1.0;">
-              Our expansion is not driven by States, but by adding more and more cities
-            </p>
-          </div>
-          <div class="allyship-block" style="border-left: none;">
-            <h1 class="h3--alt">2</h1>
-            <h6 style="margin-bottom: 10px; margin-top: 5px;">COMMAND CENTERS</h6>
-            <p style="line-height: 1.0;">We target a total of 4 command Centers in 2025</p>
-          </div>
-
-
-          <a href="" class="button read-more sm-only">
-            Read more
-            <span class="screen-reader-text"
-              >about Our commitment to allyship</span
-            >
-            <span class="link-arrow">
-              <img src="./arrow-right-white.svg" alt="" />
-            </span>
-          </a>
         </div>
       </div>
-    </div>
+      <footer
+        style="
+          display: flex;
+          justify-content: space-between;
+          padding: 20px;
+          padding-left: 100px;
+          padding-bottom: 50px;
+          padding-top: 50px;
+          background-color: #fff;
+          font-family: 'Inter', sans-serif;
+          color: #000;
+          width: 100%;
+          margin: auto;
+        "
+      >
+        <!-- Footer Section: Logo & Text -->
+        <div class="footer-section" style="max-width: 300px">
+          <h1 class="footer-logo" style="font-size: 1.5rem; font-weight: bold">
+            B Cadabra
+          </h1>
+          <p
+            class="footer-text"
+            style="margin: 10px 0; font-size: 0.9rem; color: #666"
+          >
+            Cadabra Secure offers a wide range of security solutions for sale
+            and rent across India. We provide affordable, reliable protection
+            for homes and businesses.
+          </p>
+          <p class="footer-copyright" style="font-size: 0.8rem; color: #aaa">
+            Cadabra Secure 2024. All rights reserved.
+          </p>
+        </div>
 
-    <!-- <script type="text/javascript">
+        <!-- Footer Links Section -->
+        <div
+          class="footer-links"
+          style="
+            display: flex;
+            gap: 40px;
+            width: 50%;
+            justify-content: space-evenly;
+          "
+        >
+          <!-- Services Column -->
+          <div
+            class="footer-column"
+            style="display: flex; flex-direction: column"
+          >
+            <h3
+              class="footer-heading"
+              style="font-weight: bold; margin-bottom: 0; font-size: 2.17em"
+            >
+              Services
+            </h3>
+            <ul style="list-style: none; padding: 0">
+              <li
+                style="
+                  margin: 5px 0;
+                  line-height: 25px;
+                  font-size: 0.9rem;
+                  color: #444;
+                "
+              >
+                <a
+                  href="/rent"
+                  id="rentLink"
+                  style="text-decoration: none; color: #444"
+                  >Rent</a
+                >
+              </li>
+
+              <li
+                style="
+                  margin: 5px 0;
+                  line-height: 25px;
+                  font-size: 0.9rem;
+                  color: #444;
+                "
+              >
+                <a
+                  href="/buy"
+                  id="rentLink"
+                  style="text-decoration: none; color: #444"
+                  >Buy</a
+                >
+              </li>
+              <li
+                style="
+                  margin: 5px 0;
+                  line-height: 25px;
+                  font-size: 0.9rem;
+                  color: #444;
+                "
+              >
+                <a
+                  href="#"
+                  id="rentLink"
+                  style="text-decoration: none; color: #444"
+                  >Cadabra Fix</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- Company Column -->
+          <div
+            class="footer-column"
+            style="display: flex; flex-direction: column"
+          >
+            <h3
+              class="footer-heading"
+              style="font-weight: bold; margin-bottom: 0; font-size: 2.17em"
+            >
+              Company
+            </h3>
+            <ul style="list-style: none; padding: 0">
+              <li
+                style="
+                  margin: 5px 0;
+                  line-height: 25px;
+                  font-size: 0.9rem;
+                  color: #444;
+                "
+              >
+                <a
+                  href="/about"
+                  id="rentLink"
+                  style="text-decoration: none; color: #444"
+                  >About</a
+                >
+              </li>
+              <li
+                style="
+                  margin: 5px 0;
+                  line-height: 25px;
+                  font-size: 0.9rem;
+                  color: #444;
+                "
+              >
+                <a
+                  href="#"
+                  id="rentLink"
+                  style="text-decoration: none; color: #444"
+                  >Careers</a
+                >
+                <span
+                  class="hiring-badge"
+                  style="
+                    background-color: #65e4a3;
+                    color: white;
+                    font-size: 0.8rem;
+                    padding: 2px 6px;
+                    border-radius: 12px;
+                    margin-left: 5px;
+                  "
+                  >Hiring!</span
+                >
+              </li>
+              <li
+                style="
+                  margin: 5px 0;
+                  line-height: 25px;
+                  font-size: 0.9rem;
+                  color: #444;
+                "
+              >
+                <a
+                  href="#"
+                  id="rentLink"
+                  style="text-decoration: none; color: #444"
+                  >Blogs</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- Resources Column -->
+          <div
+            class="footer-column"
+            style="display: flex; flex-direction: column"
+          >
+            <h3
+              class="footer-heading"
+              style="font-weight: bold; margin-bottom: 0; font-size: 2.17em"
+            >
+              Resources
+            </h3>
+            <ul style="list-style: none; padding: 0">
+              <li
+                style="
+                  margin: 5px 0;
+                  line-height: 25px;
+                  font-size: 0.9rem;
+                  color: #444;
+                "
+              >
+              <a
+                  href="#"
+                  id="rentLink"
+                  style="text-decoration: none; color: #444"
+                  >Experts</a
+                >
+              </li>
+              <li
+                style="
+                  margin: 5px 0;
+                  line-height: 25px;
+                  font-size: 0.9rem;
+                  color: #444;
+                "
+              >
+              <a
+                  href="#"
+                  id="rentLink"
+                  style="text-decoration: none; color: #444"
+                  >Media</a
+                >
+              </li>
+              <li
+                style="
+                  margin: 5px 0;
+                  line-height: 25px;
+                  font-size: 0.9rem;
+                  color: #444;
+                "
+              >
+                <a
+                  href="#"
+                  id="rentLink"
+                  style="text-decoration: none; color: #444"
+                  >Docs</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </footer>
+
+      <!-- <script type="text/javascript">
       _linkedin_partner_id = "4896537";
       window._linkedin_data_partner_ids =
         window._linkedin_data_partner_ids || [];
@@ -1165,6 +1563,6 @@
         "va"
       );
     </script> -->
-  </div>
+    </div>
   </body>
 </html>

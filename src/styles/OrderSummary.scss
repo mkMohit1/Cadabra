@@ -1,11 +1,13 @@
 .order-summary {
+  position: relative;
   background-color: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   padding: 20px;
-  width: 350px;
+  min-width: 300px;
   font-family: Arial, sans-serif;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  max-height: 330px;
   &__title {
     font-size: 18px;
     font-weight: bold;
@@ -102,6 +104,36 @@
     border-radius: 6px;
     &:hover {
       background-color: #117a8b;
+    }
+  }
+  .popup {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    bottom: 0;
+    height: 175px;
+    background: rgba(0, 0, 0, 0.6); /* Dark overlay */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+
+    .askNumber{
+      position: relative;
+      .closePopup{
+        position: absolute;
+        top: -42px;
+        right: -57px;
+        background: lightgray;
+        border: none;
+        font-size: 20px;
+        color: white;
+
+        &:hover{
+          font-size: 22px;
+          color: red;
+        }
+      }
     }
   }
 }

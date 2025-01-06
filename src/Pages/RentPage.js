@@ -182,7 +182,6 @@ export default function RentPage() {
           <div className="bannerImage">
             <img src={normalImages.customer} alt="Rent banner" />
           </div>
-          <button className="banner-btn" >Go--{">"}</button>
         </div>
 
         <section className="latest-arrivals">

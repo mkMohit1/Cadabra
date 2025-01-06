@@ -26,7 +26,7 @@ const LoginPage = () => {
   const user = useSelector((state) => state.auth.user);
   
   const [isLoginView, setIsLoginView] = useState(true); // Track if the view is Login or Register
-  
+  const [newUser, setNewUser] = useState(false);
   const generateOtp = () => {
     let otp = "";
     for (let i = 0; i < 4; i++) {
@@ -67,6 +67,7 @@ const LoginPage = () => {
         mobileNumber,
         otp,
         type: loginWith,
+        newUser
       });
 
       if (response.status === 200) {
@@ -108,6 +109,7 @@ const LoginPage = () => {
   // Toggle between Login and Register views
   const handleLoginState = () => {
     setIsLoginView((prev) => !prev);
+    newUser((prev)=>!prev);
     setFormData({
       mobileNumber: "",
       enteredOtp: "",

@@ -8,6 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { fetchProducts } from "../redux/rentProductSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquareArrowUpRight } from "@fortawesome/free-solid-svg-icons";
+import ConsultationFilter from "../components/ConsultationFilter";
 
 export default function RentPage() {
   const dispatch = useDispatch();
@@ -211,7 +212,10 @@ export default function RentPage() {
               &times;
             </button>
             {/* Add content to show inside the filterDataPopup */}
-            <div>{/* You can display the filtered data here */}</div>
+            <ConsultationFilter/>
+            <div className="product-container">
+            {renderProductCards(products)}
+          </div>
           </div>
         </div>
       )}

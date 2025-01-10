@@ -82,6 +82,66 @@
     }
   }
 
+  .userDetail {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 88px;
+    cursor: pointer;
+    position: relative;
+
+    .userImage {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      img {
+        width: 100%;
+        object-fit: contain;
+      }
+    }
+
+    .userDropdown {
+      font-size: 20px;
+      color: black;
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 45px;
+      right: 0;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 200px;
+      &.active {
+        display: block; // Show dropdown when active
+      }
+
+      .user-email {
+        margin-bottom: 10px;
+        color: #333;
+        font-size: 14px;
+      }
+
+      .logout-btn {
+        width: 100%;
+        padding: 8px 15px;
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: #c82333;
+        }
+      }
+    }
+  }
+
   .hamburger {
     display: none;
     font-size: 1.5rem;
@@ -105,41 +165,8 @@
       color: #4fe8a4;
       font-weight: bold;
     }
-
-    .dropdown-menu {
-      position: absolute;
-      top: 45px;
-      right: 0;
-      background-color: #fff;
-      border: 1px solid #ddd;
-      padding: 10px;
-      border-radius: 5px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      width: 200px;
-
-      .dropdown-item {
-        padding: 5px 0;
-        color: #333;
-      }
-
-      .logout-btn {
-        width: 100%;
-        padding: 8px 15px;
-        background-color: #dc3545;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-
-        &:hover {
-          background-color: #c82333;
-        }
-      }
-    }
   }
 }
-
 
 @keyframes logoFlip {
   0% {
@@ -149,6 +176,7 @@
     transform: rotateY(360deg);
   }
 }
+
 /* Mobile Responsive Styles */
 @media (max-width: 768px) {
   .navbar {

@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import axios from "axios"; // Make sure you import axios
 import LoginPage from "../Pages/LoginPage";
 import { login } from "../redux/authSlice";
+import { normalImages } from "../ImagePath";
 
 const OrderSummary = ({ currentCart, currentMode }) => {
   const dispatch = useDispatch();
@@ -125,6 +126,10 @@ const OrderSummary = ({ currentCart, currentMode }) => {
     event.preventDefault();
     const { enteredOtp, otp, mobileNumber } = formData;
     let existingUser;
+    if(enteredOtp ===''){
+      return;
+    }
+    if (enteredOtp === otp) {
     const allUsers = await (await fetch("http://localhost:5000/users")).json();
     const userfound = allUsers.find((user) => user.mobileNumber === mobileNumber);
     if(!newUser){
@@ -133,8 +138,6 @@ const OrderSummary = ({ currentCart, currentMode }) => {
     if(!userfound){
       setNewUser(true);
     }
-    
-    if (enteredOtp === otp) {
       toast.success("Login successful!");
 
       if(!newUser){
@@ -147,13 +150,22 @@ const OrderSummary = ({ currentCart, currentMode }) => {
   };
 
   const handleUpdateUser = async(event)=>{
+    event.preventDefault();
     try {
-        const addUser = await fetch("",{
-          method:'POST',
-          headers:{
-            
-          }
+      console.log(formData);
+      const customerData= {name:formData.name, email: formData.email,mobileNumber: formData.mobileNumber, type:'commonUser'};
+        // // Sending separate data for the user and the address
+        const response = await fetch('http://localhost:5000/add/newUser', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ customerData }),
         });
+  
+        if (response.ok) {
+          const result = await response.json();
+          toast.success(result.message);
+          handleClose(); // Hide the form after submission
+        }
     } catch (error) {
       toast.error(error.message);
     }
@@ -229,11 +241,12 @@ const OrderSummary = ({ currentCart, currentMode }) => {
         Proceed to Checkout
       </button>
       {showAskNumber && (
-        <div className="popup" style={newUser?{height:"100%", top:0}:null}>
+        <div className="popup" style={newUser?{minHeight:"120vh"}:null}>
           <div className="askNumber">
             <button className="closePopup" onClick={handleClose}>
               x
             </button>
+            <div className="imageContainer" style={{backgroundSize:'cover',backgroundPosition:'center'}}><img src={normalImages.loginPage} alt="Loginimage"/></div>
             <form onSubmit={!isOtpFieldVisible ? handleSendOtp : (isOtpFieldVisible && !newUser)? handleSubmitOTP: handleUpdateUser} >
               {/* Mobile Number Input */}
               {(!isOtpFieldVisible && !newUser) && (

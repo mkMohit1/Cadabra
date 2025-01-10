@@ -13,6 +13,7 @@ import { useDispatch,useSelector } from "react-redux";
 import { login } from "./redux/authSlice";
 import { SingleProductPage } from "./components/SingleProductPage";
 import About from "./Pages/AboutPage";
+import PricingPage from "./Pages/PlanePage";
 
 function App() {
   const [blogs, setBlogs] = useState(null);
@@ -28,19 +29,19 @@ function App() {
     }
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   const fetchBlogs = async () => {
-  //     try {
-  //       const response = await fetch("https://server-lmhc.onrender.com/blogs");
-  //       const blogsData = await response.json();
-  //       setBlogs(blogsData);
-  //     } catch (error) {
-  //       console.error("Error fetching blogs:", error);
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const response = await fetch("https://server-lmhc.onrender.com/blogs");
+        const blogsData = await response.json();
+        setBlogs(blogsData);
+      } catch (error) {
+        console.error("Error fetching blogs:", error);
+      }
+    };
 
-  //   fetchBlogs();
-  // }, []);
+    fetchBlogs();
+  }, []);
 
   return (
     <Router>
@@ -100,6 +101,7 @@ function AppRoutes({ blogs, user }) {
         <Route path="/Cart" element={<ShoppingCart />} />
         <Route path="/products/:id" element ={<SingleProductPage/>}/>
         <Route path="/About" element={<About />} />
+        <Route path="/Suscription" element={<PricingPage/>}/>
         <Route
           path="/admin"
           element={

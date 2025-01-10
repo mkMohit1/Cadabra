@@ -15,7 +15,8 @@ const AdminPage = () => {
     name: '',
     email: '',
     mobileNumber: '',
-    type: ''
+    type: '',
+    loginWith:'WhatsApp'
   });
   const [adminToDelete, setAdminToDelete] = useState(null);
   const [updatedSaleAdminId, setUpdatedSaleAdminId] = useState('');

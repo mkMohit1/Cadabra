@@ -93,7 +93,7 @@ const LoginPage = () => {
 
     if (enteredOtp === otp) {
       toast.success("Login successful!");
-      dispatch(login({ mobileNumber, userID: formData.userID, isAdmin: existingUser.type }));
+      dispatch(login({ mobileNumber, userID: formData.userID, isAdmin: existingUser.type, type:formData.loginWith }));
       
       // Redirect the user based on their role after login
       if (existingUser.type === 'SupperAdmin' || existingUser.type === 'SaleAdmin' || existingUser.type === 'ProductAdmin' || existingUser.type === 'SaleManager') {   

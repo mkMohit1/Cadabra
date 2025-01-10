@@ -36,7 +36,7 @@
       height: 60px;
       font-size: 38px;
       font-family: "Inter", "sans-serif";
-      background-color: #606C38;
+      background-color: black;
       color: #4fe8a4;
       outline: none;
       border: none;
@@ -289,6 +289,9 @@
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: space-evenly;
+        margin: 68px auto 0;
+        border-top: 1px solid;
+        padding-top: 20px;
         .product-card{
           width: 130px;
           height: 230px;

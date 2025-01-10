@@ -2,21 +2,25 @@ import React, { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import "../styles/Navbar.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark, faBars, faCartShopping } from "@fortawesome/free-solid-svg-icons";
-import { useSelector } from "react-redux";
-import { mainLogo } from "../ImagePath";
+import { faXmark, faBars, faCartShopping, faCircleChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { useSelector, useDispatch } from "react-redux";
+import { mainLogo, normalImages } from "../ImagePath";
+import { logout } from "../redux/authSlice"; // Add your logout action
+import { toast } from "react-toastify";
 
 const Navbar = () => {
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
+  const user = useSelector((state) => state.auth.user);
   const [navbarBackground, setNavbarBackground] = useState("white");
   const [currentMainLogo, setCurrentMainLogo] = useState(mainLogo.mainLogo2);
   const [isFlipping, setIsFlipping] = useState(false);
   const cartCount = useSelector((state) => state.cart?.totalCartCount || 0);
   const [intervalId, setIntervalId] = useState(null);
   const [currentColor, setCurrentColor] = useState("black");
+  const [dropdownOpen, setDropdownOpen] = useState(false); // Track dropdown state
+  const dispatch = useDispatch();
 
-  // Enhanced scroll handler
   const handleScroll = () => {
     const currentScrollY = window.scrollY;
     
@@ -25,10 +29,6 @@ const Navbar = () => {
       setNavbarBackground("hsla(0deg, 0%, 7%, 46%)");
       setCurrentMainLogo(mainLogo.mainLogo1);
       
-      // if(currentScrollY>=250 && currentMainLogo !== mainLogo.mainLogo3 && currentMainLogo !== mainLogo.mainLogo4){
-      //   setCurrentMainLogo(mainLogo.mainLogo3);
-      // }
-      // Start interval if not already running
       if (!intervalId) {
         const newIntervalId = setInterval(() => {
           setIsFlipping(true);
@@ -44,7 +44,6 @@ const Navbar = () => {
       setNavbarBackground("white");
       setCurrentColor("black");
       setCurrentMainLogo(mainLogo.mainLogo2);
-      // Clear interval if scroll position is less than 150
       if (intervalId) {
         clearInterval(intervalId);
         setIntervalId(null);
@@ -52,7 +51,6 @@ const Navbar = () => {
     }
   };
 
-  // Set up scroll listener
   useEffect(() => {
     const throttledScroll = () => {
       window.requestAnimationFrame(() => {
@@ -73,7 +71,27 @@ const Navbar = () => {
     if (location.pathname !== "/") {
       window.location.href = "/";
     }
-  };  
+  };
+
+  // Handle logout
+  const handleLogout = async() => {
+    try {
+      const response = await fetch('http://localhost:5000/auth/logout');
+      console.log(response)
+    if(response.ok){
+      const data = await response.json();
+      toast.success(data.message);
+      dispatch(logout()); // Dispatch your logout action to clear user session
+      setDropdownOpen(false); // Close dropdown on logout
+      //window.location.href = "/";
+      
+    }
+    } catch (error) {
+      toast.error('Failed to logout');
+    }
+   
+  };
+
   return (
     <nav
       className="navbar"
@@ -110,6 +128,11 @@ const Navbar = () => {
             </NavLink>
           </li>
           <li>
+            <NavLink to="/Suscription" style={{ color: currentColor }}>
+              Suscription
+            </NavLink>
+          </li>
+          <li>
             <NavLink to="/Cart" style={{ color: currentColor }}>
               <FontAwesomeIcon
                 icon={faCartShopping}
@@ -123,9 +146,23 @@ const Navbar = () => {
             </NavLink>
           </li>
           <li>
-            <NavLink to="/Login" style={{ color: currentColor }}>
-              Login
-            </NavLink>
+            {user ? (
+              <div className="userDetail" onClick={() => setDropdownOpen(!dropdownOpen)}>
+              <div className="userImage"><img src={normalImages.google} alt="userImage" /></div>
+              <FontAwesomeIcon icon={faCircleChevronDown} className="userDropdown" />
+              {dropdownOpen && (
+                <div className="dropdown-menu">
+                  <div className="user-email">{user.email}</div>
+                  <button className="logout-btn" onClick={handleLogout}>Logout</button>
+                </div>
+              )}
+            </div>
+            ) :  (
+              <NavLink to="/Login" style={{ color: currentColor }}>
+                Login
+              </NavLink>
+              
+            )}
           </li>
         </ul>
       </div>

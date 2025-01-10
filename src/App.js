@@ -14,6 +14,7 @@ import { login } from "./redux/authSlice";
 import { SingleProductPage } from "./components/SingleProductPage";
 import About from "./Pages/AboutPage";
 import PricingPage from "./Pages/PlanePage";
+import ContactForm from "./Pages/ContactPage";
 
 function App() {
   const [blogs, setBlogs] = useState(null);
@@ -102,6 +103,7 @@ function AppRoutes({ blogs, user }) {
         <Route path="/products/:id" element ={<SingleProductPage/>}/>
         <Route path="/About" element={<About />} />
         <Route path="/Suscription" element={<PricingPage/>}/>
+        <Route path="/Contact" element={<ContactForm/>}/>
         <Route
           path="/admin"
           element={

@@ -8,7 +8,7 @@ import Testimonials from '../components/Testimonials';
 import CustomerSection2 from '../components/CustomerSection2';
 import BlogSection from '../components/BlogSection';
 import SubscribeSection from '../components/SubscribeSection';
-import { decryptData } from '../Decrypto/DecryptEncrpt';
+import { decryptData } from '../DecryptoAndOther/DecryptEncrpt';
 import { useDispatch } from 'react-redux';
 import { login } from '../redux/authSlice';
 const HomePage = ({ blogs }) => {

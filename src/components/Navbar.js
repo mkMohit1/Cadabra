@@ -6,7 +6,7 @@ import { faXmark, faBars, faCartShopping, faCircleChevronDown } from "@fortaweso
 import { useSelector, useDispatch } from "react-redux";
 import { mainLogo, normalImages } from "../ImagePath";
 import { logout } from "../redux/authSlice"; // Add your logout action
-import { toast } from "react-toastify";
+import { infoToast,errorToast, successToast } from "../DecryptoAndOther/ToastUpdate";
 
 const Navbar = () => {
   const location = useLocation();
@@ -80,14 +80,14 @@ const Navbar = () => {
       console.log(response)
     if(response.ok){
       const data = await response.json();
-      toast.success(data.message);
+      successToast(data.message);
       dispatch(logout()); // Dispatch your logout action to clear user session
       setDropdownOpen(false); // Close dropdown on logout
       //window.location.href = "/";
       
     }
     } catch (error) {
-      toast.error('Failed to logout');
+      errorToast('Failed to logout');
     }
    
   };

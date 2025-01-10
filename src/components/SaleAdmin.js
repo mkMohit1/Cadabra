@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Search, Edit, Trash } from 'lucide-react';
 import '../styles/AdminPage.scss';
 import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
+import { infoToast,errorToast, successToast } from "../DecryptoAndOther/ToastUpdate";
 
 const SaleAdmin = () => {
   const [showModal, setShowModal] = useState(false);
@@ -61,11 +61,11 @@ const SaleAdmin = () => {
         const data = await response.json();
         console.log(data);
         if (!response.ok) {
-          toast.error(data.error || "Failed to update manager");
+          errorToast(data.error || "Failed to update manager");
           return;
         }
 
-        toast.success('Manager updated successfully');
+        successToast('Manager updated successfully');
         setAdmins((prevAdmins) =>
           prevAdmins.map((admin) =>
             admin._id === editingAdmin._id ? { ...admin, ...formData } : admin
@@ -83,7 +83,7 @@ const SaleAdmin = () => {
         setShowModal(false);
       } catch (error) {
         console.error('Failed to update manager:', error);
-        toast.error('Failed to update manager');
+        errorToast('Failed to update manager');
       }
     } else {
       // Add new admin
@@ -98,11 +98,11 @@ const SaleAdmin = () => {
         const data = await response.json();
 
         if (!response.ok) {
-          toast.error(data.error || "Failed to add new manager");
+          errorToast(data.error || "Failed to add new manager");
           return;
         }
 
-        toast.success('New Manager added successfully');
+        successToast('New Manager added successfully');
         const newAdmin = { ...data.newSaleManager };
         setAdmins([...admins, newAdmin]);
 
@@ -116,7 +116,7 @@ const SaleAdmin = () => {
         setShowModal(false);
       } catch (error) {
         console.error('Failed to add new manager:', error);
-        toast.error('Failed to add new manager');
+        errorToast('Failed to add new manager');
       }
     }
   };
@@ -129,16 +129,16 @@ const SaleAdmin = () => {
         method: 'DELETE',
       });
       if (!response.ok) {
-        toast.error('Failed to delete manager');
+        errorToast('Failed to delete manager');
         return;
       }
-      toast.success('Manager deleted successfully');
+      successToast('Manager deleted successfully');
     
       // Filter out the deleted admin by _id (assuming _id is used as the unique identifier)
       setAdmins(admins.filter((admin) => admin._id !== id)); // Use _id for deletion
     } catch (error) {
       console.error('Failed to delete manager:', error);
-      toast.error('Failed to delete manager');
+      errorToast('Failed to delete manager');
     }
   };
 
@@ -148,14 +148,14 @@ const SaleAdmin = () => {
       try {
         const response = await fetch(`https://server-lmhc.onrender.com/admin/getAdmins/${currentUser.mobileNumber}`);
         if (!response.ok) {
-          toast.error('Failed to fetch managers');
+          errorToast('Failed to fetch managers');
           return;
         }
         const data = await response.json();
         setAdmins(data);
       } catch (error) {
         console.error('Failed to fetch managers:', error);
-        toast.error('Failed to fetch managers');
+        errorToast('Failed to fetch managers');
       }
     };
     fetchAdmins();

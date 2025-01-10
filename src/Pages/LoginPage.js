@@ -5,7 +5,7 @@ import "../styles/LoginPage.scss";
 import { normalImages as images, normalImages } from "../ImagePath";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/authSlice";
-import { toast } from "react-toastify";
+import { infoToast,errorToast, successToast } from "../DecryptoAndOther/ToastUpdate";
 
 const LoginPage = () => {
   const location = useLocation();
@@ -46,7 +46,7 @@ const LoginPage = () => {
     
     // Validate mobile number format
     if (!/^\d{10}$/.test(mobileNumber)) {
-      toast.error("Please enter a valid mobile number.");
+      errorToast("Please enter a valid mobile number.");
       return;
     }
     
@@ -55,7 +55,7 @@ const LoginPage = () => {
     const existingUser = allUsers.find((user) => user.mobileNumber === mobileNumber);
 
     if (!existingUser) {
-      toast.error("User not found. Please register first.");
+      errorToast("User not found. Please register first.");
       return;
     }
 
@@ -75,13 +75,13 @@ const LoginPage = () => {
           otpFieldVisible: true,
           otpSent: true, // Update OTP sent status
         });
-        toast.success(`OTP sent successfully via ${loginWith}.`);
+        successToast(`OTP sent successfully via ${loginWith}.`);
         updateFormData({ userID: existingUser._id });
       } else {
-        toast.error("Failed to send OTP. Please try again.");
+        errorToast("Failed to send OTP. Please try again.");
       }
     } catch (error) {
-      toast.error("Failed to send OTP. Please try again.");
+      errorToast("Failed to send OTP. Please try again.");
     }
   };
 
@@ -92,7 +92,7 @@ const LoginPage = () => {
     const existingUser = await (await fetch(`http://localhost:5000/user/${mobileNumber}`)).json();
 
     if (enteredOtp === otp) {
-      toast.success("Login successful!");
+      successToast("Login successful!");
       dispatch(login({ mobileNumber, userID: formData.userID, isAdmin: existingUser.type, type:formData.loginWith }));
       
       // Redirect the user based on their role after login
@@ -102,7 +102,7 @@ const LoginPage = () => {
         navigate("/");
       }
     } else {
-      toast.error("Invalid OTP. Please try again.");
+      errorToast("Invalid OTP. Please try again.");
     }
   };
 
@@ -129,7 +129,7 @@ const LoginPage = () => {
       otpFieldVisible: false,
       otpSent: false,
     });
-    toast.info(`Switched to ${method} login method`);
+    infoToast(`Switched to ${method} login method`);
   };
 
   // Handle Google login (redirects to the backend)

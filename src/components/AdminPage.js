@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Search, Edit, Trash } from 'lucide-react';
 import '../styles/AdminPage.scss';
 import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
+import { infoToast,errorToast, successToast } from "../DecryptoAndOther/ToastUpdate";
 
 const AdminPage = () => {
   const [showModal, setShowModal] = useState(false);
@@ -44,7 +44,7 @@ const AdminPage = () => {
       setAdmins(data);
     } catch (error) {
       console.error('Error fetching admins:', error);
-      toast.error('Failed to fetch admins');
+      errorToast('Failed to fetch admins');
     }
   };
 
@@ -91,18 +91,18 @@ const AdminPage = () => {
   
       if (!response.ok) {
         const errorData = await response.json();
-        toast.error(`Failed to add new admin: ${errorData.error || 'Unknown error'}`);
+        errorToast(`Failed to add new admin: ${errorData.error || 'Unknown error'}`);
         return;
       }
   
       const data = await response.json();
-      toast.success('New admin added successfully');
+      successToast('New admin added successfully');
       setAdmins((prevAdmins) => [...prevAdmins, data.newUser]); // Use the newUser from the response
       setFormData({ name: '', email: '', mobileNumber: '', type: '' });
       setShowModal(false);
   
     } catch (error) {
-      toast.error('Error adding admin');
+      errorToast('Error adding admin');
       console.error('Error in handleSubmit:', error);
     }
   };
@@ -115,13 +115,13 @@ const AdminPage = () => {
 
       if (response.ok) {
         setAdmins((prevAdmins) => prevAdmins.filter(admin => admin._id !== id));
-        toast.success('Admin deleted successfully');
+        successToast('Admin deleted successfully');
       } else {
         const errorData = await response.json();
-        toast.error(`Error while deleting the admin: ${errorData.message || 'Unknown error'}`);
+        errorToast(`Error while deleting the admin: ${errorData.message || 'Unknown error'}`);
       }
     } catch (error) {
-      toast.error('Error while deleting the admin');
+      errorToast('Error while deleting the admin');
       console.error('Error in handleDelete:', error);
     }
   };
@@ -169,11 +169,11 @@ const AdminPage = () => {
         )
       );
       
-      toast.success('Admin updated successfully');
+      successToast('Admin updated successfully');
       setShowUpdateModal(false);
     } catch (error) {
       console.error('Error updating admin:', error);
-      toast.error('Failed to update admin');
+      errorToast('Failed to update admin');
     }
   };
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ReactQuill from 'react-quill'; // Import ReactQuill
 import 'react-quill/dist/quill.snow.css'; // Import Quill styles (can be customized)
-import { toast } from 'react-toastify';
+import { infoToast,errorToast, successToast } from "../DecryptoAndOther/ToastUpdate";
 import "../styles/CreateProduct.scss";
 
 const CreateProduct = ({ product, setShowCreateForm, fetchProducts, userID }) => {
@@ -41,7 +41,7 @@ const CreateProduct = ({ product, setShowCreateForm, fetchProducts, userID }) =>
 
     // Validate required fields
     if (!formData.title || !formData.subTitle || !formData.description || !formData.category || !formData.status || !formData.mrp || !formData.discount || !formData.productImage) {
-      toast.error("All fields are required, including the image.");
+      errorToast("All fields are required, including the image.");
       return;
     }
 
@@ -58,16 +58,16 @@ const CreateProduct = ({ product, setShowCreateForm, fetchProducts, userID }) =>
       const response = await fetch(url, { method, body: formDataToSend });
 
       if (!response.ok) {
-        toast.error('Failed to save product');
+        errorToast('Failed to save product');
         return;
       }
 
       const data = await response.json();
-      toast.success(data.message);
+      successToast(data.message);
       setShowCreateForm(false);
       fetchProducts(); // Refresh product list
     } catch (error) {
-      toast.error(`Error while saving the product: ${error}`);
+      errorToast(`Error while saving the product: ${error}`);
     }
   };
 

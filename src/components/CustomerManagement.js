@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/CustomerManagement.scss';
-import { toast } from 'react-toastify';
+import { infoToast,errorToast, successToast } from "../DecryptoAndOther/ToastUpdate";
 import { useSelector } from 'react-redux';
 import { current } from '@reduxjs/toolkit';
 
@@ -19,7 +19,7 @@ const CustomerManagement = () => {
       setCustomers(data.customers);
     } else {
       const error = await response.json();
-      toast.error(error.message);
+      errorToast(error.message);
     }
   };
 
@@ -42,15 +42,15 @@ const CustomerManagement = () => {
           method: 'DELETE',
         });
         if (response.ok) {
-          toast.success("Customer deleted successfully!");
+          successToast("Customer deleted successfully!");
           fetchCustomers(); // Refresh the customer list
         } else {
           const error = await response.json();
-          toast.error(error.message);
+          errorToast(error.message);
         }
       } catch (err) {
         console.error("Error deleting customer:", err);
-        toast.error("Failed to delete customer.");
+        errorToast("Failed to delete customer.");
       }
     }
   };
@@ -260,11 +260,11 @@ const CustomerManagement = () => {
 
       if (response.ok) {
         const result = await response.json();
-        toast.success(result.message);
+        successToast(result.message);
         setShowAddCustomer(false); // Hide the form after submission
       } else {
         const error = await response.json();
-        toast.error(error.message);
+        errorToast(error.message);
       }
     };
 

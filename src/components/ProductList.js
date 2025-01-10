@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
+import { infoToast,errorToast, successToast } from "../DecryptoAndOther/ToastUpdate";
 
 const ProductList = ({ products, fetchProducts, onNewProduct, onEditProduct }) => {
 
@@ -13,11 +13,11 @@ const ProductList = ({ products, fetchProducts, onNewProduct, onEditProduct }) =
     });
 
     if (response.ok) {
-      toast.success('Product deleted successfully');
+      successToast('Product deleted successfully');
       //Optionally, you can refetch the products list after deletion
       fetchProducts();
     } else {
-      toast.error('Failed to delete product');
+      errorToast('Failed to delete product');
     }
   };
 

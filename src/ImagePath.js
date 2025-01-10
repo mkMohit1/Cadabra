@@ -38,8 +38,13 @@ import mainLogo1 from './images/mainLogo1.png';
 import mainLogo2 from './images/mainLogo2.png';
 import mainLogo3 from './images/mainLogo3.png';
 import mainLogo4 from './images/mainLogo4.png';
+import contact1 from './images/contact1.png';
+import contact2 from './images/contact2.png';
+import contact3 from './images/contact3.png';
+
 
 export const mainLogo = {mainLogo1, mainLogo2, mainLogo3, mainLogo4};
+export const contactImage = [contact1,contact2,contact3];
 
 const serviceImg =[service1, service2, service3];
 export const logoSection = [log1,log2,log3,log4,log5,log6];

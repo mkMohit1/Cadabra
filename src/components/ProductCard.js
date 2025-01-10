@@ -4,7 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
 import { removeCartItem, removeSellCartItem, updateCartItem, updateSellCartCount } from "../redux/cartSlice";
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
+import { infoToast,errorToast, successToast } from "../DecryptoAndOther/ToastUpdate";
 import { useNavigate } from "react-router-dom";
 import SVGComponent from "../svgComponents/Offer"; // Import the SVG component
 
@@ -25,12 +26,12 @@ const ProductCard = ({ product, isInCart }) => {
       // If the product is already in the cart, remove it
       dispatch(removeCartItem(product));
       dispatch(removeSellCartItem(product));
-      toast.info("Product removed from the cart");
+      infoToast("Product removed from the cart");
     } else {
       // If the product is not in the cart, add it
       dispatch(updateCartItem(product));
       dispatch(updateSellCartCount(product));
-      toast.success("Product added to the cart");
+      successToast("Product added to the cart");
     }
     setSelectProduct((prev) => !prev);  // Toggle the product state after action
   };

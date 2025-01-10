@@ -11,16 +11,28 @@ const CustomerSection2 = () => {
   const [imageSectionVisible, setImageSectionVisible] = useState(false); // Track visibility of the image-section
 
   const imageSectionRef = useRef(null); // Reference to the image section container
+  const popupTimeoutRef = useRef(null); // To store the timeout reference and clear it if needed
 
   // Create a function to handle visibility change using IntersectionObserver
   const handleIntersection = (entries, observer) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         setImageSectionVisible(true); // When the image-section comes into view
-        setShowPopup(true); // Show the popup when the image-section becomes visible
+
+        // Set a timeout to show the popup after 10 seconds
+        popupTimeoutRef.current = setTimeout(() => {
+          setShowPopup(true); // Show the popup after 5 seconds
+        }, 5000);
+
         observer.unobserve(entry.target); // Stop observing once the element is in view
       } else {
         setImageSectionVisible(false); // When the image-section leaves the viewport
+
+        // Clear the timeout if the section goes out of view before 10 seconds
+        if (popupTimeoutRef.current) {
+          clearTimeout(popupTimeoutRef.current);
+          popupTimeoutRef.current = null;
+        }
       }
     });
   };
@@ -30,7 +42,7 @@ const CustomerSection2 = () => {
     const observer = new IntersectionObserver(handleIntersection, {
       root: null, // null means the viewport
       rootMargin: "0px",
-      threshold: 1, // 50% of the element needs to be in view
+      threshold: 1, // 100% of the element needs to be in view
     });
 
     if (imageSectionRef.current) {
@@ -41,13 +53,17 @@ const CustomerSection2 = () => {
       if (imageSectionRef.current) {
         observer.unobserve(imageSectionRef.current); // Clean up observer
       }
+
+      // Clear the timeout in case the component is unmounted
+      if (popupTimeoutRef.current) {
+        clearTimeout(popupTimeoutRef.current);
+      }
     };
   }, []);
 
-
   const handleonClose = () => {
     setShowPopup(false);
-  }
+  };
 
   const toggleFAQ = (index) => {
     setOpenFAQs((prevState) =>
@@ -93,7 +109,7 @@ const CustomerSection2 = () => {
                   className="faq-question"
                   onClick={() => toggleFAQ(index)}
                   aria-expanded={openFAQs[index]}
-                  aria-controls={`faq-answer-${index}`}
+                  aria-controls={`faq-answer-${index}`} // Fixed template literal
                 >
                   <span>{faq.question}</span>
                   <span className="icon">
@@ -106,7 +122,7 @@ const CustomerSection2 = () => {
                 </div>
                 {openFAQs[index] && (
                   <div
-                    id={`faq-answer-${index}`}
+                    id={`faq-answer-${index}`} // Fixed template literal
                     className="faq-answer"
                   >
                     {faq.answer}
@@ -118,8 +134,8 @@ const CustomerSection2 = () => {
         </div>
       </div>
 
-      {/* Show popup when image-section becomes visible */}
-      {showPopup && <ConsultationPopup isOpen={showPopup} onClose ={handleonClose} />}
+      {/* Show popup when image-section becomes visible after 10 seconds */}
+      {showPopup && <ConsultationPopup isOpen={showPopup} onClose={handleonClose} />}
     </div>
   );
 };

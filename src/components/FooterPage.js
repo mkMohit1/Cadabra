@@ -1,11 +1,13 @@
 import React from "react";
 import "../styles/FooterPage.scss";
+import {mainLogo} from '../ImagePath';
+import { NavLink } from "react-router-dom";
 
 const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-section">
-        <h1 className="footer-logo">B Cadabra</h1>
+        <div className="footer-logo"><img src={mainLogo.mainLogo2} alt="footerLogo"/></div>
         <p className="footer-text">
         Cadabra Secure offers a wide range of security solutions for sale and rent across India. We provide affordable, reliable protection for homes and businesses.
         </p>
@@ -16,27 +18,27 @@ const Footer = () => {
         <div className="footer-column">
           <h3 className="footer-heading">Services</h3>
           <ul>
-            <li>Rent</li>
-            <li>Buy</li>
-            <li>Cadabra Fix</li>
+            <li><NavLink to="/rent">Rent</NavLink></li>
+            <li><NavLink to='/rent'>Buy</NavLink></li>
+            <li><NavLink to='/CadabraFix'>Cadabra Fix</NavLink></li>
           </ul>
         </div>
         <div className="footer-column">
           <h3 className="footer-heading">Company</h3>
           <ul>
-            <li>About</li>
+            <li><NavLink to='/about'>About</NavLink></li>
             <li>
-              Careers <span className="hiring-badge">Hiring!</span>
+            <NavLink to='/carrer'>Careers <span className="hiring-badge">Hiring!</span></NavLink>
             </li>
-            <li>Blogs</li>
+            <li><NavLink to='/blogs'>Blogs</NavLink></li>
           </ul>
         </div>
         <div className="footer-column">
           <h3 className="footer-heading">Resources</h3>
           <ul>
-            <li>Experts</li>
-            <li>Media</li>
-            <li>Docs</li>
+            <li><NavLink to='/experts'>Experts</NavLink></li>
+            <li><NavLink to='/media'>Media</NavLink></li>
+            <li><NavLink to='/docs'>Docs</NavLink></li>
           </ul>
         </div>
       </div>

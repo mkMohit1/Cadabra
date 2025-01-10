@@ -38,11 +38,14 @@
       color: gray;
     }
     .product-price {
-      font-size: 1rem;
-      color: #606C38;
+      font-size: 0.9rem;
+      position: absolute;
+      color: #A9A9A9;
       font-weight: 500;
       margin-bottom: 10px;
       margin-top: 10px;
+      bottom: 0;
+      left: 31%;
       span{
         font-size: 10px;
       }

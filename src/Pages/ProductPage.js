@@ -3,7 +3,6 @@ import ProductList from '../components/ProductList';
 import CreateProduct from '../components/CreateProduct';
 import '../styles/ProductPage.scss';
 import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 
 const ProductPage = () => {
   const [showCreateForm, setShowCreateForm] = useState(false);

@@ -318,4 +318,52 @@
         }
       }
     }
+
+
+    .product-slider {
+      position: relative;
+      display: flex;
+      align-items: center;
+  
+      .product-cards-container {
+        overflow: hidden;
+        width: 70%;
+        max-width: 1000px;
+        margin: 0 auto;
+        .product-cards {
+          display: flex;
+          transition: transform 0.3s ease-in-out;
+          .product-card{
+            margin: 35px auto;
+          }
+        }
+      }
+       .nav-button {
+        background: transparent;
+        border: none;
+        font-size: 110px;
+        color: #333;
+        cursor: pointer;
+        transition: color 0.3s;
+  
+        &:hover {
+          color: #0a2640;
+        }
+  
+        &:disabled {
+          color: #ccc;
+          cursor: not-allowed;
+        }
+  
+        &.prev {
+          position: absolute;
+          left: 106px; /* Adjust based on layout */
+        }
+  
+        &.next {
+          position: absolute;
+          right: 80px; /* Adjust based on layout */
+        }
+      }
+    }
 }

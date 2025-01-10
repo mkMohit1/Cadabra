@@ -5,7 +5,7 @@ import { faPlus, faXmark, faTags } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { updateCurrentContainer } from "../redux/cartSlice";
-import { toast } from "react-toastify";
+import { infoToast,errorToast, successToast } from "../DecryptoAndOther/ToastUpdate";
 import axios from "axios"; // Make sure you import axios
 import LoginPage from "../Pages/LoginPage";
 import { login } from "../redux/authSlice";
@@ -56,7 +56,7 @@ const OrderSummary = ({ currentCart, currentMode }) => {
   const handleCheckout = () => {
     if (!isAuthenticated) {
       setShowAskNumber(true);
-      toast.info("please logged in");
+      infoToast("please logged in");
       return;
     }
     if (currentContainer == "CartItem") {
@@ -89,7 +89,7 @@ const OrderSummary = ({ currentCart, currentMode }) => {
     const { mobileNumber, loginWith } = formData;
     // Validate mobile number format
     if (!/^\d{10}$/.test(mobileNumber)) {
-      toast.error("Please enter a valid mobile number.");
+      errorToast("Please enter a valid mobile number.");
       return;
     }
     // Check if the user exists
@@ -112,13 +112,13 @@ const OrderSummary = ({ currentCart, currentMode }) => {
           otpFieldVisible: true,
           otpSent: true, // Update OTP sent status
         });
-        toast.success(`OTP sent successfully via ${loginWith}.`);
+        successToast(`OTP sent successfully via ${loginWith}.`);
         setIsOtpFieldVisible(true);
       } else {
-        toast.error("Failed to send OTP. Please try again.");
+        errorToast("Failed to send OTP. Please try again.");
       }
     } catch (error) {
-      toast.error("Failed to send OTP. Please try again.");
+      errorToast("Failed to send OTP. Please try again.");
     }
   };
 
@@ -138,14 +138,14 @@ const OrderSummary = ({ currentCart, currentMode }) => {
     if(!userfound){
       setNewUser(true);
     }
-      toast.success("Login successful!");
+      successToast("Login successful!");
 
       if(!newUser){
         console.log(existingUser);
         dispatch(login({ mobileNumber, userID: formData.userID, isAdmin: existingUser.type }));
       }
     } else {
-      toast.error("Invalid OTP. Please try again.");
+      errorToast("Invalid OTP. Please try again.");
     }
   };
 
@@ -163,11 +163,11 @@ const OrderSummary = ({ currentCart, currentMode }) => {
   
         if (response.ok) {
           const result = await response.json();
-          toast.success(result.message);
+          successToast(result.message);
           handleClose(); // Hide the form after submission
         }
     } catch (error) {
-      toast.error(error.message);
+      errorToast(error.message);
     }
   }
 

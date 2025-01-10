@@ -4,7 +4,8 @@ import { rentImage, normalImages } from "../ImagePath";
 import ProductCard from '../components/ProductCard';
 import FilterProduct from "../components/FilterProduct";
 import { useDispatch, useSelector } from "react-redux";
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
+import { infoToast,errorToast, successToast } from "../DecryptoAndOther/ToastUpdate";
 import { fetchProducts } from "../redux/rentProductSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquareArrowUpRight } from "@fortawesome/free-solid-svg-icons";
@@ -22,11 +23,13 @@ export default function RentPage() {
   const [type, setType] = useState("");
   const [tenure, setTenure] = useState("");
   const [showQuiz, setShowQuiz] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+    const visibleProducts = 3;
 
   const handleSearch = (e) => {
     e.preventDefault();
     if (category === '' && type === '' && location === '' && tenure === '') {
-      toast.error("Please fill minimum two required fields!");
+      errorToast("Please fill minimum two required fields!");
       return;
     }
     const filter = { location, category, type, tenure };
@@ -43,7 +46,7 @@ export default function RentPage() {
     setLocation("");
     setTenure("");
     if(filterData.length === 0) {
-      toast.error("No products found!");
+      errorToast("No products found!");
       setFilterData({});
       return
     }
@@ -79,7 +82,14 @@ export default function RentPage() {
       return <ProductCard key={product.id} product={product} isInCart={isInCart} />;
     });
   };
+  const handleNext = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % products.length );
+  };
 
+  const handlePrev = () => {
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + products.length) % products.length);
+  };
+  
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
@@ -187,9 +197,37 @@ export default function RentPage() {
 
         <section className="latest-arrivals">
           <h2 className="latest-title">Latest Arrivals</h2>
-          <div className="product-container">
+          {/* <div className="product-container">
             {renderProductCards(products)}
-          </div>
+          </div> */}
+          <div className="product-slider">
+      <button
+        className="nav-button prev"
+        onClick={handlePrev}
+        disabled={currentIndex === 0} // Disable "prev" button if we're at the first card
+      >
+        &#8249;
+      </button>
+      
+      <div className="product-cards-container">
+        <div
+          className="product-cards"
+          style={{
+            transform: `translateX(-${(currentIndex / visibleProducts) * 100}%)`, // Calculate how far to translate the container
+          }}
+        >
+          {renderProductCards(products)}
+        </div>
+        </div>
+  
+        <button
+          className="nav-button next"
+          onClick={handleNext}
+          disabled={currentIndex >= products.length - visibleProducts} // Disable "next" button if we're at the last card
+        >
+          &#8250;
+        </button>
+      </div>
         </section>
       </section>
 

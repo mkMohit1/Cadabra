@@ -105,39 +105,39 @@ const Navbar = () => {
         />
       </div>
 
-      <div className={`nav-links ${menuOpen ? "open" : "close"}`}>
-        <ul>
+      <div className={`nav-links ${menuOpen ? "open max-w-md bg-purple-50" : "close"}`}>
+        <ul className={menuOpen?"flex flex-col ":null}>
           <li>
-            <NavLink to="/" style={{ color: currentColor }}>
+            <NavLink to="/" style={{ color: menuOpen?"black":currentColor }} >
               Home
             </NavLink>
           </li>
           <li>
-            <NavLink to="/About" style={{ color: currentColor }}>
+            <NavLink to="/About" style={{ color: menuOpen?"black":currentColor }}>
               About
             </NavLink>
           </li>
           <li>
-            <NavLink to="/Contact" style={{ color: currentColor }}>
+            <NavLink to="/Contact" style={{ color: menuOpen?"black":currentColor }}>
               Contact
             </NavLink>
           </li>
           <li>
-            <NavLink to="/Rent" style={{ color: currentColor }}>
+            <NavLink to="/Rent" style={{ color: menuOpen?"black":currentColor }}>
               Rent
             </NavLink>
           </li>
           <li>
-            <NavLink to="/Suscription" style={{ color: currentColor }}>
+            <NavLink to="/Suscription" style={{ color: menuOpen?"black":currentColor }}>
               Suscription
             </NavLink>
           </li>
           <li>
-            <NavLink to="/Cart" style={{ color: currentColor }}>
+            <NavLink to="/Cart" style={{ color: menuOpen?"black":currentColor }}>
               <FontAwesomeIcon
                 icon={faCartShopping}
                 style={{
-                  color:  currentColor,
+                  color:  menuOpen?"black":currentColor,
                   fontSize: 20,
                   fontWeight: 300,
                 }}
@@ -158,7 +158,7 @@ const Navbar = () => {
               )}
             </div>
             ) :  (
-              <NavLink to="/Login" style={{ color: currentColor }}>
+              <NavLink to="/Login" style={{ color: menuOpen?"black":currentColor }}>
                 Login
               </NavLink>
               

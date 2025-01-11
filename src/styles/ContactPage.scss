@@ -66,7 +66,7 @@
   
   .hand {
     position: absolute;
-    width: 80px;
+    width: 150px;
     height: 2px;
     z-index: 100;
     img{
@@ -79,8 +79,8 @@
     right: 20%;
     transform: rotate(45deg);
     img{
-        margin: -72px -15px 0px;
-        transform: rotate(-52deg);
+      margin: -80px 47px 0px;
+      transform: rotate(-52deg);
     }
   }
   
@@ -89,8 +89,8 @@
     left: 20%;
     transform: rotate(-45deg);
     img{
-        margin: -100px -120px 0px;
-        transform: rotate(35deg);
+      margin: -130px -90px 0px;
+      transform: rotate(35deg);
     }
   }
   
@@ -137,7 +137,7 @@
   .form-group input,
   .form-group textarea {
     width: 100%;
-    padding: 10px 0 !important;
+    padding: 10px 10px !important;
     border: none;
     border-bottom: 1px solid #ddd;
     outline: none;

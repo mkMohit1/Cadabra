@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Menu, User, Maximize, ChevronDown, LogOut } from "lucide-react";
-import "../styles/AdminDashboard.scss";
+import "../styles/AdminDashboard.Module.scss";
 import { useSelector, useDispatch } from "react-redux";
 import Dashboard from "../components/Dashboard";
 import AdminPage from "../components/AdminPage";
@@ -8,6 +8,9 @@ import { logout } from "../redux/authSlice";
 import SaleAdmin from "../components/SaleAdmin";
 import CustomerManagement from "../components/CustomerManagement";
 import ProductPage from "./ProductPage";
+import { io } from "socket.io-client";
+
+const socket= io('http://localhost:5000');
 
 const AdminDashboard = () => {
   const dispatch = useDispatch();
@@ -38,7 +41,20 @@ const AdminDashboard = () => {
     window.location.href = "/admin-login";
 
   };
-
+  useEffect(()=>{
+    if(currentUser.isAdmin =='SupperAdmin'){
+      // Notify backend that SuperAdmin is logged in
+      socket.emit('superAdminLogin');
+      socket.on('newContactNotification',(notification)=>{
+        alert(notification.message);
+        console.log('Contact Data', notification.data);
+      });
+      return ()=>{
+        socket.disconnect();
+      }
+    }
+  },[]);
+  
   return (
     <div className="dashboard">
       <aside className={`sidebar ${!isSidebarOpen ? "collapsed" : ""}`}>

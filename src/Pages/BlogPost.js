@@ -24,7 +24,7 @@ const BlogPost = ({ title, subtitle, imageUrl, featuredText, onContactClick, onS
   }
   return (
     <div className="blog-post">
-      <header className="blog-header">
+      {/* <header className="blog-header">
         <nav className="blog-nav">
           <ul>
             <li><a href="#">Featured</a></li>
@@ -37,7 +37,7 @@ const BlogPost = ({ title, subtitle, imageUrl, featuredText, onContactClick, onS
             <button onClick={onSubscribeClick}>Subscribe</button>
           </div>
         </nav>
-      </header>
+      </header> */}
 
       <div className="blog-content">
         {blog.category && <span className="blog-featured">{blog.category}</span>}
@@ -99,7 +99,7 @@ const BlogPost = ({ title, subtitle, imageUrl, featuredText, onContactClick, onS
       </section>
 
       {/* Footer Section */}
-      <footer className="blog-footer">
+      {/* <footer className="blog-footer">
         <div className="footer-logo">
           <h1 className="logo">ab</h1>
           <p>All rights reserved.</p>
@@ -113,7 +113,7 @@ const BlogPost = ({ title, subtitle, imageUrl, featuredText, onContactClick, onS
           <a href="#">Privacy Policy</a>
           <a href="#">Cookie Policy</a>
         </div>
-      </footer>
+      </footer> */}
     </div>
   );
 };

@@ -99,6 +99,14 @@
             }
             .read-btn{
               font-size: 40px;
+              .arrow{
+                color: lightgray;
+              }
+              .arrow:hover{
+                
+                  color:#ffd437;
+                
+              }
             }
           }
         }

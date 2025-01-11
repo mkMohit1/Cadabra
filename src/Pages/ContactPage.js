@@ -1,21 +1,49 @@
 import React, { useState } from 'react';
 import '../styles/ContactPage.scss';
 import { contactImage, mainLogo } from '../ImagePath';
+import { useSelector } from 'react-redux';
+import { errorToast, successToast } from '../DecryptoAndOther/ToastUpdate';
 
 const ContactForm = () => {
+    const user = useSelector((state)=>state.auth.user);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    message: ''
+    message: '',
+    mobile:user.mobileNumber?user.mobileNumber:'',
+    type: user.type
   });
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     // Handle form submission
+    if(!user){
+        errorToast("Please signin.")
+        return;
+    }
+    try {
+        const response = await fetch('http://localhost:5000/contact', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+        if (response.ok) {
+          successToast('Your message has been sent successfully!');
+          setFormData({ name: '', email: '', message: '' }); // Reset form but keep mobile
+        } else {
+          const errorText = await response.text();
+          errorToast(`Failed to send your message. Error: ${errorText}`);
+        }
+      } catch (error) {
+        console.error('Error submitting form:', error);
+        errorToast('An error occurred. Please try again later.');
+      }
   };
 
   return (

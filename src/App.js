@@ -15,6 +15,9 @@ import { SingleProductPage } from "./components/SingleProductPage";
 import About from "./Pages/AboutPage";
 import PricingPage from "./Pages/PlanePage";
 import ContactForm from "./Pages/ContactPage";
+import List from "./components/Job/list";
+import CreateJob from "./components/Job/CreateJob";
+import JobsPortal from "./components/Job/JobsPortal";
 
 function App() {
   const [blogs, setBlogs] = useState(null);
@@ -104,6 +107,9 @@ function AppRoutes({ blogs, user }) {
         <Route path="/About" element={<About />} />
         <Route path="/Suscription" element={<PricingPage/>}/>
         <Route path="/Contact" element={<ContactForm/>}/>
+          <Route path="/Job/list" element={<List />} /> {/* Job list for admin */}
+          <Route path='/Job/createjob' element={<CreateJob/>} /> {/* Create job for admin*/}
+          <Route path="/Job" element={<JobsPortal />} /> {/* Main Jobs Portal page */}
         <Route
           path="/admin"
           element={

@@ -80,12 +80,14 @@ $transition-speed: 0.3s;
 .main-content {
   flex: 1;
   display: flex;
+  justify-content: flex-start;
   flex-direction: column;
 }
 
 // Header
 .header {
   @include flex-center;
+  width: 100%;
   justify-content: space-between;
   height: $header-height;
   padding: 0 1.5rem;
@@ -159,7 +161,7 @@ $transition-speed: 0.3s;
 // Dashboard Content
 .dashboard-content {
   padding: 1.5rem;
-  
+  width: 100%;
   h1 {
     font-size: 1.5rem;
     font-weight: 600;
@@ -169,7 +171,7 @@ $transition-speed: 0.3s;
 
 .metrics-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 2fr));
   gap: 1.5rem;
 }
 
@@ -207,9 +209,9 @@ $transition-speed: 0.3s;
 // Responsive Design
 @media (max-width: 768px) {
   .sidebar {
-    position: fixed;
+    position: sticky;
     z-index: 1000;
-    
+    min-height: 100vh;
     &.collapsed {
       transform: translateX(-100%);
     }

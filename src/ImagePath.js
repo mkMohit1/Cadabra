@@ -41,7 +41,10 @@ import mainLogo4 from './images/mainLogo4.png';
 import contact1 from './images/contact1.png';
 import contact2 from './images/contact2.png';
 import contact3 from './images/contact3.png';
-
+import Jobbg from "./images/Image_Banner.jpeg";
+import Jobmap from "./images/Map.png";
+import Jobmin from "./images/minimize.png";
+import Jobarrow from "./images/Group_2.png";
 
 export const mainLogo = {mainLogo1, mainLogo2, mainLogo3, mainLogo4};
 export const contactImage = [contact1,contact2,contact3];
@@ -71,7 +74,11 @@ export const normalImages ={
     loginPage: loginPageImg,
     loginTxt: loginTxtImg,
     loginWOther: loginWOtherImg,
-    whatsApp: whatsApp
+    whatsApp: whatsApp,
+    Jobbg:Jobbg,
+    Jobmap:Jobmap,
+    Jobmin:Jobmin,
+    Jobarrow:Jobarrow
 }
 
 export const rentImage = {

@@ -28,7 +28,7 @@ const Footer = () => {
           <ul>
             <li><NavLink to='/about'>About</NavLink></li>
             <li>
-            <NavLink to='/carrer'>Careers <span className="hiring-badge">Hiring!</span></NavLink>
+            <NavLink to='/Job'>Careers <span className="hiring-badge">Hiring!</span></NavLink>
             </li>
             <li><NavLink to='/blogs'>Blogs</NavLink></li>
           </ul>

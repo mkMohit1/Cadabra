@@ -69,7 +69,7 @@ const BlogSection = ({ blogs }) => {
                         </div>
                       )}
                       <div className="read-btn">
-                      <Link to={`/blog/${post._id}`}><FontAwesomeIcon icon={faCircleArrowRight} style={{color:"lightgray"}}/></Link>
+                      <Link to={`/blog/${post._id}`}><FontAwesomeIcon icon={faCircleArrowRight} className="arrow"/></Link>
                     </div>
                     </div>
                     

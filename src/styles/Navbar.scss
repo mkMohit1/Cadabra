@@ -91,9 +91,7 @@
     position: relative;
 
     .userImage {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
+      width: 45px;
       img {
         width: 100%;
         object-fit: contain;
@@ -114,7 +112,7 @@
       padding: 10px;
       border-radius: 5px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      width: 200px;
+      width: fit-content;
       &.active {
         display: block; // Show dropdown when active
       }
@@ -186,11 +184,11 @@
       position: absolute;
       top: 60px;
       right: 0;
-      width: 80%;
+      width: 60%;
       background-color: white;
       z-index: 1000;
       text-align: center;
-      padding: 20px 0;
+      margin: 26px 0;
       display: none;
       flex-direction: column;
       gap: 10px;

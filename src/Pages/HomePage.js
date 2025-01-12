@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import Navbar from '../components/Navbar';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { decryptData } from '../DecryptoAndOther/DecryptEncrpt';
+import { login } from '../redux/authSlice';
 import HeroSection from '../components/HeroSection';
 import LogosSection from '../components/LogoSection';
 import ServicesSection from '../components/ServicesSection';
@@ -8,45 +10,46 @@ import Testimonials from '../components/Testimonials';
 import CustomerSection2 from '../components/CustomerSection2';
 import BlogSection from '../components/BlogSection';
 import SubscribeSection from '../components/SubscribeSection';
-import { decryptData } from '../DecryptoAndOther/DecryptEncrpt';
-import { useDispatch } from 'react-redux';
-import { login } from '../redux/authSlice';
-const HomePage = ({ blogs }) => {
-    const [decryptedUser, setDecryptedUser] = useState(null);
-    const dispatch = useDispatch();
-    useEffect(() => {
-        // Get the encrypted data from the URL
-        const urlParams = new URLSearchParams(window.location.search);
-        if(urlParams.size>0){
-            const encryptedUserData = decodeURIComponent(urlParams.get('user'));
-            const iv = decodeURIComponent(urlParams.get('iv'));
-            let decrypted;
-            // console.log('Decoded Encrypted Data:', encryptedUserData);
-            // console.log('Decoded IV:', iv);
-            if(encryptedUserData && iv){
-                decrypted = decryptData(encryptedUserData, iv);
-            }
-            // console.log('Decrypted Data:', decrypted);
-            setDecryptedUser(decrypted);
-            if(decrypted){
-                dispatch(login({ userID: decrypted.userID, isAdmin: decrypted.type, type:decrypted.loginWith }));
-            }
-        }
-        
-    }, []);
 
-    return (
-        <div className="App">
-            <HeroSection />
-            <LogosSection />
-            <ServicesSection />
-            <CustomerSection />
-            <Testimonials />
-            <CustomerSection2 />
-            <BlogSection blogs={blogs} />
-            <SubscribeSection />
-        </div>
-    );
-}
+const HomePage = ({ blogs }) => {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
+
+  useEffect(() => {
+    if (!user) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const encryptedUserData = urlParams.get('user');
+      const iv = urlParams.get('iv');
+
+      if (encryptedUserData && iv) {
+        try {
+          const decrypted = decryptData(decodeURIComponent(encryptedUserData), decodeURIComponent(iv));
+          console.log('Decrypted Data:', decrypted);
+          dispatch(login(decrypted));
+
+          // Clean the URL
+          urlParams.delete('user');
+          urlParams.delete('iv');
+          window.history.replaceState(null, '', `${window.location.pathname}`);
+        } catch (error) {
+          console.error('Decryption failed:', error);
+        }
+      }
+    }
+  }, [dispatch, user]);
+
+  return (
+    <div className="App">
+      <HeroSection />
+      <LogosSection />
+      <ServicesSection />
+      <CustomerSection />
+      <Testimonials />
+      <CustomerSection2 />
+      <BlogSection blogs={blogs} />
+      <SubscribeSection />
+    </div>
+  );
+};
 
 export default HomePage;

@@ -44,7 +44,7 @@ const AdminDashboard = () => {
   useEffect(()=>{
     if(currentUser.isAdmin =='SupperAdmin'){
       // Notify backend that SuperAdmin is logged in
-      socket.emit('superAdminLogin');
+      socket.emit('supperAdminLogin');
       socket.on('newContactNotification',(notification)=>{
         alert(notification.message);
         console.log('Contact Data', notification.data);

@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import SVGComponent from "../svgComponents/Offer"; // Import the SVG component
 
 const ProductCard = ({ product, isInCart }) => {
+  const MAX_USP_LENGTH = 70; // Set the maximum length of the productUsp
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [selectProduct, setSelectProduct] = useState(isInCart);  // Track whether the product is in the cart
@@ -55,7 +56,7 @@ const ProductCard = ({ product, isInCart }) => {
         {product.subTitle}  
       </p>
       <p className="product-usp">
-      {product.productUsp}
+      {product.productUsp.length>MAX_USP_LENGTH?`${product.productUsp.slice(0,MAX_USP_LENGTH)}...`:product.productUsp}
       </p>
       <p className="product-price">
       <del>{product.mrp}</del> -{/* Crossed out original price */}
@@ -65,7 +66,7 @@ const ProductCard = ({ product, isInCart }) => {
         {selectProduct ? <FontAwesomeIcon icon={faCheck}/> :<FontAwesomeIcon icon={faPlus}/>}
       </button>
       <span className="offer-svg">
-        <SVGComponent discount={product.discount} />
+        <SVGComponent discount={parseInt(product.discount)} />
       </span>
       {/* {selectProduct && (
         <div className="counter">

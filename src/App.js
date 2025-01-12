@@ -18,20 +18,19 @@ import ContactForm from "./Pages/ContactPage";
 import List from "./components/Job/list";
 import CreateJob from "./components/Job/CreateJob";
 import JobsPortal from "./components/Job/JobsPortal";
+import { loginUser } from "./redux/authSlice";
 
 function App() {
   const [blogs, setBlogs] = useState(null);
   const dispatch = useDispatch();
- const user = useSelector((state) => state.auth.user);
-  
-  // Fetching user data from localStorage and updating state
+  const user = useSelector((state) => state.auth.user);
+
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("loggedInUser"));
-    console.log("Stored User:", storedUser); // Debugging line to check stored user
-    if (storedUser) {
-      dispatch(login(storedUser)); // Restore user state on refresh
+    if (storedUser && !user) {
+      dispatch(login(storedUser)); // Restore user state
     }
-  }, [dispatch]);
+  }, [dispatch, user]);
 
   useEffect(() => {
     const fetchBlogs = async () => {

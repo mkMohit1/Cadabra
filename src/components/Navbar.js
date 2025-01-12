@@ -19,7 +19,36 @@ const Navbar = () => {
   const [intervalId, setIntervalId] = useState(null);
   const [currentColor, setCurrentColor] = useState("black");
   const [dropdownOpen, setDropdownOpen] = useState(false); // Track dropdown state
+  const [userDetail, setUserDetail]=useState({});
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 786) {
+        setMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    const fetchresponse = async()=>{
+      try {
+        const response = await(await fetch("http://localhost:5000/users")).json();
+        const currentuser = response.filter((temp, index)=>temp._id === user.userID);
+        // console.log(currentuser); 
+        setUserDetail(...currentuser) ;
+      } catch (error) {
+        console.log('Failed to fetch user');
+      }
+    } 
+
+    fetchresponse();
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+
+    
+  }, []);
+
 
   const handleScroll = () => {
     const currentScrollY = window.scrollY;
@@ -91,7 +120,7 @@ const Navbar = () => {
     }
    
   };
-
+  console.log("navbar",user);
   return (
     <nav
       className="navbar"
@@ -105,8 +134,8 @@ const Navbar = () => {
         />
       </div>
 
-      <div className={`nav-links ${menuOpen ? "open max-w-md bg-purple-50" : "close"}`}>
-        <ul className={menuOpen?"flex flex-col ":null}>
+      <div className={`nav-links ${menuOpen ? "open" : "close"}`}>
+        <ul className={menuOpen?"flex flex-col w-full bg-purple-50 mr-3":'flex flex-row'}>
           <li>
             <NavLink to="/" style={{ color: menuOpen?"black":currentColor }} >
               Home
@@ -133,7 +162,7 @@ const Navbar = () => {
             </NavLink>
           </li>
           <li>
-            <NavLink to="/Cart" style={{ color: menuOpen?"black":currentColor }}>
+            <NavLink to="/Cart" style={{ color: menuOpen?"black":currentColor }} className="relative">
               <FontAwesomeIcon
                 icon={faCartShopping}
                 style={{
@@ -142,17 +171,17 @@ const Navbar = () => {
                   fontWeight: 300,
                 }}
               />
-              {cartCount > 0 && <div className="totalCounter">{cartCount}</div>}
+              {cartCount > 0 && <div className={`absolute -top-[18px] -right-[2px] w-[19px] h-[18px] bg-black text-center rounded-full text-white`}>{cartCount}</div>}
             </NavLink>
           </li>
           <li>
             {user ? (
               <div className="userDetail" onClick={() => setDropdownOpen(!dropdownOpen)}>
-              <div className="userImage"><img src={normalImages.google} alt="userImage" /></div>
+              <div className="userImage"><img src={userDetail.userImage } alt="userImage" className="rounded-full" /></div>
               <FontAwesomeIcon icon={faCircleChevronDown} className="userDropdown" />
               {dropdownOpen && (
                 <div className="dropdown-menu">
-                  <div className="user-email">{user.email}</div>
+                  <div className="user-email">{userDetail.email}</div>
                   <button className="logout-btn" onClick={handleLogout}>Logout</button>
                 </div>
               )}

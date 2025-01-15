@@ -20,15 +20,16 @@
     
     .rentHeader-content{
         text-align: center;
-        max-width: 550px;
+        max-width: 100%;
         h2{
-            font-size: 50px;
+            font-size: 5.0rem;
             margin-bottom: 0;
-            margin-top: 5rem;
+            margin-top: 6rem;
         }
         p{
-            font-size: 18px;
+            font-size: 2.0rem;
             opacity: 0.7;
+            margin-bottom: 5%;
         }
     }
      .rent-btn{
@@ -36,7 +37,7 @@
       height: 60px;
       font-size: 38px;
       font-family: "Inter", "sans-serif";
-      background-color: black;
+      // background-color: black;
       color: #4fe8a4;
       outline: none;
       border: none;
@@ -156,7 +157,9 @@
             opacity: 0.7;
             font-size: 21px;
             line-height: 30px;
+            margin-bottom: 10%;
           }
+          
         }
         .howBottom{
           display: flex;
@@ -236,8 +239,8 @@
     
     /* Close Button */
     .close-btn {
-      top: 8px;
-      right: 6px;
+      top: 6px;
+      right: -49%;
       width: 40px;
       border-radius: 0;
       border: none;

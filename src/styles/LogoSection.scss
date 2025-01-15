@@ -4,12 +4,14 @@
   gap: 2rem;
   font-family: 'Inter', 'sans-serif';
   margin: 2rem auto;
+  margin-bottom: 10px;
   color: #0a2640;
   width: 80%;
   
   /* Add gradient effect at the left and right edges */
   position: relative;
   padding: 0 1rem; /* Add some padding to give space for the gradient effect */
+  padding-top: 1rem;
   
   /* The gradient on the edges */
   ::before, ::after {

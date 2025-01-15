@@ -45,6 +45,7 @@ import Jobbg from "./images/Image_Banner.jpeg";
 import Jobmap from "./images/Map.png";
 import Jobmin from "./images/minimize.png";
 import Jobarrow from "./images/Group_2.png";
+import Finalimage from "./images/final.png"
 
 export const mainLogo = {mainLogo1, mainLogo2, mainLogo3, mainLogo4};
 export const contactImage = [contact1,contact2,contact3];
@@ -78,7 +79,8 @@ export const normalImages ={
     Jobbg:Jobbg,
     Jobmap:Jobmap,
     Jobmin:Jobmin,
-    Jobarrow:Jobarrow
+    Jobarrow:Jobarrow,
+    Finalimage:Finalimage
 }
 
 export const rentImage = {

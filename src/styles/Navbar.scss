@@ -3,13 +3,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-family: "Inter", sans-serif;
-  padding: 0.2rem 2rem 0;
+  font-family: "Mulish", sans-serif;
+  padding: 0.5rem 2rem ;
   color: #4fe8a4;
   position: fixed;
   width: 100%;
   z-index: 100;
   backdrop-filter: blur(10px);
+
 
   .logo {
     padding: 0;
@@ -57,30 +58,36 @@
         &:hover{
           background: url('../images/background.svg');
           background-size: contain;
-          background-position: center;
+          background-position: bottom;
           background-repeat: no-repeat;
+          
         }
       }
     }
   }
 
-  .login-btn {
-    padding: 5px 10px;
-    border: 1px solid #4fe8a4;
-    background: transparent;
-    color: #4fe8a4;
-    border-radius: 15px;
-    font-family: "Inter", sans-serif;
-    height: 40px;
-    width: 100px;
-    cursor: pointer;
-    transition: all 0.3s ease;
+  .hello-btn {
+  padding: 10px 10px !important;
+  border: 1px solid transparent !important; /* Transparent border for now */
+  background: linear-gradient(19deg, #21D4FD 0%, #B721FF 100%) !important;
+  color: white !important; /* White text */
+  border-radius: 0px !important;
+  font-family: "Mulish", sans-serif !important; /* Ensure Mulish font is used */
+  height: 40px !important;
+  width: 100px !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  text-align: center !important;
+  display: inline-block !important; /* Allow text to be centered inside */
+  font-weight: 700 !important;
+}
 
-    &:hover {
-      background-color: #4fe8a4;
-      color: white;
-    }
-  }
+.hello-btn:hover {
+  background-color: linear-gradient(19deg, #21D4FD 0%, #B721FF 100%) !important; /* Maintain gradient on hover */
+  color: white !important; /* Text remains white on hover */
+  border: 1px solid white !important; /* White border on hover */
+}
+
 
   .userDetail {
     display: flex;
@@ -91,7 +98,9 @@
     position: relative;
 
     .userImage {
-      width: 45px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
       img {
         width: 100%;
         object-fit: contain;
@@ -112,7 +121,7 @@
       padding: 10px;
       border-radius: 5px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      width: fit-content;
+      width: 200px;
       &.active {
         display: block; // Show dropdown when active
       }
@@ -184,11 +193,11 @@
       position: absolute;
       top: 60px;
       right: 0;
-      width: 60%;
+      width: 80%;
       background-color: white;
       z-index: 1000;
       text-align: center;
-      margin: 26px 0;
+      padding: 20px 0;
       display: none;
       flex-direction: column;
       gap: 10px;

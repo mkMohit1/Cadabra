@@ -1,16 +1,20 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/RentPage.scss";
 import { rentImage, normalImages } from "../ImagePath";
-import ProductCard from '../components/ProductCard';
+import ProductCard from "../components/ProductCard";
 import FilterProduct from "../components/FilterProduct";
 import { useDispatch, useSelector } from "react-redux";
-import { ToastContainer } from 'react-toastify';
-import { infoToast,errorToast, successToast } from "../DecryptoAndOther/ToastUpdate";
+import { ToastContainer } from "react-toastify";
+import {
+  infoToast,
+  errorToast,
+  successToast,
+} from "../DecryptoAndOther/ToastUpdate";
 import { fetchProducts } from "../redux/rentProductSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquareArrowUpRight } from "@fortawesome/free-solid-svg-icons";
 import ConsultationFilter from "../components/ConsultationFilter";
-
+import { Link } from "react-router-dom";
 export default function RentPage() {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.product.rentProduct);
@@ -24,11 +28,11 @@ export default function RentPage() {
   const [tenure, setTenure] = useState("");
   const [showQuiz, setShowQuiz] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-    const visibleProducts = 3;
+  const visibleProducts = 3;
 
   const handleSearch = (e) => {
     e.preventDefault();
-    if (category === '' && type === '' && location === '' && tenure === '') {
+    if (category === "" && type === "" && location === "" && tenure === "") {
       errorToast("Please fill minimum two required fields!");
       return;
     }
@@ -45,10 +49,10 @@ export default function RentPage() {
     setType("");
     setLocation("");
     setTenure("");
-    if(filterData.length === 0) {
+    if (filterData.length === 0) {
       errorToast("No products found!");
       setFilterData({});
-      return
+      return;
     }
     console.log(FilterProduct);
     setFilterData(FilterProduct);
@@ -68,7 +72,8 @@ export default function RentPage() {
 
   const handleData = (data) => {
     console.log(data);
-    if (Object.keys(data).length === 0) {  // Check if data object is empty
+    if (Object.keys(data).length === 0) {
+      // Check if data object is empty
       return;
     }
     handleShowQuiz();
@@ -79,17 +84,21 @@ export default function RentPage() {
     return products.map((product) => {
       const isInCart = cartItem.some((item) => item._id === product._id);
       //console.log(cartItem);
-      return <ProductCard key={product.id} product={product} isInCart={isInCart} />;
+      return (
+        <ProductCard key={product.id} product={product} isInCart={isInCart} />
+      );
     });
   };
   const handleNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % products.length );
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % products.length);
   };
 
   const handlePrev = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + products.length) % products.length);
+    setCurrentIndex(
+      (prevIndex) => (prevIndex - 1 + products.length) % products.length
+    );
   };
-  
+
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
@@ -98,26 +107,60 @@ export default function RentPage() {
     <div className="rentPage">
       <section className={`mainContent ${showQuiz ? "blurred" : ""}`}>
         <section className="rentHeader">
-          <div className="rentHeader-content">
-            <h2>Rent out clothes you no longer need</h2>
-            <p>Save and earn money with the most Earth-friendly form of style. Guaranteed freshly dry-cleaned.</p>
+          <div className="hero-section">
+            <div className="hero-content">
+              <h1 className="font-extrabold font-mulish">
+                Select the right product
+              </h1>
+              <p className="font-bold font-mulish">
+                <span className="using">using</span> <span className="monthly">CadabraAI</span>{" "}
+              </p>
+              <div className="hero-buttons">
+                {/* <button className="buy-btn font-mulish">
+                  <Link to="/Rent" className="linkRent">
+                    <span className="font-mulish button-text">Rent Today</span>
+                  </Link>
+                </button> */}
+
+                <button
+                  className="buy-btn font-mulish linkRent"
+                  onClick={handleShowQuiz}
+                >
+                 <span className="font-mulish button-text"> Rent Now{" "}</span>
+                </button>
+              </div>
+            </div>
+            <div className="topBgCircle"></div>
           </div>
-          <button className="rent-btn" onClick={handleShowQuiz}>Rent Now <FontAwesomeIcon className="fontIcon" icon={faSquareArrowUpRight}/></button>
+          {/* <button className="rent-btn" onClick={handleShowQuiz}>
+            Rent Now{" "}
+            <FontAwesomeIcon className="fontIcon" icon={faSquareArrowUpRight} />
+          </button> */}
         </section>
 
         <section className="filterContainer">
           <form onSubmit={handleSearch}>
             <div className="allFilterList">
               <div className="filterItem">
-                <select id="location" value={location} onChange={(e) => setLocation(e.target.value)}>
+                <select
+                  id="location"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                >
                   <option value="">Select your Location</option>
                   {locationNames.map((item, index) => (
-                    <option value={item} key={`${item}-${index + 1}`}>{item}</option>
+                    <option value={item} key={`${item}-${index + 1}`}>
+                      {item}
+                    </option>
                   ))}
                 </select>
               </div>
               <div className="filterItem">
-                <select id="category" value={category} onChange={(e) => setCategory(e.target.value)}>
+                <select
+                  id="category"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                >
                   <option value="">Select a category</option>
                   <option value="type1">type1</option>
                   <option value="type2">type2</option>
@@ -126,14 +169,22 @@ export default function RentPage() {
                 </select>
               </div>
               <div className="filterItem">
-                <select id="type" value={type} onChange={(e) => setType(e.target.value)}>
+                <select
+                  id="type"
+                  value={type}
+                  onChange={(e) => setType(e.target.value)}
+                >
                   <option value="">Select a type</option>
                   <option value="residential">Residential</option>
                   <option value="commercial">Commercial</option>
                 </select>
               </div>
               <div className="filterItem">
-                <select id="tenure" value={tenure} onChange={(e) => setTenure(e.target.value)}>
+                <select
+                  id="tenure"
+                  value={tenure}
+                  onChange={(e) => setTenure(e.target.value)}
+                >
                   <option value="">Select a tenure</option>
                   <option value="under_1_year">Under 1 year</option>
                   <option value="1_year">1 Year</option>
@@ -142,22 +193,28 @@ export default function RentPage() {
                 </select>
               </div>
             </div>
-            <button type="submit" className="search-btn">Search</button>
+            <button type="submit" className="search-btn">
+              Search
+            </button>
           </form>
-          {filterData.length > 0 ?
-          <div className="product-container">
-            {renderProductCards(filterData)}
-          </div>
-          :null}
+          {filterData.length > 0 ? (
+            <div className="product-container">
+              {renderProductCards(filterData)}
+            </div>
+          ) : null}
         </section>
 
         <section className="howItContainer">
           <div className="howTop">
             <h2>How it works</h2>
-            <p>Save and earn money with the most Earth-friendly form of style. Guaranteed freshly dry-cleaned.</p>
+            <p>
+              Save and earn money with the most Earth-friendly form of style.
+              Guaranteed freshly dry-cleaned.
+            </p>
           </div>
           <div className="howBottom">
-            <div className="howBottomItem">
+            <img src={normalImages.Finalimage} alt="Final_one" />
+            {/* <div className="howBottomItem">
               <div className="Image">
                 <img src={rentImage.sell} alt="sell image" />
               </div>
@@ -185,14 +242,14 @@ export default function RentPage() {
                 <h3 className="detailHead">Get Paid</h3>
                 <p className="detailText">Get it delivered or pick it up at a nearby Wardrobe Hub</p>
               </div>
-            </div>
+            </div> */}
           </div>
         </section>
 
         <div className="BannerContainer">
-          <div className="bannerImage">
+          {/* <div className="bannerImage">
             <img src={normalImages.customer} alt="Rent banner" />
-          </div>
+          </div> */}
         </div>
 
         <section className="latest-arrivals">
@@ -201,33 +258,35 @@ export default function RentPage() {
             {renderProductCards(products)}
           </div> */}
           <div className="product-slider">
-      <button
-        className="nav-button prev"
-        onClick={handlePrev}
-        disabled={currentIndex === 0} // Disable "prev" button if we're at the first card
-      >
-        &#8249;
-      </button>
-      
-      <div className="product-cards-container">
-        <div
-          className="product-cards"
-          style={{
-            transform: `translateX(-${(currentIndex / visibleProducts) * 100}%)`, // Calculate how far to translate the container
-          }}
-        >
-          {renderProductCards(products)}
-        </div>
-        </div>
-  
-        <button
-          className="nav-button next"
-          onClick={handleNext}
-          disabled={currentIndex >= products.length - visibleProducts} // Disable "next" button if we're at the last card
-        >
-          &#8250;
-        </button>
-      </div>
+            <button
+              className="nav-button prev"
+              onClick={handlePrev}
+              disabled={currentIndex === 0} // Disable "prev" button if we're at the first card
+            >
+              &#8249;
+            </button>
+
+            <div className="product-cards-container">
+              <div
+                className="product-cards"
+                style={{
+                  transform: `translateX(-${
+                    (currentIndex / visibleProducts) * 100
+                  }%)`, // Calculate how far to translate the container
+                }}
+              >
+                {renderProductCards(products)}
+              </div>
+            </div>
+
+            <button
+              className="nav-button next"
+              onClick={handleNext}
+              disabled={currentIndex >= products.length - visibleProducts} // Disable "next" button if we're at the last card
+            >
+              &#8250;
+            </button>
+          </div>
         </section>
       </section>
 
@@ -238,7 +297,10 @@ export default function RentPage() {
             <button className="close-btn" onClick={handleCloseQuiz}>
               &times;
             </button>
-            <FilterProduct handleCloseQuiz={handleCloseQuiz} handleData={handleData} />
+            <FilterProduct
+              handleCloseQuiz={handleCloseQuiz}
+              handleData={handleData}
+            />
           </div>
         </div>
       )}
@@ -246,14 +308,17 @@ export default function RentPage() {
       {Object.keys(filterDataPopup).length > 0 && (
         <div className="popup">
           <div className="popup-content filter-popup">
-            <button className="close-btn" onClick={() => setFilterDataPopup([])}>
+            <button
+              className="close-btn"
+              onClick={() => setFilterDataPopup([])}
+            >
               &times;
             </button>
             {/* Add content to show inside the filterDataPopup */}
-            <ConsultationFilter/>
+            <ConsultationFilter />
             <div className="product-container">
-            {renderProductCards(products)}
-          </div>
+              {renderProductCards(products)}
+            </div>
           </div>
         </div>
       )}

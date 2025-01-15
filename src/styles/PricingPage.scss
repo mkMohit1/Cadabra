@@ -232,3 +232,82 @@ $blue-50: #EFF6FF;
     }
   }
 }
+.comparison-link {
+  margin-top: 2rem;
+  text-align: center;
+
+  .compare-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    background-color: transparent;
+    color: #666;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+
+    &:hover {
+      color: #333;
+    }
+
+    .arrow-icon {
+      width: 20px;
+      height: 20px;
+      margin-left: 0.5rem;
+      transition: transform 0.3s ease;
+
+      &.rotate {
+        transform: rotate(180deg);
+      }
+    }
+  }
+}
+
+.comparison-table {
+  margin-top: 2rem;
+  overflow-x: auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+
+    th, td {
+      padding: 1rem;
+      border: 1px solid #eee;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f8f9fa;
+      font-weight: 600;
+    }
+
+    td {
+      .check-icon {
+        width: 20px;
+        height: 20px;
+        margin: 0 auto;
+
+        &.included {
+          color: #28a745;
+        }
+
+        &.not-included {
+          color: #dc3545;
+        }
+      }
+    }
+
+    tr:hover {
+      background-color: #f8f9fa;
+    }
+  }
+}
+
+.text-main{
+  color: linear-gradient(19deg, #21D4FD 0%, #B721FF 100%) ;
+}

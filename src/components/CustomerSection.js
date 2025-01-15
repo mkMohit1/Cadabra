@@ -1,69 +1,85 @@
-import React from 'react';
-import '../styles/CustomerSection.scss';
-import {normalImages} from "../ImagePath";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckCircle, faPenNib } from '@fortawesome/free-solid-svg-icons';
-import {faEye, faSun} from "@fortawesome/free-regular-svg-icons";
+import React from "react";
+import { normalImages } from "../ImagePath";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheckCircle, faPenNib } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faSun } from "@fortawesome/free-regular-svg-icons";
 
 const CustomerSection = () => {
   return (
-    <div className="customer-section">
-      <div className="customer-container">
+    <div className="bg-gray-100 py-10 pb-20 font-Inter">
+      <div className="max-w-6xl lg:mx-auto mx-auto space-y-16 ml-4">
         {/* Top Section */}
-        <div className="customer-row">
-          <div className="customer-card">
+        <div className="flex flex-col md:flex-row items-center gap-8 mr-4">
+          <div className="relative md:w-1/2 flex justify-center mb-[25px]">
             <img
-              src={normalImages.onPhoneCall2} // Replace with actual image path
+              src={normalImages.onPhoneCall2}
               alt="Customer Engagement"
-              className="customer-img"
+              className="rounded-lg w-full max-w-[450px] object-cover"
             />
-            <div className="chart-overlay">
-                <div className='chart-overlay-img'>
-                <img src={normalImages.chart} alt='chart-image' />
-                </div>                
-              <div className="chart">
-                <p>30%</p>
-                <p>More income in June</p>
-              </div>
+            <div className="absolute top-[65%] left-1/2 transform -translate-x-1/2 bg-white shadow-md rounded-lg p-4 w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64">
+              <img src={normalImages.chart} alt="Chart" className="w-full h-3/4 object-contain mb-2" />
+              <p className="text-center text-gray-700 font-semibold text-sm sm:text-base md:text-sm">
+                30% More income in June
+              </p>
             </div>
           </div>
-          <div className="customer-text">
-            <h2>We make security affordable by offering simple and flexible rental options for you</h2>
-            <ul>
-              <li><FontAwesomeIcon icon={faCheckCircle} style={{color:"#0a2640"}} className='faicon'/>Select product(s) from Cadabra Marketplace.</li>
-              <li><FontAwesomeIcon icon={faCheckCircle} style={{color:"#0a2640"}} className='faicon'/>Accept Rental, Tenure & Agreement.</li>
-              <li><FontAwesomeIcon icon={faCheckCircle} style={{color:"#0a2640"}} className='faicon'/>Work Order processed at our hub.</li>
+          <div className="md:w-1/2 text-center md:text-left space-y-4">
+            <h2 className="text-xl font-medium text-gray-800">
+              We make security affordable by offering simple and flexible rental options for you
+            </h2>
+            <ul className="space-y-2 ">
+              <li className="flex items-center text-gray-600">
+                <FontAwesomeIcon icon={faCheckCircle} className="text-blue-700 mr-2" />
+                Select product(s) from Cadabra Marketplace.
+              </li>
+              <li className="flex items-center text-gray-600">
+                <FontAwesomeIcon icon={faCheckCircle} className="text-blue-700 mr-2" />
+                Accept Rental, Tenure & Agreement.
+              </li>
+              <li className="flex items-center text-gray-600">
+                <FontAwesomeIcon icon={faCheckCircle} className="text-blue-700 mr-2" />
+                Work Order processed at our hub.
+              </li>
             </ul>
-            <button className="start-btn">Rent now</button>
+            <button className="bg-black text-green-400 font-bold py-2 px-6 rounded-full hover:bg-gray-800 transition">
+              Rent now
+            </button>
           </div>
         </div>
 
         {/* Bottom Section */}
-        <div className="customer-row">
-          <div className="customer-text">
-            <h2>We connect our customers with expert security advisors to help them design tailored security solutions</h2>
-            <ul>
-              <li><FontAwesomeIcon icon={faPenNib} style={{color:"white"}} className='faicon'/>We connect our customers with Security Experts.</li>
-              <li><FontAwesomeIcon icon={faEye} style={{color:"#0a2640"}} className='faicon'/>Consultant-led projects for your dream space.</li>
-              <li><FontAwesomeIcon icon={faSun} style={{color:"#0a2640"}} className='faicon'/>Enterprise End-to-End Security Solutions</li>
+        <div className="flex flex-col md:flex-row items-center gap-8 mr-4">
+          <div className="md:w-1/2 text-center md:text-left space-y-4 lg:ml-4">
+            <h2 className="text-xl font-medium text-gray-800">
+              We connect our customers with expert security advisors to help them design tailored security solutions
+            </h2>
+            <ul className="space-y-4">
+              <li className="flex items-center bg-blue-900 text-white p-4 rounded-md shadow-md">
+                <FontAwesomeIcon icon={faPenNib} className="mr-4" />
+                We connect our customers with Security Experts.
+              </li>
+              <li className="flex items-center bg-gray-100 p-4 rounded-md shadow-md">
+                <FontAwesomeIcon icon={faEye} className="text-blue-700 mr-4" />
+                Consultant-led projects for your dream space.
+              </li>
+              <li className="flex items-center bg-gray-100 p-4 rounded-md shadow-md">
+                <FontAwesomeIcon icon={faSun} className="text-blue-700 mr-4" />
+                Enterprise End-to-End Security Solutions.
+              </li>
             </ul>
           </div>
-          <div className="customer-card">
+          <div className="relative md:w-1/2 flex justify-center md:mb-[100px] mb-[80px]">
             <img
-              src={normalImages.onPhoneCall} // Replace with actual image path
+              src={normalImages.onPhoneCall}
               alt="Customer Collaboration"
-              className="customer-img"
+              className="rounded-lg w-full max-w-[450px] object-cover"
             />
-            <div className="chart-overlay">
-            <div className='chart-overlay-img'>
-                <img src={normalImages.chart2} alt='chart-image' />
-                </div>
-              <div className="chart">
-                <ul>
-                <li className='dot1'>Residential Security Planning</li>
-                <li className='dot2'>Security Advisor contribution</li>
-                </ul>
-              </div>
+            <div className="absolute top-[65%] left-1/2 transform -translate-x-1/2 bg-white shadow-md rounded-lg p-4 w-40 sm:w-48 md:w-56 lg:w-60">
+              <img src={normalImages.chart2} alt="Chart" className="w-full mb-2" />
+              <ul className="text-left space-y-2">
+                <li className="text-purple-500 text-sm">Residential Security Planning</li>
+                <li className="text-pink-500 text-sm">Security Advisor contribution</li>
+              </ul>
             </div>
           </div>
         </div>

@@ -9,7 +9,7 @@ const services = [
     description: '->',
   },
   {
-    title: 'CCTV Surveillance',
+    title: 'CCTV Surve.',
     subText: 'For Homes & Businesses',
     description: '->',
   },
@@ -22,7 +22,7 @@ const services = [
 
 const ServicesSection = () => {
   return (
-    <div className="services-section">
+    <div className="services-section font-mulish">
       <h2>Thousands of options Ready to Rent!</h2>
       <div className="services-container">
         {services.map((service, index) => (

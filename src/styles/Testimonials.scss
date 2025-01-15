@@ -1,107 +1,108 @@
-.testimonials {
-  padding: 2rem;
-  padding-bottom: 3.5rem;
-  background-color: #0b1e39;
-  color: #fff;
-  text-align: center;
-  font-family: 'Inter', 'sans-serif';
-  position: relative;
+// .testimonials {
+//   padding: 2rem;
+//   padding-bottom: 3.5rem;
+//   background-color: #0b1e39;
+//   color: #fff;
+//   text-align: center;
+//   font-family: 'Inter', 'sans-serif';
+//   position: relative;
 
-  .testimonials-header {
-    margin-bottom: 2rem;
-    width: 50%;
-    margin-left: 18%;
-    h2 {
-      font-size: 40px;
-      color: #fff;
-      font-weight: 300;
-      line-height: 50px;
-      text-align: left;
-    }
-  }
+//   .testimonials-header {
+//     margin-bottom: 2rem;
+//     width: 50%;
+//     margin-left: 18%;
+//     h2 {
+//       font-size: 40px;
+//       color: #fff;
+//       font-weight: 300;
+//       line-height: 50px;
+//       text-align: left;
+//     }
+//   }
 
-  .testimonials-container {
-    display: flex;
-    gap: 1.5rem;
-    justify-content: center;
+//   .testimonials-container {
+//     display: flex;
+//     gap: 1.5rem;
+//     justify-content: center;
 
-    .testimonial-card {
-      background: #fff;
-      color: #333;
-      padding: 1.5rem;
-      position: relative;
-      border-radius: 8px;
-      height: 300px;
-      width: 250px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      text-align: left;
+//     .testimonial-card {
+//       background: #fff;
+//       color: #333;
+//       padding: 1.5rem;
+//       position: relative;
+//       border-radius: 8px;
+//       height: 300px;
+//       width: 250px;
+//       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+//       text-align: left;
 
-      .quote {
-        font-style: italic;
-        margin-bottom: 1rem;
-        line-height: 25px;
-        max-height: 200px;
-        overflow-y: overlay;
-        overflow: scroll;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
+//       .quote {
+//         font-style: italic;
+//         margin-bottom: 1rem;
+//         line-height: 25px;
+//         max-height: 200px;
+//         overflow-y: overlay;
+//         overflow: scroll;
+//         scrollbar-width: none;
+//         -ms-overflow-style: none;
         
-      }
-      .quote::-webkit-scrollbar {
-        display: none; /* Safari and Chrome */
-      }
+//       }
+//       .quote::-webkit-scrollbar {
+//         display: none; /* Safari and Chrome */
+//       }
 
-      .profile {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        margin-top: 1rem;
-        position: absolute;
-        bottom: 0;
-        .profile-image {
-          width: 50px;
-          height: 50px;
-          border-radius: 50%;
-          object-fit: cover;
-        }
+//       .profile {
+//         display: flex;
+//         align-items: center;
+//         gap: 1rem;
+//         margin-top: 1rem;
+//         position: absolute;
+//         bottom: 0;
+//         .profile-image {
+//           width: 50px;
+//           height: 50px;
+//           border-radius: 50%;
+//           object-fit: cover;
+//         }
 
-        .profile-info {
-          .name {
-            font-weight: bold;
-            margin: 0;
-          }
+//         .profile-info {
+//           .name {
+//             font-weight: bold;
+//             margin: 0;
+//           }
 
-          .title {
-            font-size: 0.9rem;
-            color: #555;
-          }
-        }
-      }
-    }
-  }
+//           .title {
+//             font-size: 0.9rem;
+//             color: #555;
+//           }
+//         }
+//       }
+//     }
+//   }
 
-  .navigation {
-    // margin-top: 2rem;
-    position: absolute;
-    right: 19.5%;
-    top: 14%;
-    .nav-button {
-      background: #fff;
-      color: #0b1e39;
-      border: none;
-      border-radius: 50%;
-      width: 40px;
-      font-family: 'Inter', 'sans-serif';
-      height: 40px;
-      font-size: 1.5rem;
-      cursor: pointer;
-      margin: 0 0.5rem;
-      transition: background-color 0.3s ease;
+//   .navigation {
+//     // margin-top: 2rem;
+//     position: absolute;
+//     right: 19.5%;
+//     top: 14%;
+//     .nav-button {
+//       background: #fff;
+//       color: #0b1e39;
+//       border: none;
+//       border-radius: 50%;
+//       width: 40px;
+//       font-family: 'Inter', 'sans-serif';
+//       height: 40px;
+//       font-size: 1.5rem;
+//       cursor: pointer;
+//       margin: 0 0.5rem;
+//       transition: background-color 0.3s ease;
 
-      &:hover {
-        background: #007bff;
-        color: #fff;
-      }
-    }
-  }
-}
+//       &:hover {
+//         background: #007bff;
+//         color: #fff;
+//       }
+//     }
+//   }
+// }
+

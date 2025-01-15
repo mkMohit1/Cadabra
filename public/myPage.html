@@ -450,128 +450,159 @@
         class="nav-links"
         style="display: flex; gap: 1.5rem; align-items: center"
       >
-        <ul
+      <ul
+      style="
+        display: flex;
+        gap: 1.5rem;
+        list-style: none;
+        align-items: center;
+        margin: 0;
+      "
+    >
+      <li>
+        <a
+          href="/"
+          id="homeLink"
           style="
-            display: flex;
-            gap: 1.5rem;
-            list-style: none;
-            align-items: center;
-            margin: 0;
+            text-decoration: none;
+            color: black;
+            font-weight: 300;
+            padding: 5px 10px;
+            font-size: 14px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
           "
+          onmouseover="this.style.backgroundImage = 'url(./background.svg)'; this.style.backgroundSize = 'contain'; this.style.backgroundPosition = 'bottom'; this.style.backgroundRepeat = 'no-repeat';"
+          onmouseout="this.style.backgroundImage = ''; this.style.backgroundSize = ''; this.style.backgroundPosition = ''; this.style.backgroundRepeat = '';"
+          >Home</a
         >
-          <li>
-            <a
-              href="/"
-              id="homeLink"
-              style="
-                text-decoration: none;
-                color: black;
-                font-weight: 300;
-                padding: 5px 10px;
-                font-size: 14px;
-                text-transform: uppercase;
-                transition: all 0.3s ease;
-              "
-              >Home</a
-            >
-          </li>
-          <li>
-            <a
-              href="/about"
-              id="aboutLink"
-              style="
-                text-decoration: none;
-                color: black;
-                font-weight: 300;
-                padding: 5px 10px;
-                font-size: 14px;
-                text-transform: uppercase;
-                transition: all 0.3s ease;
-              "
-              >About</a
-            >
-          </li>
-          <li>
-            <a
-              href="/contact"
-              id="contactLink"
-              style="
-                text-decoration: none;
-                color: black;
-                font-weight: 300;
-                padding: 5px 10px;
-                font-size: 14px;
-                text-transform: uppercase;
-                transition: all 0.3s ease;
-              "
-              >Contact</a
-            >
-          </li>
-          <li>
-            <a
-              href="/rent"
-              id="rentLink"
-              style="
-                text-decoration: none;
-                color: black;
-                font-weight: 300;
-                padding: 5px 10px;
-                font-size: 14px;
-                text-transform: uppercase;
-                transition: all 0.3s ease;
-              "
-              >Rent</a
-            >
-          </li>
-          <li>
-            <a
-              href="/cart"
-              id="cartLink"
-              style="
-                text-decoration: none;
-                color: black;
-                font-weight: 300;
-                padding: 5px 10px;
-                font-size: 14px;
-                text-transform: uppercase;
-                position: relative;
-                transition: all 0.3s ease;
-              "
-            >
-              <i class="fa-solid fa-cart-shopping" style="font-size: 20px"></i>
-              <span
-                id="cartCount"
-                class="totalCounter"
-                style="
-                  position: absolute;
-                  top: -5px;
-                  right: -5px;
-                  color: white;
-                  border-radius: 50%;
-                  font-size: 12px;
-                  padding: 3px 6px;
-                "
-                >0</span
-              >
-            </a>
-          </li>
-          <li>
-            <a
-              href="/login"
-              id="loginLink"
-              style="
-                text-decoration: none;
-                color: black;
-                font-weight: 300;
-                padding: 5px 10px;
-                font-size: 14px;
-                text-transform: uppercase;
-                transition: all 0.3s ease;
-              "
-              >Login</a
-            >
-          </li>
-        </ul>
+      </li>
+      <li>
+        <a
+          href="/about"
+          id="aboutLink"
+          style="
+            text-decoration: none;
+            color: black;
+            font-weight: 300;
+            padding: 5px 10px;
+            font-size: 14px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+          "
+          onmouseover="this.style.backgroundImage = 'url(./background.svg)'; this.style.backgroundSize = 'contain'; this.style.backgroundPosition = 'bottom'; this.style.backgroundRepeat = 'no-repeat';"
+          onmouseout="this.style.backgroundImage = ''; this.style.backgroundSize = ''; this.style.backgroundPosition = ''; this.style.backgroundRepeat = '';"
+          >About</a
+        >
+      </li>
+      <li>
+        <a
+          href="/contact"
+          id="contactLink"
+          style="
+            text-decoration: none;
+            color: black;
+            font-weight: 300;
+            padding: 5px 10px;
+            font-size: 14px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+          "
+          onmouseover="this.style.backgroundImage = 'url(./background.svg)'; this.style.backgroundSize = 'contain'; this.style.backgroundPosition = 'bottom'; this.style.backgroundRepeat = 'no-repeat';"
+          onmouseout="this.style.backgroundImage = ''; this.style.backgroundSize = ''; this.style.backgroundPosition = ''; this.style.backgroundRepeat = '';"
+          >Contact</a
+        >
+      </li>
+      <li>
+        <a
+          href="/rent"
+          id="rentLink"
+          style="
+            text-decoration: none;
+            color: black;
+            font-weight: 300;
+            padding: 5px 10px;
+            font-size: 14px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+          "
+          onmouseover="this.style.backgroundImage = 'url(./background.svg)'; this.style.backgroundSize = 'contain'; this.style.backgroundPosition = 'bottom'; this.style.backgroundRepeat = 'no-repeat';"
+          onmouseout="this.style.backgroundImage = ''; this.style.backgroundSize = ''; this.style.backgroundPosition = ''; this.style.backgroundRepeat = '';"
+          >Rent</a
+        >
+      </li>
+      <li>
+        <a
+          href="/Suscription"
+          id="rentLink"
+          style="
+            text-decoration: none;
+            color: black;
+            font-weight: 300;
+            padding: 5px 10px;
+            font-size: 14px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+          "
+          onmouseover="this.style.backgroundImage = 'url(./background.svg)'; this.style.backgroundSize = 'contain'; this.style.backgroundPosition = 'bottom'; this.style.backgroundRepeat = 'no-repeat';"
+          onmouseout="this.style.backgroundImage = ''; this.style.backgroundSize = ''; this.style.backgroundPosition = ''; this.style.backgroundRepeat = '';"
+        >
+          Suscription
+        </a>
+      </li>
+
+      <li>
+        <a
+          href="/cart"
+          id="cartLink"
+          style="
+            text-decoration: none;
+            color: black;
+            font-weight: 300;
+            padding: 5px 10px;
+            font-size: 14px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+          "
+          onmouseover="this.style.backgroundImage = 'url(./background.svg)'; this.style.backgroundSize = 'contain'; this.style.backgroundPosition = 'bottom'; this.style.backgroundRepeat = 'no-repeat';"
+          onmouseout="this.style.backgroundImage = ''; this.style.backgroundSize = ''; this.style.backgroundPosition = ''; this.style.backgroundRepeat = '';"
+        >
+          <i class="fa-solid fa-cart-shopping" style="font-size: 20px"></i>
+          <span
+            id="cartCount"
+            class="totalCounter"
+            style="
+              position: absolute;
+              top: -5px;
+              right: -5px;
+              color: white;
+              border-radius: 50%;
+              font-size: 12px;
+              padding: 3px 6px;
+            "
+            >0</span
+          >
+        </a>
+      </li>
+      <li>
+        <a
+          href="/login"
+          id="loginLink"
+          style="
+            text-decoration: none;
+            color: black;
+            font-weight: 300;
+            padding: 5px 10px;
+            font-size: 14px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+          "
+          onmouseover="this.style.backgroundImage = 'url(./background.svg)'; this.style.backgroundSize = 'contain'; this.style.backgroundPosition = 'bottom'; this.style.backgroundRepeat = 'no-repeat';"
+          onmouseout="this.style.backgroundImage = ''; this.style.backgroundSize = ''; this.style.backgroundPosition = ''; this.style.backgroundRepeat = '';"
+          >Login</a
+        >
+      </li>
+    </ul>
       </div>
 
       <div

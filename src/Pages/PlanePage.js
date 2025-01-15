@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Check, X, ChevronLeft, ChevronRight } from "lucide-react";
 
 const PricingPage = () => {
@@ -220,250 +220,172 @@ const PricingPage = () => {
       </>
     );
   };
-  return (
-    <div className="w-full max-w-7xl mx-auto px-4 font-mulish">
-      <div className="text-center py-8 ">
-        <h1 className="text-4xl font-bold mb-6">Choose Your Plan</h1>
-        <h1
-          className="text-4xl font-bold mb-6 text-main"
-          style={{
-            background: "linear-gradient(19deg, #21D4FD 0%, #B721FF 100%)",
-            WebkitBackgroundClip: "text",
-            color: "transparent",
-          }}
-        >
-          Choose a plan for Securing your Loved ones
-        </h1>
-        <p className="mb-10 text-2xl">
-          Not sure what product to buy? Pick a plan to start and our AI tool
-          will help you make selection.
-        </p>
-        <div className="inline-flex rounded-lg border border-gray-200 p-1 mb-6">
-          <button
-            className={`px-4 py-2 rounded-md ${
-              billingCycle === "monthly"
-                ? "bg-gradient-to-r from-blue-400 to-purple-500 text-white"
-                : "text-gray-600"
-            }`}
-            onClick={() => setBillingCycle("monthly")}
-          >
-            Monthly
-          </button>
-          <button
-            className={`px-4 py-2 rounded-md ${
-              billingCycle === "yearly"
-                ? "bg-gradient-to-r from-blue-400 to-purple-500 text-white"
-                : "text-gray-600"
-            }`}
-            onClick={() => setBillingCycle("yearly")}
-          >
-            Yearly (Save 2.5%)
-          </button>
-        </div>
+  const plansRef = useRef(null);
 
-        <h2 className="text-2xl mb-8">
-          <span className="text-gray-600">Best Plans For</span>{" "}
-          <span
-            className="text-coded"
-            style={{
-              background: "linear-gradient(19deg, #21D4FD 0%, #B721FF 100%)",
-              WebkitBackgroundClip: "text",
-              color: "transparent",
-            }}
-          >
-            Homeshield Security
-          </span>
+  const scrollToPlans = () => {
+    if (plansRef.current) {
+      plansRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+  return (
+   <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 font-sans">
+      {/* Header Section */}
+      <div className="text-center py-8 space-y-4">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold">Choose Your Plan</h1>
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+          Choose a plan for Securing your Loved ones
         </h2>
+        <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 max-w-3xl mx-auto">
+          Not sure what product to buy? Pick a plan to start and our AI tool will help you make selection.
+        </p>
+
+        {/* Billing Toggle */}
+        <div className="flex justify-center mt-6">
+          <div className="inline-flex rounded-lg border border-gray-200 p-1">
+            <button
+              className={`px-4 py-2 text-sm sm:text-base rounded-md transition-all ${
+                billingCycle === "monthly"
+                  ? "bg-gradient-to-r from-blue-400 to-purple-500 text-white"
+                  : "text-gray-600"
+              }`}
+              onClick={() => setBillingCycle("monthly")}
+            >
+              Monthly
+            </button>
+            <button
+              className={`px-4 py-2 text-sm sm:text-base rounded-md transition-all ${
+                billingCycle === "yearly"
+                  ? "bg-gradient-to-r from-blue-400 to-purple-500 text-white"
+                  : "text-gray-600"
+              }`}
+              onClick={() => setBillingCycle("yearly")}
+            >
+              Yearly (Save 2.5%)
+            </button>
+          </div>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      {/* Pricing Cards Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {plans.map((plan) => (
-          <div
-            key={plan.name}
-            className="border rounded-lg p-6 shadow-lg hover:shadow-xl transition-shadow flex flex-col h-full "
-          >
-            <div className="flex-grow">
-              <div className="text-lg font-bold mb-2">{plan.name}</div>
-              <div className="text-sm text-gray-600 mb-4 h-12">
-                {plan.subtitle}
+          <div key={plan.name} className="border rounded-lg p-4 sm:p-6 shadow-lg hover:shadow-xl transition-all">
+            <div className="space-y-4">
+              <div>
+                <h3 className="text-lg font-bold">{plan.name}</h3>
+                <p className="text-sm text-gray-600 h-12">{plan.subtitle}</p>
               </div>
-              <div className="text-3xl font-bold mb-6">{renderPrice(plan)}</div>
-              <div className="space-y-3 mb-6">
+              
+              <div className="text-2xl sm:text-3xl font-bold">
+                {plan.price === "contact" ? (
+                  <button className="w-full py-2 px-4 bg-gradient-to-r from-blue-400 to-purple-500 text-white rounded-md text-base">
+                    Contact Us
+                  </button>
+                ) : (
+                  <>
+                    ₹{handlePriceChange(plan).toFixed(2)}
+                    <span className="text-base font-normal text-gray-600">/{billingCycle}</span>
+                  </>
+                )}
+              </div>
+
+              <div className="space-y-3">
                 {plan.keyFeatures.map((feature) => (
-                  <div
-                    key={feature.name}
-                    className="flex items-center space-x-2"
-                  >
-                    <Check
-                      className={`w-5 h-5 ${
-                        feature.included ? "text-green-500" : "text-gray-300"
-                      }`}
-                    />
-                    <span
-                      className={
-                        feature.included ? "text-gray-800" : "text-gray-400"
-                      }
-                    >
+                  <div key={feature.name} className="flex items-center space-x-2">
+                    <Check className={`w-5 h-5 ${feature.included ? "text-green-500" : "text-gray-300"}`} />
+                    <span className={`text-sm ${feature.included ? "text-gray-800" : "text-gray-400"}`}>
                       {feature.name}
                     </span>
                   </div>
                 ))}
               </div>
-            </div>
-            <div className="mt-auto pt-6">
-              <button className="w-full py-2 px-4 bg-gradient-to-r from-blue-400 to-purple-500 text-white rounded-md hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-600 transition-all">
+
+              <button className="w-full py-2 px-4 bg-gradient-to-r from-blue-400 to-purple-500 text-white rounded-md hover:from-blue-500 hover:to-purple-600 transition-all">
                 Choose Plan
               </button>
             </div>
           </div>
         ))}
       </div>
-      {/* Trusted Companies Section */}
-      <div className="py-16 border-t border-gray-100 bg-[#f8f9fb] rounded-xl">
-        <div className="text-center mb-10">
-          <p className="text-gray-600 text-2xl font-bold mb-4">
-            Provide your number, and our experts will call you back shortly!
-          </p>
-        </div>
-        <div className="flex items-center justify-center">
-          <input
-            type="tel"
-            placeholder="Enter your mobile number......"
-            className="border border-gray-300 py-5 px-5  text-lg w-[60%]  focus:outline-none focus:ring-2 focus:gradient-to-r from-blue-400 to-purple-500 transition-all duration-300 shadow-lg hover:shadow-xl"
-          />
-          <button
-            className="bg-gradient-to-r from-blue-400 to-purple-500 text-white py-5 px-6  ml-2 flex items-center justify-center transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
-            onClick={() => alert("Number submitted")}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-6 h-6 text-white"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </button>
-        </div>
-      </div>
 
-      {/* FAQ Carousel Section */}
-      <div className="py-16 border-t border-gray-100">
-        <div className="text-center mb-10">
-          <h2 className="text-3xl font-bold mb-4">
-            Frequently Asked Questions
-          </h2>
-          <p className="text-gray-600">
-            Everything you need to know about our security systems
-          </p>
-        </div>
-
-        <div className="max-w-full mx-auto relative flex justify-between items-center">
-          {/* Left Arrow */}
-          <button
-            onClick={prevFaq}
-            className="p-2 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 text-white hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-600 transition-all absolute left-0"
-            aria-label="Previous set of questions"
-          >
-            <ChevronLeft className="w-6 h-6" />
-          </button>
-
-          {/* Displaying 3 or 4 FAQ items in a row */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mx-4">
-            {faqs
-              .slice(currentFaqIndex, currentFaqIndex + itemsPerPage)
-              .map((faq, index) => (
-                <div
-                  key={index}
-                  className="min-h-[200px] bg-white rounded-lg p-8 shadow-lg"
-                >
-                  <h3 className="text-xl font-bold mb-4">{faq.question}</h3>
-                  <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
-                </div>
-              ))}
-          </div>
-
-          {/* Right Arrow */}
-          <button
-            onClick={nextFaq}
-            className="p-2 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 text-white hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-600 transition-all absolute right-0"
-            aria-label="Next set of questions"
-          >
-            <ChevronRight className="w-6 h-6" />
-          </button>
-        </div>
-      </div>
-
-      <div className="text-center mb-8">
+      {/* View All Plans and Features Button */}
+      <div className="text-center mb-12 col-span-full">
         <button
-          className="inline-flex items-center space-x-2 bg-gradient-to-r from-blue-400 to-purple-500 text-white hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-600 transition-all py-2 px-4 rounded-md"
-          onClick={() => setShowComparison(!showComparison)}
+          onClick={scrollToPlans}
+          className="inline-flex items-center space-x-2 bg-gradient-to-r from-blue-400 to-purple-500 text-white py-3 px-6 rounded-md hover:from-blue-500 hover:to-purple-600 transition-all text-lg"
         >
-          <span>{showComparison ? "Hide" : "Compare"} Plans and Features</span>
-          <svg
-            className={`w-5 h-5 transform transition-transform ${
-              showComparison ? "rotate-180" : ""
-            }`}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
+          <span>View all Plans and Features</span>
         </button>
       </div>
 
-      {showComparison && (
-        <div className="overflow-x-auto mb-8 shadow-lg hover:shadow-xl transition-shadow">
-          <table className="w-full border-collapse ">
-            <thead>
-              <tr className="bg-gray-50">
-                <th className="border px-4 py-2 text-left">Features</th>
-                {plans.map((plan) => (
-                  <th key={plan.name} className="border px-4 py-2 text-center">
-                    {plan.name}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {featureCategories.map((feature) => (
-                <tr
-                  key={feature}
-                  className="hover:bg-gradient-to-r hover:from-blue-400 hover:to-purple-500 hover:text-white transition-all"
-                >
-                  <td className="border px-4 py-2 font-medium">{feature}</td>
+      {/* Mobile Number Section */}
+      <div className="bg-gray-50 rounded-xl p-6 sm:p-8 mb-12">
+        <div className="text-center mb-6">
+          <p className="text-xl sm:text-2xl font-bold text-gray-600">
+            Provide your number, and our experts will call you back shortly!
+          </p>
+        </div>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <input
+            type="tel"
+            placeholder="Enter your mobile number......"
+            className="w-full sm:w-[60%] py-3 sm:py-5 px-4 border border-gray-300 rounded-md text-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+          <button className="w-full sm:w-auto bg-gradient-to-r from-blue-400 to-purple-500 text-white py-3 sm:py-5 px-6 rounded-md hover:from-blue-500 hover:to-purple-600 transition-all">
+            <ChevronRight className="w-6 h-6 mx-auto" />
+          </button>
+        </div>
+      </div>
+
+      {/* Comparison Section (referenced by the View All Plans button) */}
+      <div ref={plansRef}>
+        {/* Comparison Toggle */}
+        <div className="text-center mb-8">
+          <button
+            onClick={() => setShowComparison(!showComparison)}
+            className="inline-flex items-center space-x-2 bg-gradient-to-r from-blue-400 to-purple-500 text-white py-2 px-4 rounded-md hover:from-blue-500 hover:to-purple-600 transition-all"
+          >
+            <span>{showComparison ? "Hide" : "Show"} Comparison</span>
+            <ChevronRight className={`w-5 h-5 transform transition-transform ${showComparison ? "rotate-90" : ""}`} />
+          </button>
+        </div>
+
+        {/* Comparison Table */}
+        {showComparison && (
+          <div className="overflow-x-auto mb-12 shadow-lg rounded-lg">
+            <table className="w-full">
+              <thead>
+                <tr className="bg-gray-50">
+                  <th className="p-4 text-left font-medium">Features</th>
                   {plans.map((plan) => (
-                    <td
-                      key={`${plan.name}-${feature}`}
-                      className="border px-4 py-2 text-center"
-                    >
-                      {plan.features[feature] === "Yes" ? (
-                        <Check className="w-5 h-5 text-green-500 mx-auto" />
-                      ) : plan.features[feature] === "No" ? (
-                        <X className="w-5 h-5 text-red-500 mx-auto" />
-                      ) : (
-                        plan.features[feature]
-                      )}
-                    </td>
+                    <th key={plan.name} className="p-4 text-center font-medium">
+                      {plan.name}
+                    </th>
                   ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+              </thead>
+              <tbody>
+                {Object.keys(plans[0].features).map((feature) => (
+                  <tr key={feature} className="hover:bg-gray-50">
+                    <td className="p-4 border-t">{feature}</td>
+                    {plans.map((plan) => (
+                      <td key={`${plan.name}-${feature}`} className="p-4 border-t text-center">
+                        {plan.features[feature] === "Yes" ? (
+                          <Check className="w-5 h-5 text-green-500 mx-auto" />
+                        ) : plan.features[feature] === "No" ? (
+                          <X className="w-5 h-5 text-red-500 mx-auto" />
+                        ) : (
+                          plan.features[feature]
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

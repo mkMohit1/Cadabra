@@ -1,6 +1,103 @@
 .rentPage {
   position: relative;
   font-family: "Inter", sans-serif;
+  // General responsive styles
+  @media (max-width: 1200px) {
+    .product-container {
+      width: 90%;
+    }
+    
+    .product-slider {
+      .nav-button {
+        &.prev { left: 20px; }
+        &.next { right: 20px; }
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .rentHeader {
+      .rentHeader-content {
+        h2 { font-size: 3rem; }
+        p { font-size: 1.5rem; }
+      }
+      
+      .rent-btn {
+        width: 200px;
+        height: 50px;
+        font-size: 24px;
+      }
+    }
+    
+    .filterContainer {
+      form {
+        width: 95%;
+        flex-direction: column;
+        
+        .allFilterList {
+          width: 100%;
+          gap: 10px;
+          
+          .filterItem {
+            width: 100%;
+          }
+        }
+      }
+    }
+    
+    .howItContainer {
+      .howTop {
+        width: 80%;
+        h2 { font-size: 32px; }
+        p { font-size: 18px; }
+      }
+      
+      .howBottom {
+        flex-direction: column;
+        gap: 2rem;
+        
+        .path {
+          display: none;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    .rentHeader {
+      .rentHeader-content {
+        h2 { font-size: 2.5rem; }
+        p { font-size: 1.2rem; }
+      }
+      
+      .rent-btn {
+        width: 180px;
+        height: 45px;
+        font-size: 20px;
+      }
+    }
+    
+    .latest-arrivals {
+      .latest-title {
+        font-size: 2rem;
+      }
+    }
+    
+    .product-container {
+      grid-template-columns: 1fr;
+    }
+    
+    .filter-popup {
+      width: 95vw;
+      min-height: 90vh;
+      
+      .product-container {
+        .product-card {
+          width: 45%;
+        }
+      }
+    }
+  }
   .mainContent {
     transition: filter 0.3s ease;
   }
@@ -370,3 +467,56 @@
       }
     }
 }
+// Additional responsive utilities
+@media (max-width: 380px) {
+  .rentPage {
+    .filterContainer {
+      form {
+        padding: 1rem 0.5rem;
+      }
+    }
+    
+    .product-container {
+      .product-card {
+        width: 100%;
+      }
+    }
+  }
+}
+  .BannerContainer {
+    @media (max-width: 1200px) {
+      .bannerImage {
+        width: 100%;
+        left: 0;
+        img {
+          width: 100%;
+          height: auto;
+        }
+      }
+    }
+  }
+
+  .popup {
+    @media (max-width: 768px) {
+      .popup-content {
+        width: 90%;
+        margin: 0 10px;
+      }
+      
+      .close-btn {
+        right: -5%;
+      }
+    }
+  }
+
+  .product-slider {
+    @media (max-width: 768px) {
+      .product-cards-container {
+        width: 90%;
+      }
+      
+      .nav-button {
+        font-size: 60px;
+      }
+    }
+  }

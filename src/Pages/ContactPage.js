@@ -63,12 +63,111 @@ const ContactForm = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-900">
-      <div className="bg-white shadow-lg h-screen overflow-hidden w-4/5 max-w-[43rem]">
-        
-      </div>
-      <div className='bg-black shadow-lg w-4/5 max-w-2xl h-screen'>
+    <div className="flex min-h-screen items-center justify-center bg-gray-900 pt-[110px] pb-[20px]">
+      <div className="bg-white shadow-lg rounded-lg overflow-hidden md:flex w-4/5 max-w-4xl">
+        {/* Left Form Section */}
+        <div className="w-full md:w-1/2 p-8">
+          <h2 className="text-3xl font-bold mb-4 text-black">
+            <span className="text-red-600">Contact</span> in touch
+          </h2>
+          <form onSubmit={handleSubmit}>
+            <div className="mb-4">
+              <label className="block text-sm font-semibold mb-2" htmlFor="name">
+                Name
+              </label>
+              <input
+                type="text"
+                id="name"
+                value={formData.name}
+                onChange={handleChange}
+                className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-red-500"
+                placeholder="Your Name"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-semibold mb-2" htmlFor="email">
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-red-500"
+                placeholder="Your Email"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-semibold mb-2" htmlFor="message">
+                Message
+              </label>
+              <textarea
+                id="message"
+                className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-red-500"
+                rows="4"
+                value={formData.message}
+                onChange={handleChange}
+                placeholder="Your Message"
+              ></textarea>
+            </div>
+            <div className="mb-4">
+              <label className="inline-flex items-center">
+                <input type="checkbox" defaultChecked className="form-checkbox h-5 w-5 text-red-600" />
+                <span className="ml-2 text-sm text-gray-700">
+                  I consent to the collection and processing of my personal data.
+                </span>
+              </label>
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition duration-200"
+            >
+              Submit
+            </button>
+          </form>
+        </div>
 
+        {/* Right Contact Info Section */}
+        <div className="w-full md:w-1/2 bg-gray-800 text-white p-8 flex flex-col justify-center">
+          <p className="mb-4">
+          We provide innovative, reliable, and personalized solutions, ensuring excellent service and helping you achieve your business goals efficiently.
+          </p>
+          <div className="mb-4">
+          <MapContainer
+              center={coordinates}
+              zoom={13}
+              style={{ height: "200px", width: "100%", borderRadius: "8px" }}
+            >
+              <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution=''
+              />
+              <Marker position={coordinates}>
+                <Popup>We are here!</Popup>
+              </Marker>
+            </MapContainer>
+          </div>
+          <ul className="space-y-2">
+            <li className="flex items-center">
+              <span className="mr-2">📍</span>
+              Preet Vihar, - 110051, Delhi, India
+            </li>
+            <li className="flex items-center">
+              <span className="mr-2">📞</span>
+              00011222333
+            </li>
+            <li className="flex items-center">
+              <span className="mr-2">📧</span>
+              somebody@gmail.com
+            </li>
+          </ul>
+          {/* <div className="mt-4 flex space-x-4">
+            <a href="#" className="hover:text-red-500">🌐</a>
+            <a href="#" className="hover:text-red-500">🐦</a>
+            <a href="#" className="hover:text-red-500">📷</a>
+            <a href="#" className="hover:text-red-500">📺</a>
+          </div> */}
+        </div>
       </div>
     </div>
   );

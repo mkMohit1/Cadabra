@@ -8,27 +8,21 @@ import ConsultationPopup from "./ConsultationPopup";
 const CustomerSection2 = () => {
   const [openFAQs, setOpenFAQs] = useState([false, false, false]);
   const [showPopup, setShowPopup] = useState(false);
-  const [imageSectionVisible, setImageSectionVisible] = useState(false); // Track visibility of the image-section
+  const [imageSectionVisible, setImageSectionVisible] = useState(false);
 
-  const imageSectionRef = useRef(null); // Reference to the image section container
-  const popupTimeoutRef = useRef(null); // To store the timeout reference and clear it if needed
+  const imageSectionRef = useRef(null);
+  const popupTimeoutRef = useRef(null);
 
-  // Create a function to handle visibility change using IntersectionObserver
   const handleIntersection = (entries, observer) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        setImageSectionVisible(true); // When the image-section comes into view
-
-        // Set a timeout to show the popup after 10 seconds
+        setImageSectionVisible(true);
         popupTimeoutRef.current = setTimeout(() => {
-          setShowPopup(true); // Show the popup after 5 seconds
+          setShowPopup(true);
         }, 5000);
-
-        observer.unobserve(entry.target); // Stop observing once the element is in view
+        observer.unobserve(entry.target);
       } else {
-        setImageSectionVisible(false); // When the image-section leaves the viewport
-
-        // Clear the timeout if the section goes out of view before 10 seconds
+        setImageSectionVisible(false);
         if (popupTimeoutRef.current) {
           clearTimeout(popupTimeoutRef.current);
           popupTimeoutRef.current = null;
@@ -37,33 +31,24 @@ const CustomerSection2 = () => {
     });
   };
 
-  // Initialize the IntersectionObserver
   useEffect(() => {
     const observer = new IntersectionObserver(handleIntersection, {
-      root: null, // null means the viewport
+      root: null,
       rootMargin: "0px",
-      threshold: 1, // 100% of the element needs to be in view
+      threshold: 1,
     });
 
     if (imageSectionRef.current) {
-      observer.observe(imageSectionRef.current); // Observe the image-section element
+      observer.observe(imageSectionRef.current);
     }
 
     return () => {
-      if (imageSectionRef.current) {
-        observer.unobserve(imageSectionRef.current); // Clean up observer
-      }
-
-      // Clear the timeout in case the component is unmounted
-      if (popupTimeoutRef.current) {
-        clearTimeout(popupTimeoutRef.current);
-      }
+      if (imageSectionRef.current) observer.unobserve(imageSectionRef.current);
+      if (popupTimeoutRef.current) clearTimeout(popupTimeoutRef.current);
     };
   }, []);
 
-  const handleonClose = () => {
-    setShowPopup(false);
-  };
+  const handleonClose = () => setShowPopup(false);
 
   const toggleFAQ = (index) => {
     setOpenFAQs((prevState) =>
@@ -84,57 +69,52 @@ const CustomerSection2 = () => {
   ];
 
   return (
-    <div className="customer-section">
-      <div className="content-container">
+    <div className="customer-section flex flex-col items-center justify-center py-8 px-4 bg-gray-100">
+      <div className="content-container flex flex-col md:flex-row md:gap-8 max-w-7xl">
         <div
-          ref={imageSectionRef} // Reference to the image-section
-          className={`image-section ${imageSectionVisible ? "visible" : "hidden"}`} // Apply class based on visibility
+          ref={imageSectionRef}
+          className={`image-section w-full md:w-1/2 mb-8 md:mb-0 `}
         >
           <img
-            src={normalImages.svgImage1} // Replace with actual image path
+            src={normalImages.svgImage1}
             alt="Office Environment"
+            className="w-full rounded-lg object-cover"
           />
         </div>
-        <div className="text-section">
-          <h2>
-            Not interested in Renting? You can also purchase from our wide selection of products and services.
-          </h2>
-          <div className="faq-container">
-            {faqs.map((faq, index) => (
-              <div
-                className={`faq-item ${openFAQs[index] ? "open" : ""}`}
-                key={index}
-              >
+
+        <div className="w-full flex flex-col md:flex-row lg:flex-row justify-between items-center lg:items-start space-y-6 lg:space-y-0 lg:space-x-8">
+            <h2 className="text-xl md:text-2xl font-medium text-gray-800 md:w-fit  text-center lg:text-left lg:w-[50%] m-auto">
+              Not interested in Renting? You can also purchase from our wide selection of products and services.
+            </h2>
+
+            <div className="faq-container w-full lg:w-1/2 space-y-4">
+              {faqs.map((faq, index) => (
                 <div
-                  className="faq-question"
+                  className={`faq-item p-4 shadow-md transition-all duration-300 ${
+                    openFAQs[index] ? "bg-gray-200" : "bg-white"
+                  }`}
+                  key={index}
                   onClick={() => toggleFAQ(index)}
-                  aria-expanded={openFAQs[index]}
-                  aria-controls={`faq-answer-${index}`} // Fixed template literal
                 >
-                  <span>{faq.question}</span>
-                  <span className="icon">
-                    {openFAQs[index] ? (
-                      <FontAwesomeIcon icon={faCircleChevronUp} />
-                    ) : (
-                      <FontAwesomeIcon icon={faCircleChevronDown} />
-                    )}
-                  </span>
-                </div>
-                {openFAQs[index] && (
-                  <div
-                    id={`faq-answer-${index}`} // Fixed template literal
-                    className="faq-answer"
-                  >
-                    {faq.answer}
+                  <div className="faq-question flex justify-between items-center text-sm font-semibold text-gray-700 cursor-pointer">
+                    <span>{faq.question}</span>
+                    <FontAwesomeIcon
+                      icon={openFAQs[index] ? faCircleChevronUp : faCircleChevronDown}
+                      className="text-gray-500"
+                    />
                   </div>
-                )}
-              </div>
-            ))}
+                  {openFAQs[index] && (
+                    <div className="faq-answer mt-2 text-sm text-gray-600">
+                      {faq.answer}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+
       </div>
 
-      {/* Show popup when image-section becomes visible after 10 seconds */}
       {showPopup && <ConsultationPopup isOpen={showPopup} onClose={handleonClose} />}
     </div>
   );

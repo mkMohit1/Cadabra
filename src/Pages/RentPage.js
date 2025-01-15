@@ -112,9 +112,9 @@ export default function RentPage() {
               <h1 className="font-extrabold font-mulish">
                 Select the right product
               </h1>
-              <p className="font-bold font-mulish">
-                <span className="using">using</span> <span className="monthly">CadabraAI</span>{" "}
-              </p>
+                  <p className="font-bold font-mulish">
+                    <span className="using">using</span> <span className="monthly">CadabraAI</span>{" "}
+                  </p>
               <div className="hero-buttons">
                 {/* <button className="buy-btn font-mulish">
                   <Link to="/Rent" className="linkRent">

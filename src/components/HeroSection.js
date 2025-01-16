@@ -19,7 +19,7 @@ const HeroSection = () => {
         </p>
         <div className="flex justify-center gap-4">
           <Link to="/Rent">
-            <button className="bg-black text-green-400 py-3 px-8 rounded-lg text-xl font-bold hover:bg-gray-800 transition">
+            <button className="bg-black text-green-400 py-3 px-8 text-xl font-bold hover:bg-gray-800 transition">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
                 Rent Today
               </span>

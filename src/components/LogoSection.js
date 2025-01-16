@@ -6,7 +6,7 @@ const LogosSection = () => {
 
   return (
     <div className="relative py-4">
-      <div className="flex gap-4 overflow-x-auto sm:scrollbar-hide md:overflow-hidden sm:px-4 md:px-0 lg:px-12 2xl:w-full 2xl:justify-evenly">
+      <div className="flex gap-4 overflow-x-auto sm:scrollbar-hide md:overflow-hidden max-w-5xl justify-evenly sm:px-4 md:px-0 lg:px-12 2xl:w-full 2xl:justify-evenly mx-auto">
         {logos.map((logo, index) => (
           <div
             key={index}

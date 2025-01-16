@@ -1,20 +1,13 @@
 import React, { useState, useEffect } from "react";
-import "../styles/RentPage.scss";
 import { rentImage, normalImages } from "../ImagePath";
 import ProductCard from "../components/ProductCard";
 import FilterProduct from "../components/FilterProduct";
 import { useDispatch, useSelector } from "react-redux";
-import { ToastContainer } from "react-toastify";
-import {
-  infoToast,
-  errorToast,
-  successToast,
-} from "../DecryptoAndOther/ToastUpdate";
 import { fetchProducts } from "../redux/rentProductSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquareArrowUpRight } from "@fortawesome/free-solid-svg-icons";
 import ConsultationFilter from "../components/ConsultationFilter";
-import { Link } from "react-router-dom";
+
 export default function RentPage() {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.product.rentProduct);
@@ -33,292 +26,146 @@ export default function RentPage() {
   const handleSearch = (e) => {
     e.preventDefault();
     if (category === "" && type === "" && location === "" && tenure === "") {
-      errorToast("Please fill minimum two required fields!");
+      alert("Please fill at least one filter!");
       return;
     }
     const filter = { location, category, type, tenure };
-    console.log(filter);
-    const FilterProduct = products.filter((product) => {
-      //console.log(product);
-      return Object.keys(filter).every((key) => {
-        if (!filter[key]) return true;
-        return product[key] === filter[key];
-      });
-    });
-    setCategory("");
-    setType("");
-    setLocation("");
-    setTenure("");
-    if (filterData.length === 0) {
-      errorToast("No products found!");
-      setFilterData({});
-      return;
-    }
-    console.log(FilterProduct);
-    setFilterData(FilterProduct);
-    return;
-  };
-
-  const handleShowQuiz = () => {
-    setShowQuiz(true);
-    console.log("showQuiz", showQuiz);
-    document.body.style.overflow = "hidden";
-  };
-
-  const handleCloseQuiz = () => {
-    setShowQuiz(false);
-    document.body.style.overflow = "auto";
-  };
-
-  const handleData = (data) => {
-    console.log(data);
-    if (Object.keys(data).length === 0) {
-      // Check if data object is empty
-      return;
-    }
-    handleShowQuiz();
-    setFilterDataPopup({ ...data });
-  };
-
-  const renderProductCards = (products) => {
-    return products.map((product) => {
-      const isInCart = cartItem.some((item) => item._id === product._id);
-      //console.log(cartItem);
-      return (
-        <ProductCard key={product.id} product={product} isInCart={isInCart} />
-      );
-    });
-  };
-  const handleNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % products.length);
-  };
-
-  const handlePrev = () => {
-    setCurrentIndex(
-      (prevIndex) => (prevIndex - 1 + products.length) % products.length
+    const filteredProducts = products.filter((product) =>
+      Object.keys(filter).every((key) =>
+        filter[key] ? product[key] === filter[key] : true
+      )
     );
+    setFilterData(filteredProducts);
   };
+
+  const renderProductCards = (data) =>
+    data.map((product) => (
+      <ProductCard
+        key={product.id}
+        product={product}
+        isInCart={cartItem.some((item) => item._id === product._id)}
+      />
+    ));
+
+  const handleNext = () => setCurrentIndex((prev) => (prev + 1) % products.length);
+  const handlePrev = () =>
+    setCurrentIndex((prev) => (prev - 1 + products.length) % products.length);
 
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
-  console.log(filterDataPopup);
+
   return (
-    <div className="rentPage">
-      <section className={`mainContent ${showQuiz ? "blurred" : ""}`}>
-        <section className="rentHeader">
-          <div className="hero-section">
-            <div className="hero-content">
-              <h1 className="font-extrabold font-mulish">
-                Select the right product
-              </h1>
-                  <p className="font-bold font-mulish">
-                    <span className="using">using</span> <span className="monthly">CadabraAI</span>{" "}
-                  </p>
-              <div className="hero-buttons">
-                {/* <button className="buy-btn font-mulish">
-                  <Link to="/Rent" className="linkRent">
-                    <span className="font-mulish button-text">Rent Today</span>
-                  </Link>
-                </button> */}
+    <div className="font-inter">
+      {/* Header Section */}
+      <div className="relative text-center bg-cover bg-center py-[100px] px-4"
+        style={{background:`url(${normalImages.patern})`}}
+      >
+        <h1 className="text-3xl md:text-5xl font-bold">Select the Right Product</h1>
+        <button
+          onClick={() => setShowQuiz(true)}
+          className="bg-black text-green-400 py-3 px-8 text-xl font-bold hover:bg-gray-800 transition"
+        >
+          <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
+          Rent Now <FontAwesomeIcon icon={faSquareArrowUpRight} className="ml-2 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600" />
+          </span>
+        </button>
+      </div>
 
-                <button
-                  className="buy-btn font-mulish linkRent"
-                  onClick={handleShowQuiz}
-                >
-                 <span className="font-mulish button-text"> Rent Now{" "}</span>
-                </button>
-              </div>
-            </div>
-            <div className="topBgCircle"></div>
+      {/* Filter Section */}
+      <div className="bg-gray-100 py-8">
+        <form
+          onSubmit={handleSearch}
+          className="max-w-5xl mx-auto flex flex-wrap gap-4 items-end"
+        >
+          <select
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            className="w-full sm:w-1/4 border border-gray-300 rounded-lg px-4 py-2"
+          >
+            <option value="">Select Location</option>
+            {locationNames.map((item, idx) => (
+              <option key={idx} value={item}>
+                {item}
+              </option>
+            ))}
+          </select>
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="w-full sm:w-1/4 border border-gray-300 rounded-lg px-4 py-2"
+          >
+            <option value="">Select Category</option>
+          </select>
+          <select
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+            className="w-full sm:w-1/4 border border-gray-300 rounded-lg px-4 py-2"
+          >
+            <option value="">Select Type</option>
+          </select>
+          <select
+            value={tenure}
+            onChange={(e) => setTenure(e.target.value)}
+            className="w-full sm:w-1/4 border border-gray-300 rounded-lg px-4 py-2"
+          >
+            <option value="">Select Tenure</option>
+          </select>
+          <button
+            type="submit"
+            className="w-full sm:w-auto bg-green-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-green-600"
+          >
+            Search
+          </button>
+        </form>
+
+        {filterData.length > 0 && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+            {renderProductCards(filterData)}
           </div>
-          {/* <button className="rent-btn" onClick={handleShowQuiz}>
-            Rent Now{" "}
-            <FontAwesomeIcon className="fontIcon" icon={faSquareArrowUpRight} />
-          </button> */}
-        </section>
+        )}
+      </div>
 
-        <section className="filterContainer">
-          <form onSubmit={handleSearch}>
-            <div className="allFilterList">
-              <div className="filterItem">
-                <select
-                  id="location"
-                  value={location}
-                  onChange={(e) => setLocation(e.target.value)}
-                >
-                  <option value="">Select your Location</option>
-                  {locationNames.map((item, index) => (
-                    <option value={item} key={`${item}-${index + 1}`}>
-                      {item}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="filterItem">
-                <select
-                  id="category"
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                >
-                  <option value="">Select a category</option>
-                  <option value="type1">type1</option>
-                  <option value="type2">type2</option>
-                  <option value="type3">type3</option>
-                  <option value="type4">type4</option>
-                </select>
-              </div>
-              <div className="filterItem">
-                <select
-                  id="type"
-                  value={type}
-                  onChange={(e) => setType(e.target.value)}
-                >
-                  <option value="">Select a type</option>
-                  <option value="residential">Residential</option>
-                  <option value="commercial">Commercial</option>
-                </select>
-              </div>
-              <div className="filterItem">
-                <select
-                  id="tenure"
-                  value={tenure}
-                  onChange={(e) => setTenure(e.target.value)}
-                >
-                  <option value="">Select a tenure</option>
-                  <option value="under_1_year">Under 1 year</option>
-                  <option value="1_year">1 Year</option>
-                  <option value="more_than_1_year">More than 1 year</option>
-                  <option value="Not_Sure">Not Sure</option>
-                </select>
-              </div>
+      {/* Product Slider */}
+      <div className="bg-gray-50 py-12">
+        <h2 className="text-2xl font-bold text-center mb-6">Latest Arrivals</h2>
+        <div className="relative flex items-center">
+          <button
+            className="absolute left-4 bg-gray-300 text-black rounded-full p-3"
+            onClick={handlePrev}
+          >
+            &#8249;
+          </button>
+          <div className="overflow-hidden w-full px-4">
+            <div
+              className="flex transition-transform duration-300"
+              style={{
+                transform: `translateX(-${currentIndex * (100 / visibleProducts)}%)`,
+              }}
+            >
+              {renderProductCards(products)}
             </div>
-            <button type="submit" className="search-btn">
-              Search
-            </button>
-          </form>
-          {filterData.length > 0 ? (
-            <div className="product-container">
-              {renderProductCards(filterData)}
-            </div>
-          ) : null}
-        </section>
-
-        <section className="howItContainer">
-          <div className="howTop">
-            <h2>How it works</h2>
-            <p>
-              Save and earn money with the most Earth-friendly form of style.
-              Guaranteed freshly dry-cleaned.
-            </p>
           </div>
-          <div className="howBottom">
-            <img src={normalImages.Finalimage} alt="Final_one" />
-            {/* <div className="howBottomItem">
-              <div className="Image">
-                <img src={rentImage.sell} alt="sell image" />
-              </div>
-              <div className="detail">
-                <h3 className="detailHead">List clothes</h3>
-                <p className="detailText">List hundreds of closets, brands, occasions, and all sizes</p>
-              </div>
-            </div>
-            <img src={rentImage.path} className="path" alt="path" />
-            <div className="howBottomItem">
-              <div className="Image">
-                <img src={rentImage.cash} alt="cash image" />
-              </div>
-              <div className="detail">
-                <h3 className="detailHead">Sell them</h3>
-                <p className="detailText">Get it delivered or pick it up at a nearby Wardrobe Hub</p>
-              </div>
-            </div>
-            <img src={rentImage.path1} className="path" alt="path1" />
-            <div className="howBottomItem">
-              <div className="Image">
-                <img src={rentImage.celebrate} alt="celebrate image" />
-              </div>
-              <div className="detail">
-                <h3 className="detailHead">Get Paid</h3>
-                <p className="detailText">Get it delivered or pick it up at a nearby Wardrobe Hub</p>
-              </div>
-            </div> */}
-          </div>
-        </section>
-
-        <div className="BannerContainer">
-          {/* <div className="bannerImage">
-            <img src={normalImages.customer} alt="Rent banner" />
-          </div> */}
+          <button
+            className="absolute right-4 bg-gray-300 text-black rounded-full p-3"
+            onClick={handleNext}
+          >
+            &#8250;
+          </button>
         </div>
-
-        <section className="latest-arrivals">
-          <h2 className="latest-title">Latest Arrivals</h2>
-          {/* <div className="product-container">
-            {renderProductCards(products)}
-          </div> */}
-          <div className="product-slider">
-            <button
-              className="nav-button prev"
-              onClick={handlePrev}
-              disabled={currentIndex === 0} // Disable "prev" button if we're at the first card
-            >
-              &#8249;
-            </button>
-
-            <div className="product-cards-container">
-              <div
-                className="product-cards"
-                style={{
-                  transform: `translateX(-${
-                    (currentIndex / visibleProducts) * 100
-                  }%)`, // Calculate how far to translate the container
-                }}
-              >
-                {renderProductCards(products)}
-              </div>
-            </div>
-
-            <button
-              className="nav-button next"
-              onClick={handleNext}
-              disabled={currentIndex >= products.length - visibleProducts} // Disable "next" button if we're at the last card
-            >
-              &#8250;
-            </button>
-          </div>
-        </section>
-      </section>
+      </div>
 
       {/* Quiz Popup */}
       {showQuiz && (
-        <div className="popup">
-          <div className="popup-content">
-            <button className="close-btn" onClick={handleCloseQuiz}>
-              &times;
-            </button>
-            <FilterProduct
-              handleCloseQuiz={handleCloseQuiz}
-              handleData={handleData}
-            />
-          </div>
-        </div>
-      )}
-      {/* Popup filter */}
-      {Object.keys(filterDataPopup).length > 0 && (
-        <div className="popup">
-          <div className="popup-content filter-popup">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white rounded-lg p-8 max-w-md w-full relative">
             <button
-              className="close-btn"
-              onClick={() => setFilterDataPopup([])}
+              onClick={() => setShowQuiz(false)}
+              className="absolute top-2 right-2 text-gray-500 text-xl hover:text-gray-700"
             >
               &times;
             </button>
-            {/* Add content to show inside the filterDataPopup */}
-            <ConsultationFilter />
-            <div className="product-container">
-              {renderProductCards(products)}
-            </div>
+            <FilterProduct handleCloseQuiz={() => setShowQuiz(false)} />
           </div>
         </div>
       )}

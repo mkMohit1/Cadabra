@@ -7,6 +7,11 @@ module.exports = {
         mulish: ['Mulish', 'sans-serif'], // Adding Mulish font to Tailwind theme
         Inter:['Inter', 'sans-serif']
       },
+      screens: {
+        xs: '425px',
+        xxs: '375px',
+        xxxs: '320px',
+      },
     },
   },
   plugins: [],

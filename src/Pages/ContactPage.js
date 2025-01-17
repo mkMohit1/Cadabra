@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { errorToast, successToast } from '../DecryptoAndOther/ToastUpdate';
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import "../styles/ContactPage.scss";
 import L from "leaflet";
 
 // Fix the missing marker icon issue in Leaflet
@@ -63,12 +64,14 @@ const ContactForm = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-900 pt-[110px] pb-[20px]">
-      <div className="bg-white shadow-lg rounded-lg overflow-hidden md:flex w-4/5 max-w-4xl">
+    <div className="flex min-h-5xl items-center justify-center bg-gray-900 pt-[90px] pb-[20px] relative">
+      <div className='absolute md:w-[50%] custom-bg-black bg-black md:h-[100%] z-1 left-0 sm:w-full sm:h-[60%] sm:top-0'></div>
+      <div className='absolute md:w-[50%] custom-bg-white bg-white md:h-[100%] z-1 right-0 sm:w-full sm:h-[40.7%] sm:bottom-0'></div>
+      <div className="bg-white shadow-lg rounded-lg overflow-hidden md:flex w-4/5 max-w-4xl z-10 mt-[2rem] mb-[1rem]">
         {/* Left Form Section */}
         <div className="w-full md:w-1/2 p-8">
           <h2 className="text-3xl font-bold mb-4 text-black">
-            <span className="text-red-600">Contact</span> in touch
+            <span className="text-red-600 border-b-2 border-black">Contact</span> us
           </h2>
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
@@ -128,7 +131,7 @@ const ContactForm = () => {
         </div>
 
         {/* Right Contact Info Section */}
-        <div className="w-full md:w-1/2 bg-gray-800 text-white p-8 flex flex-col justify-center">
+        <div className="w-full md:w-1/2 bg-black text-white p-8 flex flex-col justify-center">
           <p className="mb-4">
           We provide innovative, reliable, and personalized solutions, ensuring excellent service and helping you achieve your business goals efficiently.
           </p>

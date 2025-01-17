@@ -40,7 +40,7 @@ export default function RentPage() {
 
   const renderProductCards = (data) =>
     data.map((product) => (
-      <ProductCard
+      <ProductCard 
         key={product.id}
         product={product}
         isInCart={cartItem.some((item) => item._id === product._id)}
@@ -62,12 +62,16 @@ export default function RentPage() {
         style={{background:`url(${normalImages.patern})`}}
       >
         <h1 className="text-3xl md:text-5xl font-bold">Select the Right Product</h1>
+        <p className="text-3xl mt-4  mb-4">
+          Using <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600 font-semibold">CadabraAI</span>
+        </p>
         <button
           onClick={() => setShowQuiz(true)}
           className="bg-black text-green-400 py-3 px-8 text-xl font-bold hover:bg-gray-800 transition"
         >
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
-          Rent Now <FontAwesomeIcon icon={faSquareArrowUpRight} className="ml-2 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600" />
+          Rent Now 
+          {/* <FontAwesomeIcon icon={faSquareArrowUpRight} className="ml-2" /> */}
           </span>
         </button>
       </div>
@@ -81,7 +85,7 @@ export default function RentPage() {
           <select
             value={location}
             onChange={(e) => setLocation(e.target.value)}
-            className="w-full sm:w-1/4 border border-gray-300 rounded-lg px-4 py-2"
+            className="w-full sm:w-1/5 border border-gray-300 rounded-lg px-4 py-2"
           >
             <option value="">Select Location</option>
             {locationNames.map((item, idx) => (
@@ -93,21 +97,21 @@ export default function RentPage() {
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full sm:w-1/4 border border-gray-300 rounded-lg px-4 py-2"
+            className="w-full sm:w-1/5 border border-gray-300 rounded-lg px-4 py-2"
           >
             <option value="">Select Category</option>
           </select>
           <select
             value={type}
             onChange={(e) => setType(e.target.value)}
-            className="w-full sm:w-1/4 border border-gray-300 rounded-lg px-4 py-2"
+            className="w-full sm:w-1/5 border border-gray-300 rounded-lg px-4 py-2"
           >
             <option value="">Select Type</option>
           </select>
           <select
             value={tenure}
             onChange={(e) => setTenure(e.target.value)}
-            className="w-full sm:w-1/4 border border-gray-300 rounded-lg px-4 py-2"
+            className="w-full sm:w-1/5 border border-gray-300 rounded-lg px-4 py-2"
           >
             <option value="">Select Tenure</option>
           </select>
@@ -131,12 +135,12 @@ export default function RentPage() {
         <h2 className="text-2xl font-bold text-center mb-6">Latest Arrivals</h2>
         <div className="relative flex items-center">
           <button
-            className="absolute left-4 bg-gray-300 text-black rounded-full p-3"
+            className="absolute left-[200px] bg-gray-300 text-black rounded-full p-3"
             onClick={handlePrev}
           >
             &#8249;
           </button>
-          <div className="overflow-hidden w-full px-4">
+          <div className="overflow-hidden max-w-4xl mx-auto  px-4 py-8">
             <div
               className="flex transition-transform duration-300"
               style={{
@@ -147,7 +151,7 @@ export default function RentPage() {
             </div>
           </div>
           <button
-            className="absolute right-4 bg-gray-300 text-black rounded-full p-3"
+            className="absolute right-[200px] bg-gray-300 text-black rounded-full p-3"
             onClick={handleNext}
           >
             &#8250;

@@ -82,7 +82,7 @@ export const normalImages ={
     Jobmin:Jobmin,
     Jobarrow:Jobarrow,
     Finalimage:Finalimage,
-    patern:patern
+    patern:patern,
 }
 
 export const rentImage = {

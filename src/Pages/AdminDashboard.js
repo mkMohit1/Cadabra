@@ -65,7 +65,7 @@ const AdminDashboard = () => {
         <nav className="nav-menu">
           {[
             { icon: "📊", text: "Dashboard" },
-            currentUser.isAdmin === "SupperAdmin" && { icon: "👥", text: "Admins" },
+            currentUser.isAdmin === "SuperAdmin" && { icon: "👥", text: "Admins" },
             currentUser.isAdmin === "SaleAdmin" && { icon: "👔", text: "Sales Manager" },
             currentUser.isAdmin === "ProductAdmin" && { icon: "📦", text: "Product" },
             currentUser.isAdmin === "SaleManager" && { icon: "🙍‍♂️", text: "Customer" },
@@ -131,7 +131,7 @@ const AdminDashboard = () => {
 
         <div className="dashboard-content">
           {currentContainer === "Dashboard" && <Dashboard />}
-          {currentContainer === "Admins" && currentUser.isAdmin === "SupperAdmin" && <AdminPage />}
+          {currentContainer === "Admins" && currentUser.isAdmin === "SuperAdmin" && <AdminPage />}
           {currentContainer === "Sales Manager" && currentUser.isAdmin === "SaleAdmin" && <SaleAdmin />}
           {currentContainer=== 'Customer' && <CustomerManagement />}
           {currentContainer === 'Product' && <ProductPage/>}

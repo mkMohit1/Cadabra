@@ -15,7 +15,7 @@ const OrderSummary = ({ currentCart, currentMode }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [openMoreMap, setOpenMoreMap] = useState({}); // Track open state for each item
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const user = useSelector((state) => state.auth.user);
   const currentContainer = useSelector((state) => state.cart.currentContainer);
   const [showAskNumber, setShowAskNumber] = useState(false);
   const [newUser, setNewUser] = useState(false);
@@ -54,7 +54,7 @@ const OrderSummary = ({ currentCart, currentMode }) => {
   };
 
   const handleCheckout = () => {
-    if (!isAuthenticated) {
+    if (!user) {
       setShowAskNumber(true);
       infoToast("please logged in");
       return;
@@ -142,7 +142,10 @@ const OrderSummary = ({ currentCart, currentMode }) => {
 
       if(!newUser){
         console.log(existingUser);
-        dispatch(login({ mobileNumber, userID: formData.userID, isAdmin: existingUser.type }));
+        dispatch(login({ mobileNumber, userID: formData.userID, isAdmin: existingUser.role }));
+      }
+      if(userfound){
+        setShowAskNumber(false);
       }
     } else {
       errorToast("Invalid OTP. Please try again.");
@@ -153,12 +156,12 @@ const OrderSummary = ({ currentCart, currentMode }) => {
     event.preventDefault();
     try {
       console.log(formData);
-      const customerData= {name:formData.name, email: formData.email,mobileNumber: formData.mobileNumber, type:'commonUser'};
+      const customerData= {name:formData.name, email: formData.email,mobileNumber: formData.mobileNumber, role:'commonUser', loginWith:formData.loginWith};
         // // Sending separate data for the user and the address
-        const response = await fetch('http://localhost:5000/add/newUser', {
+        const response = await fetch('http://localhost:5000/register/verify', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ customerData }),
+          body: JSON.stringify({customerData}),
         });
   
         if (response.ok) {

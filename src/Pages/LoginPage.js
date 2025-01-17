@@ -1,124 +1,130 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import "../styles/LoginPage.scss";
-import { normalImages as images, normalImages } from "../ImagePath";
-import { useDispatch, useSelector } from "react-redux";
+import {normalImages} from "../ImagePath";
 import { login } from "../redux/authSlice";
-import { infoToast,errorToast, successToast } from "../DecryptoAndOther/ToastUpdate";
+import { successToast, errorToast, infoToast } from "../DecryptoAndOther/ToastUpdate";
 
 const LoginPage = () => {
-  const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  
+
   const [formData, setFormData] = useState({
     mobileNumber: "",
     enteredOtp: "",
-    otp: "",
-    userID: null,
-    isUser: false,
-    otpFieldVisible: false,
+    otp:"",
     otpSent: false,
+    otpFieldVisible: false,
     loginWith: "whatsapp", // Default login method
+    newUser: false, // Tracks if the user is new
   });
-
-  const user = useSelector((state) => state.auth.user);
-  
-  const [isLoginView, setIsLoginView] = useState(true); // Track if the view is Login or Register
-  const [newUser, setNewUser] = useState(false);
+  // Fallback for OTP generation
   const generateOtp = () => {
-    let otp = "";
-    for (let i = 0; i < 4; i++) {
-      otp += Math.floor(Math.random() * 9) + 1;
-    }
-    return otp;
+    return Math.floor(1000 + Math.random() * 9000); // Generates a 4-digit OTP
   };
+  const { mobileNumber, enteredOtp, otpSent, otpFieldVisible, loginWith, newUser } = formData;
 
   const updateFormData = (updates) => {
     setFormData((prev) => ({ ...prev, ...updates }));
   };
 
-  // Handle sending OTP
+  // Function to request OTP
   const handleSendOtp = async (event) => {
     event.preventDefault();
-    const { mobileNumber, loginWith } = formData;
-    
-    // Validate mobile number format
+
     if (!/^\d{10}$/.test(mobileNumber)) {
-      errorToast("Please enter a valid mobile number.");
+      errorToast("Please enter a valid 10-digit mobile number.");
       return;
     }
-    
-    // Check if the user exists
-    const allUsers = await (await fetch('http://localhost:5000/users')).json();
-    const existingUser = allUsers.find((user) => user.mobileNumber === mobileNumber);
-
-    if (!existingUser) {
-      errorToast("User not found. Please register first.");
-      return;
-    }
-
     const otp = generateOtp();
-    updateFormData({ otp });
-
+    updateFormData({otp:otp});
     try {
-      const response = await axios.post(`http://localhost:5000/send-otp`, {
+      const response = await axios.post("http://localhost:5000/send-otp", {
         mobileNumber,
         otp,
         type: loginWith,
-        newUser
+        newUser, // Send newUser flag
       });
 
       if (response.status === 200) {
-        updateFormData({
-          otpFieldVisible: true,
-          otpSent: true, // Update OTP sent status
-        });
-        successToast(`OTP sent successfully via ${loginWith}.`);
-        updateFormData({ userID: existingUser._id });
-      } else {
-        errorToast("Failed to send OTP. Please try again.");
+        successToast(`OTP sent via ${loginWith}.`);
+        updateFormData({ otpSent: true, otpFieldVisible: true });
       }
     } catch (error) {
-      errorToast("Failed to send OTP. Please try again.");
+      errorToast(
+        error.response?.data?.message || "Failed to send OTP. Please try again."
+      );
     }
   };
 
-  // Handle OTP submission
+  // Function to submit OTP and (login or register)
   const handleSubmitOtp = async (event) => {
     event.preventDefault();
-    const { enteredOtp, otp, mobileNumber } = formData;
-    const existingUser = await (await fetch(`http://localhost:5000/user/${mobileNumber}`)).json();
-
-    if (enteredOtp === otp) {
-      successToast("Login successful!");
-      dispatch(login({ mobileNumber, userID: formData.userID, isAdmin: existingUser.type, type:formData.loginWith }));
+    console.log({
+      mobileNumber,
+      enteredOtp,
+      actualOtp: formData.otp,
+      newUser: formData.newUser,
+  });
+    if (!enteredOtp) {
+      errorToast("Please enter the OTP.");
+      return;
+    }
+    try {
+      // Determine the API endpoint based on newUser flag
+      const endpoint = newUser
+        ? "http://localhost:5000/register/verify" // Registration OTP verification
+        : "http://localhost:5000/login";        // Login OTP verification
+  
+      const response = await axios.post(endpoint, {
+        mobileNumber,
+        enteredOtp,
+        actualOtp: formData.otp,
+        newUser:formData.newUser,
+        loginWith
+      });
       
-      // Redirect the user based on their role after login
-      if (existingUser.type === 'SupperAdmin' || existingUser.type === 'SaleAdmin' || existingUser.type === 'ProductAdmin' || existingUser.type === 'SaleManager') {   
-        navigate("/admin");
-      } else {
-        navigate("/");
+      if (response.status === 200) {
+        const { user } = response.data;
+        console.log(response.data);
+        // Success message
+        if (newUser) {
+          successToast("Registration successful!");
+        } else {
+          successToast("Login successful!");
+        }
+  
+        // Dispatch user data to the store
+        dispatch(login({id: user.id,mobileNumber:user.mobileNumber, isAdmin:user.role }));
+        // Navigate based on user role
+        // if (user.role === "SuperAdmin" || user.role === "SaleAdmin" || user.role==='ProductAdmin' || user.role==='SaleManager') {
+        //   navigate("/admin");
+        // } else {
+        //   navigate("/");
+        // }
       }
-    } else {
-      errorToast("Invalid OTP. Please try again.");
+    } catch (error) {
+      errorToast(
+        error.response?.data?.message ||
+          (newUser
+            ? "Failed to register. Please try again."
+            : "Failed to login. Please try again.")
+      );
     }
   };
-
+  
   // Toggle between Login and Register views
   const handleLoginState = () => {
-    setIsLoginView((prev) => !prev);
-    newUser((prev)=>!prev);
-    setFormData({
+    updateFormData({
       mobileNumber: "",
       enteredOtp: "",
-      otp: "",
-      userID: null,
-      isUser: false,
-      otpFieldVisible: false,
+      opt:'',
       otpSent: false,
+      otpFieldVisible: false,
       loginWith: "whatsapp",
+      newUser: !newUser, // Toggle between login and registration
     });
   };
 
@@ -126,110 +132,108 @@ const LoginPage = () => {
   const handleLoginMode = (method) => {
     updateFormData({
       loginWith: method,
-      otpFieldVisible: false,
       otpSent: false,
+      otpFieldVisible: false,
     });
-    infoToast(`Switched to ${method} login method`);
+    infoToast(`Switched to ${method} login method.`);
   };
 
-  // Handle Google login (redirects to the backend)
-  const handleGoogleLogin = async () => {
+  // Handle Google login
+  const handleGoogleLogin = () => {
     window.open("http://localhost:5000/auth/google", "_self");
   };
-
-  const {
-    mobileNumber,
-    enteredOtp,
-    otpFieldVisible,
-    otpSent,
-    loginWith,
-  } = formData;
-
+  console.log(newUser);
   return (
-    <div className="auth-container">
-      <div className="auth-card">
-        <h2 className="auth-title">
-          {isLoginView ? 'Login' : 'Register'}
-        </h2>
-        
-        <form onSubmit={!otpFieldVisible ? handleSendOtp : handleSubmitOtp} className="auth-form">
-          {/* Mobile Number Input Field */}
-          {!otpFieldVisible && (
-            <div className="form-group">
-              <label className="form-label">Mobile Number</label>
-              <input
-                type="text"
-                placeholder="Mobile Number *"
-                value={mobileNumber}
-                onChange={(e) => updateFormData({ mobileNumber: e.target.value })}
-                className="form-input"
-                required
-              />
-            </div>
-          )}
-
-          {/* OTP Input Field */}
-          {otpFieldVisible && (
-            <div className="form-group">
-              <label className="form-label">Enter OTP</label>
-              <input
-                type="text"
-                placeholder="Enter OTP"
-                value={enteredOtp}
-                onChange={(e) => updateFormData({ enteredOtp: e.target.value })}
-                className="form-input"
-                required
-              />
-            </div>
-          )}
-
-          {/* Submit Button */}
-          <button type="submit" className="submit-button">
-            {otpSent ? "Submit OTP" : "Request OTP"}
-          </button>
-
-          {/* Social Buttons for different login methods */}
-          <div className="social-buttons">
-            {loginWith === 'whatsapp' ? (
-              <button 
-                type="button"
-                onClick={() => handleLoginMode('voice')}
-                className="social-button whatsapp"
-              >
-                <img src={normalImages.whatsApp} alt="WhatsApp" className="social-icon" />
-                <span>Login with WhatsApp</span>
-              </button>
-            ) : (
-              <button 
-                type="button"
-                onClick={() => handleLoginMode('whatsapp')}
-                className="social-button voice"
-              >
-                <img src={normalImages.loginCall} alt="Voice" className="social-icon" />
-                <span>Login with Voice OTP</span>
-              </button>
-            )}
-
-            <button type="button" className="social-button google" onClick={handleGoogleLogin}>
-              <img src={normalImages.google} alt="Google" className="social-icon" />
-              <span>Login with Google</span>
-            </button>
+    <div className="min-h-screen flex items-center justify-center p-4 bg-white">
+    <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8 border-2 border-gray-200">
+      <h2 className="text-2xl font-bold text-center mb-6 text-gray-700">
+        {!newUser ? 'Login' : 'Register'}
+      </h2>
+      
+      <form onSubmit={!otpFieldVisible ? handleSendOtp : handleSubmitOtp} className="flex flex-col space-y-6">
+        {!otpFieldVisible && (
+          <div className="flex flex-col space-y-2">
+            <label className="font-semibold text-gray-700 text-sm ml-2">
+              Mobile Number
+            </label>
+            <input
+              type="text"
+              placeholder="Mobile Number *"
+              value={mobileNumber}
+              onChange={(e) => updateFormData({ mobileNumber: e.target.value })}
+              className="w-full px-4 py-3 border border-gray-200 rounded text-sm transition focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/20"
+              required
+            />
           </div>
+        )}
 
-          {/* Toggle between Login/Register view */}
-          <p className="toggle-text">
-            {isLoginView ? 'Not a member? ' : 'Already a member? '}
-            <button
+        {otpFieldVisible && (
+          <div className="flex flex-col space-y-2">
+            <label className="font-semibold text-gray-700 text-sm ml-2">
+              Enter OTP
+            </label>
+            <input
+              type="text"
+              placeholder="Enter OTP"
+              value={enteredOtp}
+              onChange={(e) => updateFormData({ enteredOtp: e.target.value })}
+              className="w-full px-4 py-3 border border-gray-200 rounded text-sm transition focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/20"
+              required
+            />
+          </div>
+        )}
+
+        <button
+          type="submit"
+          className="w-full px-4 py-3 bg-emerald-600 text-white font-medium rounded hover:bg-emerald-700 transition flex items-center justify-center"
+        >
+          {otpSent ? "Submit OTP" : "Request OTP"}
+        </button>
+
+        <div className="flex flex-col space-y-3">
+          {loginWith === 'whatsapp' ? (
+            <button 
               type="button"
-              onClick={handleLoginState}
-              className="toggle-button"
+              onClick={() => handleLoginMode('voice')}
+              className="w-full px-4 py-3 border border-gray-200 rounded flex items-center justify-center space-x-3 hover:bg-gray-50 transition"
             >
-              {isLoginView ? 'Register' : 'Login'}
+              <img src={normalImages.whatsApp} alt="WhatsApp" className="w-6 h-6" />
+              <span className="text-sm">Login with WhatsApp</span>
             </button>
-          </p>
-        </form>
-      </div>
+          ) : (
+            <button 
+              type="button"
+              onClick={() => handleLoginMode('whatsapp')}
+              className="w-full px-4 py-3 border border-gray-200 rounded flex items-center justify-center space-x-3 hover:bg-gray-50 transition"
+            >
+              <img src={normalImages.loginCall} alt="Voice" className="w-6 h-6" />
+              <span className="text-sm">Login with Voice OTP</span>
+            </button>
+          )}
+
+          <button
+            type="button"
+            onClick={handleGoogleLogin}
+            className="w-full px-4 py-3 border border-gray-200 rounded flex items-center justify-center space-x-3 hover:bg-gray-50 transition"
+          >
+            <img src={normalImages.google} alt="Google" className="w-6 h-6" />
+            <span className="text-sm">Login with Google</span>
+          </button>
+        </div>
+
+        <p className="text-center text-sm text-gray-700 mt-4">
+          {!newUser ? 'Not a member? ' : 'Already a member? '}
+          <button
+            type="button"
+            onClick={handleLoginState}
+            className="font-bold text-gray-700 hover:text-emerald-600 transition"
+          >
+            {!newUser ? 'Register' : 'Login'}
+          </button>
+        </p>
+      </form>
     </div>
+  </div>
   );
 };
 

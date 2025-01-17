@@ -70,9 +70,10 @@ function AppRoutes({ blogs, user }) {
     //   localStorage.setItem("loggedInUser",JSON.stringify({userID: formData.userID, isAdmin: existingUser.type}))
     // }
     if (isAdminPage) {
+      console.log("dsfhjdhfsdvhb",user);
       if (!user) {
         navigate("/admin-login");
-      } else if (!["SupperAdmin", "SaleAdmin", "ProductAdmin"].includes(user.isAdmin)) {
+      } else if (!["SuperAdmin", "SaleAdmin", "ProductAdmin"].includes(user.isAdmin)) {
         navigate("/admin-login");
       }
     }
@@ -81,22 +82,23 @@ function AppRoutes({ blogs, user }) {
   // Redirect user after login based on their role
   useEffect(() => {
     if (user) {
-      if (user.isAdmin && ["SupperAdmin", "SaleAdmin", "ProductAdmin",'SaleManager'].includes(user.isAdmin)) {
+      if (user.isAdmin && ["SuperAdmin", "SaleAdmin", "ProductAdmin",'SaleManager'].includes(user.isAdmin)) {
+        console.log("mk admin");
         navigate("/admin"); // Redirect admin users to admin dashboard
-      } else if (location.pathname === "/login" || location.pathname === "/admin-login") {
+      } else if (location.pathname === "/login" || location.pathname === "/Login" || location.pathname === "/admin-login") {
         navigate("/"); // Redirect regular users to home page
       }
     }
   }, [user, location.pathname, navigate]);
 
 
-  const showNavbarFooter = !["/login", "/admin", "/admin-login"].includes(location.pathname);
+  const showNavbarFooter = ![ "/admin", "/admin-login"].includes(location.pathname);
 
   return (
     <>
       {showNavbarFooter && <Navbar />}
       <Routes>
-        <Route path="/login" element={<LoginPage />} />
+        <Route path={"/login" || "Login"} element={<LoginPage />} />
         <Route path="/admin-login" element={<LoginPage />} />
         <Route path="/Rent" element={<RentPage />} />
         <Route path="/" element={<HomePage blogs={blogs} />} />
@@ -112,7 +114,7 @@ function AppRoutes({ blogs, user }) {
         <Route
           path="/admin"
           element={
-            user && ["SupperAdmin", "SaleAdmin", "ProductAdmin",'SaleManager'].includes(user.isAdmin) ? (
+            user && ["SuperAdmin", "SaleAdmin", "ProductAdmin",'SaleManager'].includes(user.isAdmin) ? (
               <AdminDashboard />
             ) : (
               <LoginPage />

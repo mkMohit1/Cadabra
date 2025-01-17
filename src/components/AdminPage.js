@@ -41,12 +41,31 @@ const AdminPage = () => {
         throw new Error('Failed to fetch admins');
       }
       const data = await response.json();
-      setAdmins(data);
+      console.log(data);
+      // Handle related data based on role
+      let adminList = [];
+      switch (currentUser.role) {
+        case 'SuperAdmin':
+          adminList = [...data.saleAdmin, ...data.productAdmin];
+          break;
+        case 'SaleAdmin':
+          adminList = data.saleManager || [];
+          break;
+        case 'SaleManager':
+          adminList = data.customers || [];
+          break;
+        default:
+          adminList = [];
+      }
+  
+      setAdmins(adminList);
+      console.log('Admins fetched:', adminList);
     } catch (error) {
       console.error('Error fetching admins:', error);
       errorToast('Failed to fetch admins');
     }
   };
+  
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
@@ -57,7 +76,7 @@ const AdminPage = () => {
       admin.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       admin.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
       admin.mobileNumber.includes(searchTerm) ||
-      admin.type.toLowerCase().includes(searchTerm.toLowerCase())
+      admin.role.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [admins, searchTerm]);
 

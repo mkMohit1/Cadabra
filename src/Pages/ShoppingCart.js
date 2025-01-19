@@ -57,12 +57,13 @@ const ShoppingCart = () => {
 
   useEffect(() => {
     if (user && cartItem.length > 0) {
-        const syncCart = debounce(() => {
-            dispatch(syncCartWithServer({ userId: user._id, cartItems: cartItem }));
-        }, 500); // Adjust debounce timing as needed
-        syncCart();
+      dispatch(syncCartWithServer({ userId: user._id, cartItems: cartItem }));
+        // const syncCart = debounce(() => {
+        //     dispatch(syncCartWithServer({ userId: user._id, cartItems: cartItem }));
+        // }, 500); // Adjust debounce timing as needed
+        // syncCart();
     }
-}, [user, cartItem, dispatch]);
+}, [user, dispatch]);
 
   const currentCart = currentMode === "rent" ? cartItem : sellCartItem;
 

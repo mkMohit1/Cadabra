@@ -184,39 +184,42 @@ const OrderSummary = ({ currentCart, currentMode }) => {
     }else{
       document.body.style.overflow='initial';
     }
+    return ()=>{
+      document.body.style.overflow='initial';
+    }
   },[showAskNumber])
 
   return (
-    <div className="order-summary">
-      <h3 className="order-summary__title">Order Summary</h3>
-      <div className="order-summary__items">
+    <div className="bg-white rounded-lg shadow-md p-6 ">
+      <h3 className="text-xl font-semibold mb-6">Order Summary</h3>
+      
+      <div className="space-y-4">
         {currentCart && currentCart.length > 0 ? (
           currentCart.map((item) => {
-            console.log(item);
-
             const price = currentMode === "rent" ? item.mrp : item.mrp;
-            const isOpen = openMoreMap[item.id] || false; // Check if this item's "more info" is open
+            const isOpen = openMoreMap[item.id] || false;
             const quantity = currentMode === "rent" ? item.rentQuantity : item.saleQuantity;
-            console.log(price);
+            
             return (
-              <div className="order-summary__items__item" key={item.id}>
-                <div className="order-summary__item__details">
-                  <span className="item-label">{item.title}</span>
-                  <span className="item-quantity">{1}x</span>
-                  <span className="item-value">${(quantity * price).toFixed(2)}</span>
-                  <div
-                    className="more-item"
-                    aria-expanded={isOpen}
-                    onClick={() => toggleMore(item.id)}
-                    aria-controls={`more-content-${item.id}`}
-                  >
-                    <span className="icon">
-                      {isOpen ? <FontAwesomeIcon icon={faXmark} /> : <FontAwesomeIcon icon={faPlus} />}
-                    </span>
+              <div key={item.id} className="border-b pb-4">
+                <div className="flex justify-between items-center">
+                  <div className="flex-1">
+                    <span className="font-medium">{item.title}</span>
+                    <div className="text-sm text-gray-600">
+                      <span>Quantity: {quantity}</span>
+                      <span className="ml-4">${(quantity * price).toFixed(2)}</span>
+                    </div>
                   </div>
+                  <button
+                    onClick={() => toggleMore(item.id)}
+                    className="ml-4 text-gray-500 hover:text-gray-700"
+                  >
+                    <FontAwesomeIcon icon={isOpen ? faXmark : faPlus} />
+                  </button>
                 </div>
+                
                 {isOpen && (
-                  <div id={`more-content-${item.id}`} className="more-content">
+                  <div className="mt-4 p-4 bg-gray-50 rounded">
                     <span>Additional Information</span>
                   </div>
                 )}
@@ -224,77 +227,157 @@ const OrderSummary = ({ currentCart, currentMode }) => {
             );
           })
         ) : (
-          <p>No items in your cart.</p>
+          <p className="text-gray-500">No items in your cart.</p>
         )}
       </div>
-      <div className="order-summary__total">
-        <span className="total-label">TOTAL</span>
-        <span className="total-value">${total.toFixed(2)}</span>
-      </div>
-      <div className="order-summary__delivery">
-        Estimated Delivery by <strong>01 Feb, 2023</strong>
-      </div>
-      <div className="order-summary__coupon">
-        <input type="text" className="coupon-input" placeholder="Coupon Code" />
-        <button className="apply-coupon-btn">
-          <FontAwesomeIcon icon={faTags} />
+
+      <div className="mt-6 pt-6 border-t">
+        <div className="flex justify-between items-center mb-6">
+          <span className="font-semibold">TOTAL</span>
+          <span className="text-xl font-bold">${total.toFixed(2)}</span>
+        </div>
+
+        <div className="text-sm text-gray-600 mb-6">
+          Estimated Delivery by <strong>01 Feb, 2023</strong>
+        </div>
+
+        <div className="flex space-x-2 mb-6">
+          <input
+            type="text"
+            className="flex-1 p-2 border rounded"
+            placeholder="Coupon Code"
+          />
+          <button className="p-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+            <FontAwesomeIcon icon={faTags} />
+          </button>
+        </div>
+
+        <button
+          onClick={handleCheckout}
+          className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        >
+          Proceed to Checkout
         </button>
       </div>
-      <button className="checkout-btn" onClick={handleCheckout}>
-        Proceed to Checkout
-      </button>
+
       {showAskNumber && (
-        <div className="popup" style={newUser?{minHeight:"120vh"}:null}>
-          <div className="askNumber">
-            <button className="closePopup" onClick={handleClose}>
-              x
-            </button>
-            <div className="imageContainer" style={{backgroundSize:'cover',backgroundPosition:'center'}}><img src={normalImages.loginPage} alt="Loginimage"/></div>
-            <form onSubmit={!isOtpFieldVisible ? handleSendOtp : (isOtpFieldVisible && !newUser)? handleSubmitOTP: handleUpdateUser} >
-              {/* Mobile Number Input */}
-              {(!isOtpFieldVisible && !newUser) && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+  <div className="bg-gradient-to-r from-blue-400 to-purple-500 rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-hidden">
+    <div className="flex flex-col md:flex-row h-full">
+      {/* Left side - Image */}
+      <div className="w-full md:w-1/2 relative">
+        <img 
+          src={normalImages.loginPage} 
+          alt="Login" 
+          className="w-full h-full min-h-[400px] object-cover"
+        />
+      </div>
+
+      {/* Divider between left and right */}
+      <div className="hidden md:block w-1 bg-gray-300"></div>
+
+      {/* Right side - Form */}
+      <div className="w-full md:w-1/2 p-8 relative">
+        <button 
+          className="absolute right-4 top-4 text-gray-600 hover:text-gray-800 text-xl font-bold z-10"
+          onClick={handleClose}
+        >
+          ×
+        </button>
+
+        <div className="h-full flex flex-col justify-center">
+          <h2 className="text-2xl font-bold mb-6 text-gray-800">Welcome Back</h2>
+          
+          <form 
+            className="space-y-6"
+            onSubmit={!isOtpFieldVisible ? handleSendOtp : (isOtpFieldVisible && !newUser) ? handleSubmitOTP : handleUpdateUser}
+          >
+            {(!isOtpFieldVisible && !newUser) && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Mobile Number
+                </label>
                 <input
                   type="text"
-                  placeholder="mobile number"
+                  placeholder="Enter your mobile number"
+                  className="w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   onChange={(e) => updateFormData({ mobileNumber: e.target.value })}
                   value={formData.mobileNumber}
                 />
-              )}
+              </div>
+            )}
 
-              {/* OTP Input */}
-              {(isOtpFieldVisible && !newUser) && (
+            {(isOtpFieldVisible && !newUser) && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  OTP
+                </label>
                 <input
                   type="text"
                   placeholder="Enter OTP"
+                  className="w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   onChange={(e) => updateFormData({ enteredOtp: e.target.value })}
                   value={formData.enteredOtp}
                 />
-              )}
-              {newUser && (
-                <>
-                  <div className="form-group">
-                  <label>Name:</label>
-                  <input type="text" name="name" value={formData.name} onChange={(e)=>updateFormData({name:e.target.value})} />
+              </div>
+            )}
+
+            {newUser && (
+              <>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Name
+                  </label>
+                  <input 
+                    type="text"
+                    placeholder="Enter your name"
+                    className="w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    value={formData.name}
+                    onChange={(e) => updateFormData({ name: e.target.value })}
+                  />
                 </div>
-      
-                <div className="form-group">
-                  <label>Email:</label>
-                  <input type="email" name="email" value={formData.email} onChange={(e)=>updateFormData({email:e.target.value})} />
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Email
+                  </label>
+                  <input 
+                    type="email"
+                    placeholder="Enter your email"
+                    className="w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    value={formData.email}
+                    onChange={(e) => updateFormData({ email: e.target.value })}
+                  />
                 </div>
-                <div className="form-group">
-                  <label>Phone:</label>
-                  <input type="tel" name="mobileNumber" value={formData.mobileNumber} onChange={(e)=>updateFormData({mobileNumber:e.target.value})} />
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Phone
+                  </label>
+                  <input 
+                    type="tel"
+                    placeholder="Enter your phone number"
+                    className="w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    value={formData.mobileNumber}
+                    onChange={(e) => updateFormData({ mobileNumber: e.target.value })}
+                  />
                 </div>
               </>
-              )}
+            )}
 
-              {/* Submit Button */}
-              <button type="submit">
-                {!isOtpFieldVisible ? "Send OTP" : (isOtpFieldVisible && !newUser)? "Submit OTP":'Submit'}
-              </button>
-            </form>
-          </div>
+            <button 
+              type="submit"
+              className="w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 transition-colors font-medium"
+            >
+              {!isOtpFieldVisible ? "Send OTP" : (isOtpFieldVisible && !newUser) ? "Submit OTP" : 'Submit'}
+            </button>
+          </form>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
       )}
     </div>
   );

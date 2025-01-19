@@ -142,7 +142,7 @@ const LoginPage = () => {
   const handleGoogleLogin = () => {
     window.open("http://localhost:5000/auth/google", "_self");
   };
-  console.log(newUser);
+  // console.log(newUser);
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-white">
     <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8 border-2 border-gray-200">

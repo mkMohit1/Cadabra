@@ -19,11 +19,24 @@ import List from "./components/Job/list";
 import CreateJob from "./components/Job/CreateJob";
 import JobsPortal from "./components/Job/JobsPortal";
 import { loginUser } from "./redux/authSlice";
+import { updateCartItem } from "./redux/cartSlice";
 
 function App() {
   const [blogs, setBlogs] = useState(null);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
+
+   useEffect(()=>{
+      // Load cart from localStorage
+      const storedCart = localStorage.getItem("cart");
+      console.log("storedCart", storedCart);
+      if (storedCart) {
+        const cartItems = JSON.parse(storedCart);
+        cartItems.forEach((item) => {
+          dispatch(updateCartItem(item));
+        });
+      }
+    },[])
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("loggedInUser"));

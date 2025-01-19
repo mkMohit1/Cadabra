@@ -4,14 +4,16 @@ import ProductCard from "../components/ProductCard";
 import FilterProduct from "../components/FilterProduct";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../redux/rentProductSlice";
+import { removeOldCartItems, validateCart, updateCartItem, syncCartWithServer } from "../redux/cartSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquareArrowUpRight } from "@fortawesome/free-solid-svg-icons";
 import ConsultationFilter from "../components/ConsultationFilter";
+import { infoToast } from "../DecryptoAndOther/ToastUpdate";
 
 export default function RentPage() {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.product.rentProduct);
-  const cartItem = useSelector((state) => state.cart.cartItem);
+  const cartItem = useSelector((state) => state.cart.cartItem) || [];
   const locationNames = useSelector((state) => state.product.indiaStatesAndUTs);
   const [filterData, setFilterData] = useState({});
   const [filterDataPopup, setFilterDataPopup] = useState({});
@@ -70,6 +72,27 @@ export default function RentPage() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  useEffect(() => {
+    const storedCart = localStorage.getItem("cart");
+    const cartItems = storedCart ? JSON.parse(storedCart) : [];
+  
+    if (Array.isArray(cartItems) && cartItems.length > 0) {
+      cartItems.forEach((item) => {
+        dispatch(updateCartItem(item));
+      });
+    }
+    dispatch(removeOldCartItems());
+  
+    const user = JSON.parse(localStorage.getItem("loggedInUser"));
+    if (user) {
+      dispatch(syncCartWithServer({ userId: user._id, cartItems: cartItems}));
+    }
+  }, [dispatch]);
+  
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, [dispatch]);
+
   const handleNext = () => {
     const maxIndex = Math.max(0, products.length - screenConfig.visibleProducts);
     setCurrentIndex(prev => (prev >= maxIndex ? 0 : prev + 1));
@@ -95,11 +118,7 @@ export default function RentPage() {
     setFilterData(filteredProducts);
   };
 
-  useEffect(() => {
-    dispatch(fetchProducts());
-  }, [dispatch]);
-
-    const renderProductCards = (data) =>
+  const renderProductCards = (data) =>
     data.map((product) => (
       <div 
         key={product.id} 
@@ -112,11 +131,10 @@ export default function RentPage() {
       >
         <ProductCard 
           product={product}
-          isInCart={cartItem.some((item) => item._id === product._id)}
+          isInCart={Array.isArray(cartItem) && cartItem.some((item) => item._id === product._id)}
         />
       </div>
     ));
-
 
   return (
     <div className="font-inter min-h-screen bg-white">
@@ -241,62 +259,86 @@ export default function RentPage() {
       </div>
 
       {/* Product Slider */}
-      <div className="bg-gray-50 py-4 sm:py-6 md:py-8">
-        <h2 className="text-base sm:text-lg md:text-2xl font-bold text-center mb-4">
-          Latest Arrivals
-        </h2>
-        <div className="relative max-w-5xl mx-auto">
-          {/* Navigation Buttons - Hidden on mobile */}
-          <button
-            className="hidden sm:block absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-gray-300 text-black rounded-full p-2 hover:bg-gray-400 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400"
-            onClick={handlePrev}
-            aria-label="Previous slide"
-          >
-            &#8249;
-          </button>
+<div className="bg-gray-50 py-4 sm:py-6 md:py-8">
+  <h2 className="text-base sm:text-lg md:text-2xl font-bold text-center mb-4">
+    Latest Arrivals
+  </h2>
+  
+  {/* Outer Container for Padding and Centering */}
+  <div className="px-4 sm:px-8 md:px-12 lg:px-16">
+    {/* Carousel Container - Centered with improved responsive widths */}
+    <div className="max-w-[95%] sm:max-w-[85%] md:max-w-[80%] lg:max-w-[75%] mx-auto relative">
+      {/* Navigation Buttons with Adjusted Spacing */}
+      <button
+        className="hidden sm:block absolute -left-12 lg:-left-16 top-1/2 -translate-y-1/2 z-10 bg-gradient-to-r from-blue-400 to-purple-500 hover:bg-gray-400 text-black rounded-full w-8 h-8 flex items-center justify-center transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400"
+        onClick={handlePrev}
+        aria-label="Previous slide"
+      >
+        &#8249;
+      </button>
 
-          {/* Carousel Container */}
-          <div className="overflow-hidden mx-auto px-3 sm:px-4 md:px-6 max-w-4xl md:max-w-2xl ">
+      {/* Main Carousel Viewport */}
+      <div className="overflow-hidden">
+        <div 
+          className="flex transition-all duration-300 ease-in-out"
+          style={{
+            transform: `translateX(-${currentIndex * screenConfig.slideWidth}%)`,
+          }}
+        >
+          {/* Updated Product Cards Container */}
+          {products.map((product) => (
             <div 
-              className="flex transition-all duration-300 ease-in-out"
-              style={{
-                transform: `translateX(-${currentIndex * screenConfig.slideWidth}%)`,
+              key={product.id} 
+              style={{ 
+                flex: `0 0 ${screenConfig.slideWidth}%`,
+                maxWidth: `${screenConfig.slideWidth}%`,
+                transition: 'transform 0.3s ease'
               }}
+              className="px-2 sm:px-3 md:px-4 flex justify-center"
             >
-              {renderProductCards(products)}
+              <ProductCard 
+                product={product}
+                isInCart={cartItem.some((item) => item._id === product._id)}
+              />
             </div>
-          </div>
-
-          <button
-            className="hidden sm:block absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-gray-300 text-black rounded-full p-2 hover:bg-gray-400 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400"
-            onClick={handleNext}
-            aria-label="Next slide"
-          >
-            &#8250;
-          </button>
-        </div>
-
-        {/* Touch Swipe Instructions - Mobile only */}
-        <p className="sm:hidden text-center text-sm text-gray-500 mt-2">
-          Swipe left or right to browse products
-        </p>
-
-        {/* Pagination Dots - Mobile only */}
-        <div className="flex justify-center mt-3 gap-2 sm:hidden">
-          {Array.from({ length: Math.ceil(products.length / screenConfig.visibleProducts) }).map((_, index) => (
-            <button
-              key={index}
-              className={`h-2 rounded-full transition-all ${
-                Math.floor(currentIndex / screenConfig.visibleProducts) === index 
-                  ? 'w-4 bg-blue-500' 
-                  : 'w-2 bg-gray-300'
-              }`}
-              onClick={() => setCurrentIndex(index * screenConfig.visibleProducts)}
-              aria-label={`Go to slide ${index + 1}`}
-            />
           ))}
         </div>
       </div>
+
+      <button
+        className="hidden sm:block absolute -right-12 lg:-right-16 top-1/2 -translate-y-1/2 z-10 bg-gradient-to-r from-blue-400 to-purple-500 hover:bg-gray-400 text-black rounded-full w-8 h-8 flex items-center justify-center transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400"
+        onClick={handleNext}
+        aria-label="Next slide"
+      >
+        &#8250;
+      </button>
+    </div>
+  </div>
+
+  {/* Mobile-specific Controls */}
+  <div className="sm:hidden">
+    {/* Touch Swipe Instructions */}
+    <p className="text-center text-sm text-gray-500 mt-4">
+      Swipe left or right to browse products
+    </p>
+
+    {/* Pagination Dots */}
+    <div className="flex justify-center mt-4 gap-2">
+      {Array.from({ length: Math.ceil(products.length / screenConfig.visibleProducts) }).map((_, index) => (
+        <button
+          key={index}
+          className={`h-2 rounded-full transition-all ${
+            Math.floor(currentIndex / screenConfig.visibleProducts) === index 
+              ? 'w-4 bg-blue-500' 
+              : 'w-2 bg-gray-300'
+          }`}
+          onClick={() => setCurrentIndex(index * screenConfig.visibleProducts)}
+          aria-label={`Go to slide ${index + 1}`}
+        />
+      ))}
+    </div>
+  </div>
+</div>
 
       {/* Quiz Popup */}
       {showQuiz && (

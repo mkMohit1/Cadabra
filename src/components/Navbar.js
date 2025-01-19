@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { Navigate, NavLink, useLocation } from "react-router-dom";
 import "../styles/Navbar.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark, faBars, faCartShopping, faCircleChevronDown, faSearch  } from "@fortawesome/free-solid-svg-icons";
@@ -54,10 +54,10 @@ const CitySelector = ({ onCitySelect, selectedCity, currentColor }) => {
   }, []);
 
   return (
-    <div className="relative w-[50%]" ref={dropdownRef}>
+    <div className="relative w-full md:w-[50%]" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center space-x-2 px-4 py-2 rounded-lg hover:bg-gray-100"
+        className="flex items-center space-x-2 px-4 py-2 rounded-lg   w-full justify-between md:justify-start"
         style={{ color: currentColor }}
       >
         <span>{selectedCity}</span>
@@ -68,15 +68,15 @@ const CitySelector = ({ onCitySelect, selectedCity, currentColor }) => {
       </button>
 
       {isOpen && (
-        <div className="absolute z-50 mt-2 w-[450px] bg-white rounded-lg shadow-lg border border-gray-200 left-0">
-          <div className="p-4">
+        <div className="absolute z-50 mt-2 w-[90vw] md:w-[450px] bg-white rounded-lg shadow-lg border border-gray-200 left-1/2 transform -translate-x-1/2 md:left-0 md:translate-x-0">
+          <div className="p-2 md:p-4">
             <div className="relative mb-4">
               <input
                 type="text"
                 placeholder="Search city..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full p-2 pl-8 border border-gray-200 rounded-lg focus:outline-none focus:border-gray-300"
+                className="w-full p-2 pl-8 border border-gray-200 rounded-lg focus:outline-none focus:border-gray-300 text-sm md:text-base"
               />
               <FontAwesomeIcon
                 icon={faSearch}
@@ -84,7 +84,7 @@ const CitySelector = ({ onCitySelect, selectedCity, currentColor }) => {
               />
             </div>
             
-            <div className="grid grid-cols-4 gap-4 max-h-96 overflow-y-auto">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-4 max-h-[60vh] md:max-h-96 overflow-y-auto">
               {filteredCities.map((city) => (
                 <div
                   key={city.name}
@@ -96,12 +96,12 @@ const CitySelector = ({ onCitySelect, selectedCity, currentColor }) => {
                   className={`flex flex-col items-center p-2 cursor-pointer hover:bg-gray-50 rounded-lg
                     ${selectedCity === city.name ? 'bg-gray-50 border border-red-200' : ''}`}
                 >
-                  <div className="w-12 h-12 flex items-center justify-center border border-red-500 rounded-full">
-                    <span className="text-xl">{city.icon}</span>
+                  <div className="w-8 h-8 md:w-12 md:h-12 flex items-center justify-center border border-red-500 rounded-full">
+                    <span className="text-base md:text-xl">{city.icon}</span>
                   </div>
-                  <span className="mt-2 text-sm text-center">{city.name}</span>
+                  <span className="mt-1 md:mt-2 text-xs md:text-sm text-center">{city.name}</span>
                   {city.name === "Lucknow" && (
-                    <span className="text-xs text-red-500">New</span>
+                    <span className="text-[10px] md:text-xs text-red-500">New</span>
                   )}
                 </div>
               ))}
@@ -182,23 +182,35 @@ const Navbar = () => {
   };
 
   // Handle logout
-  const handleLogout = async() => {
+  const handleLogout = async () => {
     try {
-      const response = await fetch('http://localhost:5000/auth/logout');
-      console.log(response)
-    if(response.ok){
-      const data = await response.json();
-      successToast(data.message);
-      dispatch(logout()); // Dispatch your logout action to clear user session
-      setDropdownOpen(false); // Close dropdown on logout
-      //window.location.href = "/";
-      
-    }
+      const response = await fetch('http://localhost:5000/auth/logout', {
+        method: 'GET',
+        credentials: 'include', // Ensure cookies are sent
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        successToast(data.message);
+  
+        // Dispatch Redux logout action
+        dispatch(logout());
+  
+        // Clear user data from localStorage
+        localStorage.removeItem("loggedInUser");
+  
+        setDropdownOpen(false); // Close dropdown
+        NavigatetoHome();
+      } else {
+        errorToast('Failed to logout');
+      }
     } catch (error) {
+      console.error('Error during logout:', error);
       errorToast('Failed to logout');
     }
-   
   };
+  
+  
   const handleCitySelect = (city) => {
     setSelectedCity(city);
   };

@@ -16,10 +16,14 @@ export const authSlice = createSlice({
       console.log("Payload:", action.payload);
       state.user = { ...action.payload }; // Store full user details
       localStorage.setItem("loggedInUser", JSON.stringify(state.user)); // Persist user in localStorage
+      const cartData = action.payload.cart.map((item) => item.productId); // Use the entire product object
+      localStorage.setItem('cart', JSON.stringify(cartData)); // Serialize the array of product objects
+
     },
     logout(state) {
       state.user = null;
       localStorage.removeItem("loggedInUser");
+      localStorage.removeItem('cart');
     },
   },
 });

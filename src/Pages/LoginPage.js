@@ -40,6 +40,7 @@ const LoginPage = () => {
     }
     const otp = generateOtp();
     updateFormData({otp:otp});
+    console.log(formData);
     try {
       const response = await axios.post("http://localhost:5000/send-otp", {
         mobileNumber,
@@ -95,9 +96,9 @@ const LoginPage = () => {
         } else {
           successToast("Login successful!");
         }
-  
+        console.log("Login successful! after",user);
         // Dispatch user data to the store
-        dispatch(login({id: user.id,mobileNumber:user.mobileNumber, isAdmin:user.role }));
+        dispatch(login(user));
         // Navigate based on user role
         // if (user.role === "SuperAdmin" || user.role === "SaleAdmin" || user.role==='ProductAdmin' || user.role==='SaleManager') {
         //   navigate("/admin");

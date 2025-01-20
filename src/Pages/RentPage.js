@@ -72,22 +72,22 @@ export default function RentPage() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  useEffect(() => {
-    const storedCart = localStorage.getItem("cart");
-    const cartItems = storedCart ? JSON.parse(storedCart) : [];
+  // useEffect(() => {
+  //   const storedCart = localStorage.getItem("cart");
+  //   const cartItems = storedCart ? JSON.parse(storedCart) : [];
   
-    if (Array.isArray(cartItems) && cartItems.length > 0) {
-      cartItems.forEach((item) => {
-        dispatch(updateCartItem(item));
-      });
-    }
-    dispatch(removeOldCartItems());
+  //   if (Array.isArray(cartItems) && cartItems.length > 0) {
+  //     cartItems.forEach((item) => {
+  //       dispatch(updateCartItem(item));
+  //     });
+  //   }
+  //   dispatch(removeOldCartItems());
   
-    const user = JSON.parse(localStorage.getItem("loggedInUser"));
-    if (user) {
-      dispatch(syncCartWithServer({ userId: user._id, cartItems: cartItems}));
-    }
-  }, [dispatch]);
+  //   const user = JSON.parse(localStorage.getItem("loggedInUser"));
+  //   if (user) {
+  //     dispatch(syncCartWithServer({ userId: user._id, cartItems: cartItems}));
+  //   }
+  // }, [dispatch]);
   
   useEffect(() => {
     dispatch(fetchProducts());

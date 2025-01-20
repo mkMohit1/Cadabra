@@ -69,7 +69,7 @@ function App() {
 function AppRoutes({ blogs, user }) {
   const location = useLocation();
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const isAdminPage = location.pathname === "/admin";
   if(location.pathname === "/About"){
     redirect("/myPage.html");
@@ -95,14 +95,14 @@ function AppRoutes({ blogs, user }) {
   // Redirect user after login based on their role
   useEffect(() => {
     if (user) {
-      if (user.isAdmin && ["SuperAdmin", "SaleAdmin", "ProductAdmin",'SaleManager'].includes(user.isAdmin)) {
+      if (user.role && ["SuperAdmin", "SaleAdmin", "ProductAdmin",'SaleManager'].includes(user.role)) {
         console.log("mk admin");
         navigate("/admin"); // Redirect admin users to admin dashboard
       } else if (location.pathname === "/login" || location.pathname === "/Login" || location.pathname === "/admin-login") {
         navigate("/"); // Redirect regular users to home page
       }
     }
-  }, [user, location.pathname, navigate]);
+  }, [user, location.pathname, navigate, dispatch]);
 
 
   const showNavbarFooter = ![ "/admin", "/admin-login"].includes(location.pathname);

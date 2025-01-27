@@ -22,7 +22,7 @@ import { loginUser } from "./redux/authSlice";
 import { updateCartItem } from "./redux/cartSlice";
 
 function App() {
-  const [blogs, setBlogs] = useState(null);
+  const [blogs, setBlogs] = useState([]);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
 
@@ -30,18 +30,27 @@ function App() {
       // Load cart from localStorage
       const storedCart = localStorage.getItem("cart");
       console.log("storedCart", storedCart);
-      if (storedCart) {
-        const cartItems = JSON.parse(storedCart);
-        cartItems.forEach((item) => {
-          dispatch(updateCartItem(item));
-        });
-      }
+      // if (storedCart) {
+      //   const cartItems = JSON.parse(storedCart);
+      //   cartItems.forEach((item) => {
+      //     dispatch(updateCartItem(item));
+      //   });
+      // }
     },[])
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("loggedInUser"));
     if (storedUser && !user) {
       dispatch(login(storedUser)); // Restore user state
+    }
+    if(!user){
+      const storedCart = localStorage.getItem("cartNuser");
+      if (storedCart) {
+        const cartItems = JSON.parse(storedCart);
+        cartItems.forEach((item) => {
+          dispatch(updateCartItem(item));
+        });
+      }
     }
   }, [dispatch, user]);
 
@@ -84,9 +93,10 @@ function AppRoutes({ blogs, user }) {
     // }
     if (isAdminPage) {
       console.log("dsfhjdhfsdvhb",user);
+      // dispatch(login(user));
       if (!user) {
         navigate("/admin-login");
-      } else if (!["SuperAdmin", "SaleAdmin", "ProductAdmin"].includes(user.isAdmin)) {
+      } else if (!["SuperAdmin", "SaleAdmin", "ProductAdmin"].includes(user.role)) {
         navigate("/admin-login");
       }
     }
@@ -127,7 +137,7 @@ function AppRoutes({ blogs, user }) {
         <Route
           path="/admin"
           element={
-            user && ["SuperAdmin", "SaleAdmin", "ProductAdmin",'SaleManager'].includes(user.isAdmin) ? (
+            user && ["SuperAdmin", "SaleAdmin", "ProductAdmin",'SaleManager'].includes(user.role) ? (
               <AdminDashboard />
             ) : (
               <LoginPage />

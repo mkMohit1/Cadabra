@@ -98,7 +98,7 @@
 
 .popup-paper-container {
   background: url('../images/consultantPopup.svg');
-  background-size: cover; /* Ensures the background image covers the entire container */
+  background-size: contain; /* Ensures the background image covers the entire container */
   background-position: center; /* Centers the background image */
   background-repeat: no-repeat;
 }

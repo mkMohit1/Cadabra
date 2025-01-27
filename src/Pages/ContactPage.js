@@ -23,6 +23,7 @@ L.Marker.prototype.options.icon = DefaultIcon;
 const ContactForm = () => {
   const coordinates = [28.639232 , 77.299712]; // NYC Coordinates (latitude, longitude)
   const user = useSelector((state)=>state.auth.user);
+  const [disabled, setDisabled] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -64,14 +65,14 @@ const ContactForm = () => {
   };
 
   return (
-    <div className="flex min-h-5xl items-center justify-center bg-gray-900 pt-[90px] pb-[20px] relative">
-      <div className='absolute md:w-[50%] custom-bg-black bg-black md:h-[100%] z-1 left-0 sm:w-full sm:h-[60%] sm:top-0'></div>
-      <div className='absolute md:w-[50%] custom-bg-white bg-white md:h-[100%] z-1 right-0 sm:w-full sm:h-[40.7%] sm:bottom-0'></div>
-      <div className="bg-white shadow-lg rounded-lg overflow-hidden md:flex w-4/5 max-w-4xl z-10 mt-[2rem] mb-[1rem]">
+    <div className="flex min-h-5xl items-center justify-center bg-white pt-[90px] pb-[20px] relative font-mulish">
+      {/* <div className='absolute md:w-[50%] custom-bg-black bg-black md:h-[100%] z-1 left-0 sm:w-full sm:h-[60%] sm:top-0'></div>
+      <div className='absolute md:w-[50%] custom-bg-white bg-white md:h-[100%] z-1 right-0 sm:w-full sm:h-[40.7%] sm:bottom-0'></div> */}
+      <div className="bg-white shadow-specific-lg rounded border border-gray-200 overflow-hidden md:flex w-4/5 max-w-4xl z-10 mt-[2rem] mb-[1rem]">
         {/* Left Form Section */}
         <div className="w-full md:w-1/2 p-8">
           <h2 className="text-3xl font-bold mb-4 text-black">
-            <span className="text-red-600 border-b-2 border-black">Contact</span> us
+            <span className="border-b-2 border-black">Contact</span> us
           </h2>
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
@@ -115,7 +116,7 @@ const ContactForm = () => {
             </div>
             <div className="mb-4">
               <label className="inline-flex items-center">
-                <input type="checkbox" defaultChecked className="form-checkbox h-5 w-5 text-red-600" />
+                <input type="checkbox" defaultChecked onChange={()=>setDisabled(prev=>!prev)} className="form-checkbox h-5 w-5 text-red-600" />
                 <span className="ml-2 text-sm text-gray-700">
                   I consent to the collection and processing of my personal data.
                 </span>
@@ -123,7 +124,9 @@ const ContactForm = () => {
             </div>
             <button
               type="submit"
+              disabled={disabled}
               className="w-full bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition duration-200"
+              style={{ cursor: disabled ? 'not-allowed' : 'pointer', opacity: disabled ? 0.7 : 1, hover: disabled ? '' : 'bg-gray-700', backgroundColor: disabled ? 'gray' : '' }}
             >
               Submit
             </button>
@@ -131,7 +134,7 @@ const ContactForm = () => {
         </div>
 
         {/* Right Contact Info Section */}
-        <div className="w-full md:w-1/2 bg-black text-white p-8 flex flex-col justify-center">
+        <div className="w-full md:w-1/2 border-t border-gray-400 md:border-t-0 md:border-l md:border-gray-400 bg-white text-black p-8 flex flex-col justify-center">
           <p className="mb-4">
           We provide innovative, reliable, and personalized solutions, ensuring excellent service and helping you achieve your business goals efficiently.
           </p>

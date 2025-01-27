@@ -1,7 +1,7 @@
-import React,{useState} from 'react';
+import React,{useRef, useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CartCard from './CartCard';
-import { updateCartItem, updateSellCartCount, updateCartCount, updateCartMode } from "../redux/cartSlice";
+import { updateCartItem, updateCartCount, updateCartMode } from "../redux/cartSlice";
 
 const CartItems = ({currentCart}) => {
     const dispatch = useDispatch();
@@ -9,38 +9,28 @@ const CartItems = ({currentCart}) => {
     const sellCartItem = useSelector((state) => state.cart.sellCartItem);
     const currentMode = useSelector((state) => state.cart.cartMode);
     const [openMore, setOpenMore] = useState(false);
-    console.log(currentCart);
-     const handleQuantityChange = (id, delta) => {
-        const updatedCart = currentMode === "rent" ? (cartItem || []) : (sellCartItem || []);
-        const updatedItem = updatedCart.find((item) => item._id === id);
-    
-        if (updatedItem) {
-            const currentQuantity = currentMode === "rent" ? updatedItem.rentQuantity : updatedItem.saleQuantity;
-            const updatedQuantity = Math.max(1, currentQuantity + delta);
-    
-            if (currentMode === "rent") {
-                dispatch(updateCartItem({ ...updatedItem, rentQuantity: updatedQuantity }));
-            } else {
-                dispatch(updateSellCartCount({ ...updatedItem, saleQuantity: updatedQuantity }));
-            }
-        }
-    };
+    const [checkBook, setCheckBook] = useState(false);
+    //console.log(currentCart);
+    const bookref = useRef();
 
+    const hadleUpdateBook=()=>{
+      setCheckBook((prev)=>!prev)
+    }
     const toggleMore = () => {
       setOpenMore((prevState) => !prevState);
     };
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 font-mulish">
       <div className="grid gap-4">
         {currentCart.map((item) => (
           <CartCard
             key={item._id}
             item={item}
             currentMode={currentMode}
-            handleQuantityChange={handleQuantityChange}
           />
         ))}
       </div>
+      {1==0?
       <div className="grid grid-cols-2 gap-4 mt-6">
         <button
           className={`py-2 px-4 rounded-lg transition-colors ${
@@ -64,7 +54,17 @@ const CartItems = ({currentCart}) => {
         >
           Sell
         </button>
+        </div>
+      :null}
+      <div className='w-full bg-gray-200 flex items-center pl-2 py-3 cursor-pointer' onClick={hadleUpdateBook}>
+          <input type='checkbox' name='BookOrder' className=''
+          ref={bookref}
+          checked={checkBook} // Controlled by the `checkBook` state
+          onChange={hadleUpdateBook} // Optional if the `div` click handler handles it
+          />
+          <span className='ml-2 text-lg'>Book now and pay 60% of total ammount and pay remaining on installation.</span>
       </div>
+      
     </div>
   )
 }

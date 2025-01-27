@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 // import "../styles/SubscribeSection.scss"; // Assuming SCSS for styling
 import { Bold } from "lucide-react";
+import { errorToast, successToast } from "../DecryptoAndOther/ToastUpdate";
 
 const SubscribeSection = () => {
   const [isButtonMoved, setIsButtonMoved] = useState(false);
@@ -24,6 +25,36 @@ const SubscribeSection = () => {
       window.removeEventListener('resize',handleResize);
     }
   },[]);
+
+    // Handle email subscription
+    const handleAddEmail = async (e) => {
+      e.preventDefault();
+      const email = e.target[0].value.trim();
+  
+      if (!email) {
+        errorToast("Please enter a valid email address.");
+        return;
+      }
+  
+      try {
+        const response = await fetch("http://localhost:5000/subscribe", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        });
+        const data = await response.json();
+        if (!response.ok) {
+          errorToast(data.message || "Failed to subscribe. Please try again later.");
+          return;
+        }
+        successToast(data.message || "Subscribed successfully!");
+      } catch (error) {
+        errorToast(error.message || "Failed to subscribe. Please try again later.");
+      }
+    };
+
   return (
     <div className="bg-[#0a2540] text-center py-10 text-white max-w-5xl mx-auto font-mulish">
       <div className="max-w-4xl mx-auto px-4">
@@ -31,13 +62,14 @@ const SubscribeSection = () => {
           <span className="text-4xl font-bold">Join Our Community </span>
         <span className="text-lg font-bold text-gray-400 ml-2 tracking-wide">Subscribe Today!</span>
         </h2>
-        <form className="subscribeform flex flex-col md:flex-row justify-center item-center gap-4">
+        <form className="subscribeform flex flex-col md:flex-row justify-center item-center gap-4" onSubmit={handleAddEmail}> 
           <input
             type="email"
             placeholder="Your email address"
-            className="email-input w-full md:w-3/5 p-4 text-lg  z-10 md:focs:border-2 focus:outline-none focus:border-l-2 focus:border-b-2 focus:border-[#65e4a3] border-gray-300"
+            required
+            className="email-input w-full md:w-3/5 p-4 text-lg text-black  z-10 md:focs:border-2 focus:outline-none focus:border-l-2 focus:border-b-2 focus:border-[#65e4a3] border-gray-300"
           />
-          <button type="submit" className={`text-lg py-4 ${isButtonMoved?"":'-ml-[16px]'}  px-6 font-bold bg-[#65e4a3] text-white hover:bg-green-600 transition duration-300`}>
+          <button type="submit" className={`text-lg py-4 ${isButtonMoved?"":'-ml-[16px]'} outline-none px-6 font-bold bg-gradient-to-r from-blue-400 to-purple-600 text-white transition duration-300`}>
             Start now
           </button>
         </form>

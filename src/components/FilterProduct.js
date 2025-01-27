@@ -40,7 +40,7 @@ const FilterProduct = ({ handleCloseQuiz, handleData }) => {
         setIsAnimating(false);
       }, 400);
     } else {
-      handleData({...selectedAnswers, [currentQuestion]: answer});
+      // handleData({...selectedAnswers, [currentQuestion]: answer});
       handleCloseQuiz();
     }
   };

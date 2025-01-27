@@ -47,8 +47,10 @@ import Jobmin from "./images/minimize.png";
 import Jobarrow from "./images/Group_2.png";
 import Finalimage from "./images/final.png";
 import patern from "./images/Pattern.png";
+import Cart from "./images/cart.svg";
+import mainLogo5 from './images/mainLogo5.png';
 
-export const mainLogo = {mainLogo1, mainLogo2, mainLogo3, mainLogo4};
+export const mainLogo = {mainLogo1, mainLogo2, mainLogo3, mainLogo4, mainLogo5};
 export const contactImage = [contact1,contact2,contact3];
 
 const serviceImg =[service1, service2, service3];
@@ -83,6 +85,7 @@ export const normalImages ={
     Jobarrow:Jobarrow,
     Finalimage:Finalimage,
     patern:patern,
+    Cart:Cart,
 }
 
 export const rentImage = {

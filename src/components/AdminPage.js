@@ -46,7 +46,7 @@ const AdminPage = () => {
       let adminList = [];
       switch (currentUser.role) {
         case 'SuperAdmin':
-          adminList = [...data.saleAdmin, ...data.productAdmin];
+          adminList = [...data.saleAdmin || [], ...data.productAdmin || []];
           break;
         case 'SaleAdmin':
           adminList = data.saleManager || [];
@@ -96,7 +96,7 @@ const AdminPage = () => {
   
     const newAdmin = {
       ...formData,
-      supperAdminID: currentUser.userID // Ensure to pass this correctly
+      supperAdminID: currentUser._id // Ensure to pass this correctly
     };
   
     try {

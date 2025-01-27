@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faXmark, faTags } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { updateCurrentContainer } from "../redux/cartSlice";
+import { syncCartWithServer, updateCurrentContainer } from "../redux/cartSlice";
 import { infoToast,errorToast, successToast } from "../DecryptoAndOther/ToastUpdate";
 import axios from "axios"; // Make sure you import axios
 import LoginPage from "../Pages/LoginPage";
@@ -20,6 +20,8 @@ const OrderSummary = ({ currentCart, currentMode }) => {
   const [showAskNumber, setShowAskNumber] = useState(false);
   const [newUser, setNewUser] = useState(false);
   const [isOtpFieldVisible, setIsOtpFieldVisible] = useState(false);
+  const [beforelogin, setBeforeLogin] = useState(false);
+  //console.log(currentCart);
   const [formData, setFormData] = useState({
     mobileNumber: "",
     enteredOtp: "",
@@ -47,8 +49,8 @@ const OrderSummary = ({ currentCart, currentMode }) => {
     }
 
     return currentCart.reduce((total, item) => {
-      const price = currentMode === "rent" ? item.mrp : item.mrp;
-      const quantity = currentMode === "rent" ? item.rentQuantity : item.saleQuantity;
+      const price = currentMode === "rent" ? item.productId.mrp : item.productId.mrp;
+      const quantity = currentMode === "rent" ? item.quantity : item.quantity;
       return total + quantity * price;
     }, 0);
   };
@@ -145,7 +147,15 @@ const OrderSummary = ({ currentCart, currentMode }) => {
         dispatch(login({ mobileNumber, userID: formData.userID, isAdmin: existingUser.role }));
       }
       if(userfound){
+        console.log("userfound",userfound);
         setShowAskNumber(false);
+        let breforeLoginCart = localStorage.getItem('cartNuser');
+        breforeLoginCart = JSON.parse(breforeLoginCart);
+        console.log('breforeLoginCart', breforeLoginCart);
+        if(userfound && breforeLoginCart && breforeLoginCart.length > 0){
+          dispatch(syncCartWithServer({ userId: userfound._id, cartItems: [...breforeLoginCart] }));
+          localStorage.removeItem('cartNuser');
+        }
       }
     } else {
       errorToast("Invalid OTP. Please try again.");
@@ -175,7 +185,7 @@ const OrderSummary = ({ currentCart, currentMode }) => {
   }
 
   const temp = useSelector((state) => state.cart.currentContainer);
-  console.log(temp);
+  // console.log(temp);
   const total = calculateTotal();
 
   useEffect(()=>{
@@ -187,7 +197,8 @@ const OrderSummary = ({ currentCart, currentMode }) => {
     return ()=>{
       document.body.style.overflow='initial';
     }
-  },[showAskNumber])
+  },[showAskNumber]);
+
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6 ">
@@ -196,22 +207,24 @@ const OrderSummary = ({ currentCart, currentMode }) => {
       <div className="space-y-4">
         {currentCart && currentCart.length > 0 ? (
           currentCart.map((item) => {
-            const price = currentMode === "rent" ? item.mrp : item.mrp;
-            const isOpen = openMoreMap[item.id] || false;
-            const quantity = currentMode === "rent" ? item.rentQuantity : item.saleQuantity;
+            console.log(item);
+            const price = currentMode === "rent" ? item.productId.mrp : item.productId.mrp;
+            const isOpen = openMoreMap[item.productId._id] || false;
+            const quantity = currentMode === "rent" ? item.quantity : item.quantity;
             
             return (
-              <div key={item.id} className="border-b pb-4">
+              <div key={item.productId._id} className="border-b pb-4">
                 <div className="flex justify-between items-center">
                   <div className="flex-1">
                     <span className="font-medium">{item.title}</span>
-                    <div className="text-sm text-gray-600">
-                      <span>Quantity: {quantity}</span>
+                    <div className="text-sm text-gray-600 flex justify-between">
+                      <span>{item.productId.title}</span>
+                      <span>{quantity}</span>
                       <span className="ml-4">${(quantity * price).toFixed(2)}</span>
                     </div>
                   </div>
                   <button
-                    onClick={() => toggleMore(item.id)}
+                    onClick={() => toggleMore(item.productId._id)}
                     className="ml-4 text-gray-500 hover:text-gray-700"
                   >
                     <FontAwesomeIcon icon={isOpen ? faXmark : faPlus} />
@@ -219,8 +232,14 @@ const OrderSummary = ({ currentCart, currentMode }) => {
                 </div>
                 
                 {isOpen && (
-                  <div className="mt-4 p-4 bg-gray-50 rounded">
-                    <span>Additional Information</span>
+                  <div className="mt-4 p-4 bg-gray-200 rounded">
+                    <div className="flex flex-col">
+                      <span><u>{item.productId.title}</u>:</span>
+                      <div className="flex flex-col mt-1">
+                        <span className="mb-2 ml-2 w-full flex flex-nowrap flex-row justify-between bg-gray-100">|--Quantity: {quantity} <span className="">{quantity} x {price} : {quantity*price}</span></span>
+                        <span className="mb-2 ml-2 w-full flex flex-nowrap flex-row justify-between bg-gray-100">|--plan: <span className="">{quantity <3?"Homeshield Starter":quantity ==3?"Homeshield Plus":"Homeshield Max"}</span></span>
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>

@@ -13,6 +13,23 @@ const initialState = {
     "Ladakh", "Andaman and Nicobar Islands", "Chandigarh", "Dadra and Nagar Haveli and Daman and Diu", 
     "Lakshadweep", "Delhi", "Puducherry"
   ],
+  tenureOptions :[
+    "Less than a Quarter",
+    "Quarter (4 months)",
+    "Half Year (6 months)",
+    "One Year",
+    "More than One Year"
+  ],
+  typeofServiceProvide: [
+    "type A",
+    "type B",
+    "type C",
+  ],
+  categories: [
+    "Electronics",
+    "CCTV",
+    "Security Systems",
+  ],
   serviceProvideIn: ['Delhi'],
   loading: false,
   error: null

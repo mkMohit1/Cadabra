@@ -4,7 +4,7 @@
   justify-content: space-between;
   align-items: center;
   font-family: "Mulish", sans-serif;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 2.5rem;
   color: #4fe8a4;
   position: fixed;
   width: 100%;
@@ -22,10 +22,6 @@
       transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
       transform-style: preserve-3d;
       backface-visibility: hidden;
-
-      @media (min-width: 768px) {
-        height: 70px;
-      }
 
       &.flip-animation {
         animation: logoFlip 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -209,10 +205,10 @@
 
   .hello-btn {
     padding: 8px 16px !important;
-    border: 1px solid transparent !important;
+    // border: 1px solid transparent !important;
     background: linear-gradient(19deg, #21D4FD 0%, #B721FF 100%) !important;
     color: white !important;
-    border-radius: 4px !important;
+    border-radius: 0px !important;
     font-family: "Mulish", sans-serif !important;
     height: auto !important;
     width: auto !important;

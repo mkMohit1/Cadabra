@@ -1,18 +1,39 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 const BlogSection = ({ blogs }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [visibleBlogs, setVisibleBlogs] = useState(3); // Default to 3 blogs
-
+  const clonedBlogs = Array.isArray(blogs) ? [...blogs, ...blogs] : []; // Duplicate blogs for infinite loop
+  const navigate = useNavigate();
   const handleNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % blogs.length);
+    if (currentIndex < blogs.length + visibleBlogs - 1) {
+      setCurrentIndex(currentIndex + 1);
+    } else {
+      // Reset to start after finishing one loop (seamless)
+      setTimeout(() => {
+        setCurrentIndex(visibleBlogs);
+      }, 300); // Match the transition duration
+    }
   };
 
   const handlePrev = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + blogs.length) % blogs.length);
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    } else {
+      // Reset to end of first loop
+      setTimeout(() => {
+        setCurrentIndex(blogs.length - visibleBlogs);
+      }, 300); // Match the transition duration
+    }
+  };
+
+  const handleBlogClick = (id) => {
+    // Redirect to blog post page
+    navigate(`/blog/${id}`);
+    // console.log("Blog ID:", id);
   };
 
   const updateVisibleBlogs = () => {
@@ -38,13 +59,22 @@ const BlogSection = ({ blogs }) => {
     };
   }, []);
 
+  useEffect(() => {
+    // Reset the index smoothly if out of bounds
+    if (currentIndex >= blogs.length + visibleBlogs) {
+      setCurrentIndex(visibleBlogs);
+    } else if (currentIndex < 0) {
+      setCurrentIndex(blogs.length - visibleBlogs);
+    }
+  }, [currentIndex, blogs.length, visibleBlogs]);
+
   return (
     blogs && blogs.length > 0 ? (
-      <div className="blog-section lg:max-w-[1700px] lg:mx-auto text-center py-12 px-4 bg-gray-100 font-Inter">
+      <div className="blog-section lg:max-w-[1700px] lg:mx-auto text-center py-12 px-4 bg-gray-100 font-mulish">
         {/* Header */}
-        <div className="header mb-8 md:w-full lg:max-w-4xl mx-auto h-fit">
-          <h3 className="text-sm font-medium text-[#555]">Our Blog</h3>
-          <h2 className="text-sm sm:text-sm md:text-2xl lg:text-2xl font-light text-[#222] mt-2">
+        <div className=" mb-8 md:w-full lg:max-w-7xl mx-auto h-fit flex flex-col bg-gray-100">
+          <h3 className="text-sm font-medium text-[#555] opacity-[0.7]">Our Blog</h3>
+          <h2 className="text-sm sm:text-sm md:text-2xl lg:text-4xl font-light text-[#222] mt-2">
             Value proposition accelerator product management venture
           </h2>
         </div>
@@ -65,7 +95,7 @@ const BlogSection = ({ blogs }) => {
                 transform: `translateX(-${currentIndex * (100 / visibleBlogs)}%)`,
               }}
             >
-              {blogs.map((post) => {
+              {clonedBlogs.map((post) => {
                 const date = new Date(post.date);
                 const formattedDate = date.toLocaleDateString("en-US", {
                   year: "numeric",
@@ -75,10 +105,12 @@ const BlogSection = ({ blogs }) => {
 
                 return (
                   <div
-                    className={`blog-card relative flex-shrink-0 bg-white mr-4 w-full ${
-                      visibleBlogs === 1 ? "md:w-full" : visibleBlogs === 2 ? "md:w-1/2" : "md:w-1/3"
+                    className={`blog-card relative flex-shrink-0 bg-white mr-4 w-full lg:w-[330px] ${
+                      visibleBlogs === 1 ? "w-[310px] xxs:ml-4 xs:w-full xs:ml-0" : visibleBlogs === 2 ? "md:w-[330px] ml-[20px]" : "md:w-1/3"
                     } p-4`}
                     key={post._id}
+                    onClick={() => handleBlogClick(post._id)}
+                    style={{ cursor: "pointer" }}
                   >
                     <img
                       src={post.coverImage || "https://via.placeholder.com/1200x500"}
@@ -109,12 +141,12 @@ const BlogSection = ({ blogs }) => {
                           </div>
                         )}
                         <div className="read-btn absolute bottom-0">
-                          <Link to={`/blog/${post._id}`}>
+                          {/* <Link to={`/blog/${post._id}`}>
                             <FontAwesomeIcon
                               icon={faCircleArrowRight}
                               className="arrow text-[lightgray] hover:text-[#ffd437] w-10 h-10 rounded-full"
                             />
-                          </Link>
+                          </Link> */}
                         </div>
                       </div>
                     </div>

@@ -5,11 +5,11 @@ import { NavLink } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <footer className="py-10 px-6 md:px-16 bg-white text-black font-Inter">
+    <footer className="py-10 px-6 md:px-16 bg-white text-black font-mulish">
       <div className="flex lg:justify-between flex-col md:flex-row items-center mx-auto max-w-7xl gap-8 md:justify-center">
       <div className=" max-w-md">
         <div className="footer-logo mb-2">
-          <img src={mainLogo.mainLogo2} alt="footerLogo" className="w-28"/>
+          <img src={mainLogo.mainLogo5} alt="footerLogo" className="w-28"/>
           </div>
         <p className="text-sm text-gray-600 mb-4">
         Cadabra Secure offers a wide range of security solutions for sale and rent across India. We provide affordable, reliable protection for homes and businesses.

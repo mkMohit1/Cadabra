@@ -7,21 +7,21 @@ const Testimonials = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [rightMargin, setRightMargin] = useState('15%');
 
-  const updateRightMargin = () => {
-    if (window.innerWidth >= 1280) {
-      setRightMargin('12%'); // Decrease for larger screens
-    } else if (window.innerWidth >= 1024) {
-      setRightMargin('15%'); // Default for medium-large screens
-    } else if (window.innerWidth >= 768) {
-      setRightMargin('10%'); // Decrease further for smaller screens
-    }
-  };
+  // const updateRightMargin = () => {
+  //   if (window.innerWidth >= 1280) {
+  //     setRightMargin('12%'); // Decrease for larger screens
+  //   } else if (window.innerWidth >= 1024) {
+  //     setRightMargin('15%'); // Default for medium-large screens
+  //   } else if (window.innerWidth >= 768) {
+  //     setRightMargin('10%'); // Decrease further for smaller screens
+  //   }
+  // };
 
-  useEffect(() => {
-    updateRightMargin(); // Initial check
-    window.addEventListener('resize', updateRightMargin);
-    return () => window.removeEventListener('resize', updateRightMargin); // Cleanup
-  }, []);
+  // useEffect(() => {
+  //   updateRightMargin(); // Initial check
+  //   window.addEventListener('resize', updateRightMargin);
+  //   return () => window.removeEventListener('resize', updateRightMargin); // Cleanup
+  // }, []);
 
   const testimonials = [
     {
@@ -57,9 +57,9 @@ const Testimonials = () => {
   };
 
   return (
-    <div className="bg-[#0b1e39] text-white py-10 px-4 font-Inter relative">
-      <div className="max-w-lg sm:max-w-1xl  sm:mx-auto lg:max-w-1xl lg:ml-[16%] md:ml-[8%] ml-4 mb-6 text-left">
-        <h2 className="text-3xl font-light leading-snug">
+    <div className="bg-[#0b1e39] text-white py-10 px-4 font-mulish relative">
+      <div className=" w-fit md:max-w-4xl lg:max-w-5xl  mx-auto mb-6 text-left">
+        <h2 className="lg:text-3xl md:text-2xl xs:text-[20px] font-light leading-snug">
           Customer Expressions to guide you in making the right decision
         </h2>
       </div>
@@ -84,7 +84,7 @@ const Testimonials = () => {
           </div>
         ))}
       </div>
-      <div className="flex justify-center mt-6 md:absolute md:top-14"
+      <div className="flex justify-center mt-6 "
         style={{ right: rightMargin }}
       >
       <button

@@ -65,10 +65,10 @@ const AdminDashboard = () => {
         <nav className="nav-menu">
           {[
             { icon: "📊", text: "Dashboard" },
-            currentUser.isAdmin === "SuperAdmin" && { icon: "👥", text: "Admins" },
-            currentUser.isAdmin === "SaleAdmin" && { icon: "👔", text: "Sales Manager" },
-            currentUser.isAdmin === "ProductAdmin" && { icon: "📦", text: "Product" },
-            currentUser.isAdmin === "SaleManager" && { icon: "🙍‍♂️", text: "Customer" },
+            currentUser.role === "SuperAdmin" && { icon: "👥", text: "Admins" },
+            currentUser.role === "SaleAdmin" && { icon: "👔", text: "Sales Manager" },
+            currentUser.role === "ProductAdmin" && { icon: "📦", text: "Product" },
+            currentUser.role === "SaleManager" && { icon: "🙍‍♂️", text: "Customer" },
           ]
             .filter(Boolean)  // Filter out falsy values
             .map(({ icon, text }) => (
@@ -131,8 +131,8 @@ const AdminDashboard = () => {
 
         <div className="dashboard-content">
           {currentContainer === "Dashboard" && <Dashboard />}
-          {currentContainer === "Admins" && currentUser.isAdmin === "SuperAdmin" && <AdminPage />}
-          {currentContainer === "Sales Manager" && currentUser.isAdmin === "SaleAdmin" && <SaleAdmin />}
+          {currentContainer === "Admins" && currentUser.role === "SuperAdmin" && <AdminPage />}
+          {currentContainer === "Sales Manager" && currentUser.role === "SaleAdmin" && <SaleAdmin />}
           {currentContainer=== 'Customer' && <CustomerManagement />}
           {currentContainer === 'Product' && <ProductPage/>}
         </div>

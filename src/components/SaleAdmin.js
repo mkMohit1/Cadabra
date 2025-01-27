@@ -47,7 +47,6 @@ const SaleAdmin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('Form Data:', formData);
-
     // If editing an admin, update them
     if (editingAdmin) {
       try {
@@ -93,7 +92,7 @@ const SaleAdmin = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ ...formData, supperAdminID: currentUser.userID }),
+          body: JSON.stringify({ ...formData, supperAdminID: currentUser._id }),
         });
         const data = await response.json();
 

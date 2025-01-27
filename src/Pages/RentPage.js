@@ -1,20 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import { rentImage, normalImages } from "../ImagePath";
 import ProductCard from "../components/ProductCard";
 import FilterProduct from "../components/FilterProduct";
+import "../styles/RentPage.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../redux/rentProductSlice";
 import { removeOldCartItems, validateCart, updateCartItem, syncCartWithServer } from "../redux/cartSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquareArrowUpRight } from "@fortawesome/free-solid-svg-icons";
 import ConsultationFilter from "../components/ConsultationFilter";
-import { infoToast } from "../DecryptoAndOther/ToastUpdate";
+import { errorToast, infoToast } from "../DecryptoAndOther/ToastUpdate";
+import CartIcon from "../images/cart.svg";
 
 export default function RentPage() {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.product.rentProduct);
-  const cartItem = useSelector((state) => state.cart.cartItem) || [];
+  let cartItem = useSelector((state) => state.cart.cartItem) || [];
+  let cartNItem = useSelector((state) => state.cart.cartNItem) || [];
   const locationNames = useSelector((state) => state.product.indiaStatesAndUTs);
+  const tenureOptions = useSelector((state) => state.product.tenureOptions);
+  const typeofServiceProvide = useSelector((state) => state.product.typeofServiceProvide);
+  const categories = useSelector((state) => state.product.categories);
+  const user = useSelector((state) => state.auth.user);
   const [filterData, setFilterData] = useState({});
   const [filterDataPopup, setFilterDataPopup] = useState({});
   const [location, setLocation] = useState("");
@@ -24,13 +31,21 @@ export default function RentPage() {
   const [showQuiz, setShowQuiz] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
+  const clonedProduct = Array.isArray(products) ? [...products, ...products] :[];
+  useEffect(() => {
+    if (!user) {
+      dispatch(updateCartItem(cartNItem));
+    } else {
+      dispatch(updateCartItem({cart:user.cart, user}));
+    }
+  }, [user, dispatch]);
+  
   // Responsive configuration
   const [screenConfig, setScreenConfig] = useState({
     visibleProducts: 3,
     slideWidth: 33.333,
     gapSize: 'md:gap-6',
-    padding: 'md:p-6'
+    padding: 'md:p-8'
   });
 
   useEffect(() => {
@@ -93,20 +108,43 @@ export default function RentPage() {
     dispatch(fetchProducts());
   }, [dispatch]);
 
+  useEffect(() => {
+    if (products.length > 0) {
+      setCurrentIndex(Math.floor(products.length / 2)); // Start with the center product
+    }
+  }, [products]);
+
   const handleNext = () => {
-    const maxIndex = Math.max(0, products.length - screenConfig.visibleProducts);
-    setCurrentIndex(prev => (prev >= maxIndex ? 0 : prev + 1));
+    // setCurrentIndex((prev) => (prev + 1) % products.length);
+    if (currentIndex < products.length + screenConfig.visibleProducts - 1) {
+      setCurrentIndex(currentIndex + 1);
+    } else {
+      // Reset to start after finishing one loop (seamless)
+      setTimeout(() => {
+        setCurrentIndex(screenConfig.visibleProducts);
+      }, 300); // Match the transition duration
+    }
   };
 
   const handlePrev = () => {
-    const maxIndex = Math.max(0, products.length - screenConfig.visibleProducts);
-    setCurrentIndex(prev => (prev <= 0 ? maxIndex : prev - 1));
+    // setCurrentIndex((prev) =>
+    //   prev === 0 ? products.length - 1 : prev - 1
+    // );
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    } else {
+      // Reset to end of first loop
+      setTimeout(() => {
+        setCurrentIndex(products.length - screenConfig.visibleProducts);
+      }, 300); // Match the transition duration
+    }
   };
 
   const handleSearch = (e) => {
     e.preventDefault();
     if (category === "" && type === "" && location === "" && tenure === "") {
-      alert("Please fill at least one filter!");
+      errorToast("Please fill at least one filter!");
+      setFilterData([]);
       return;
     }
     const filter = { location, category, type, tenure };
@@ -127,17 +165,17 @@ export default function RentPage() {
           maxWidth: `${screenConfig.slideWidth}%`,
           transition: 'transform 0.3s ease'
         }}
-        className="px-2 sm:px-3 md:px-4"
+        className="px-2 sm:px-3 md:px-4 justify-center"
       >
         <ProductCard 
           product={product}
-          isInCart={Array.isArray(cartItem) && cartItem.some((item) => item._id === product._id)}
+          isInCart={Array.isArray(cartItem) && cartItem.some((item) => item.productId._id === product._id)}
         />
       </div>
     ));
-
+    // console.log("cartItem",cartItem);
   return (
-    <div className="font-inter min-h-screen bg-white">
+    <div className="font-inter min-h-screen bg-white relative font-mulish">
       {/* Header Section */}
       <div 
         className="relative text-center bg-cover bg-center py-[6rem] sm:py-6 md:py-24 lg:py-28 px-3 sm:px-4 md:px-6 lg:px-8"
@@ -151,9 +189,9 @@ export default function RentPage() {
         </p>
         <button
           onClick={() => setShowQuiz(true)}
-          className="mt-3 sm:mt-4 bg-black text-green-400 py-1.5 sm:py-2 md:py-3 px-3 sm:px-4 md:px-6 text-xs sm:text-sm md:text-base font-bold hover:bg-gray-800 transition"
+          className="mt-3 sm:mt-4 bg-black py-1.5 sm:py-2 md:py-3 px-3 sm:px-4 md:px-6 text-xs sm:text-sm md:text-base font-bold hover:bg-gray-800 transition "
         >
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
+          <span className=" text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">
             Rent Now
           </span>
         </button>
@@ -173,26 +211,31 @@ export default function RentPage() {
         
         {isMobileMenuOpen && (
           <form onSubmit={handleSearch} className="mt-3 space-y-3">
-            {[
-              { value: location, setter: setLocation, placeholder: "Select Location", options: locationNames },
-              { value: category, setter: setCategory, placeholder: "Select Category", options: [] },
-              { value: type, setter: setType, placeholder: "Select Type", options: [] },
-              { value: tenure, setter: setTenure, placeholder: "Select Tenure", options: [] },
-            ].map((field, index) => (
-              <select
-                key={index}
-                value={field.value}
-                onChange={(e) => field.setter(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-400 focus:border-transparent bg-white"
-              >
-                <option value="">{field.placeholder}</option>
-                {field.options.map((item, idx) => (
-                  <option key={idx} value={typeof item === 'string' ? item : item.value}>
-                    {typeof item === 'string' ? item : item.label}
-                  </option>
-                ))}
-              </select>
-            ))}
+            { [
+                { value: location, setter: setLocation, placeholder: "Select Location", options: locationNames },
+                { value: category, setter: setCategory, placeholder: "Select Category", options: categories },
+                { value: type, setter: setType, placeholder: "Select Type", options: typeofServiceProvide },
+                { value: tenure, setter: setTenure, placeholder: "Select Tenure", options: tenureOptions },
+              ].map((field, index) => (
+                <div key={index} className="w-full">
+                  {/* Input Field with Datalist */}
+                  <input
+                    list={`datalist-${index}`} // Unique `list` ID for each field
+                    value={field.value}
+                    onChange={(e) => field.setter(e.target.value)}
+                    placeholder={field.placeholder}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-400 focus:border-transparent bg-white"
+                  />
+                  {/* Datalist for Suggestions */}
+                  <datalist id={`datalist-${index}`}>
+                    {field.options.map((item, idx) => (
+                      <option key={idx} value={typeof item === 'string' ? item : item.value}>
+                        {typeof item === 'string' ? item : item.label}
+                      </option>
+                    ))}
+                  </datalist>
+                </div>
+              ))}
             <button
               type="submit"
               className="w-full bg-green-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-600 text-sm transition-colors duration-200"
@@ -210,26 +253,33 @@ export default function RentPage() {
           className="max-w-7xl mx-auto flex  flex-wrap md:flex-nowrap gap-3 sm:gap-4 items-stretch"
         >
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 flex-grow">
-            {[
+            {
+              [
               { value: location, setter: setLocation, placeholder: "Select Location", options: locationNames },
-              { value: category, setter: setCategory, placeholder: "Select Category", options: [] },
-              { value: type, setter: setType, placeholder: "Select Type", options: [] },
-              { value: tenure, setter: setTenure, placeholder: "Select Tenure", options: [] },
-            ].map((field, index) => (
-              <select
-                key={index}
-                value={field.value}
-                onChange={(e) => field.setter(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm md:text-base focus:ring-2 focus:ring-blue-400 focus:border-transparent bg-white"
-              >
-                <option value="">{field.placeholder}</option>
-                {field.options.map((item, idx) => (
-                  <option key={idx} value={typeof item === 'string' ? item : item.value}>
-                    {typeof item === 'string' ? item : item.label}
-                  </option>
-                ))}
-              </select>
-            ))}
+              { value: category, setter: setCategory, placeholder: "Select Category", options: categories },
+              { value: type, setter: setType, placeholder: "Select Type", options: typeofServiceProvide },
+              { value: tenure, setter: setTenure, placeholder: "Select Tenure", options:tenureOptions },
+              ].map((field, index) => (
+                <div key={index} className="w-full">
+                  {/* Input Field with Datalist */}
+                  <input
+                    list={`datalist-${index}`} // Unique `list` ID for each field
+                    value={field.value}
+                    onChange={(e) => field.setter(e.target.value)}
+                    placeholder={field.placeholder}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm md:text-base focus:ring-2 focus:ring-blue-400 focus:border-transparent bg-white"
+                  />
+                  {/* Datalist for Suggestions */}
+                  <datalist id={`datalist-${index}`}>
+                    {field.options.map((item, idx) => (
+                      <option key={idx} value={typeof item === 'string' ? item : item.value}>
+                        {typeof item === 'string' ? item : item.label}
+                      </option>
+                    ))}
+                  </datalist>
+                </div>
+              ))
+            }
           </div>
           <button
             type="submit"
@@ -241,12 +291,13 @@ export default function RentPage() {
       </div>
 
       {/* Filter Results */}
+      <div className="bg-gray-100">
       {filterData.length > 0 && (
-        <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ${screenConfig.gapSize} ${screenConfig.padding}`}>
+        <div className={`grid  grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 lg:max-w-7xl md:max-w-[38rem] lg:mx-auto md:mb-4 ${screenConfig.gapSize} ${screenConfig.padding} md:max-h-[680px] overflow-y-auto hide-scrollbar  md:mx-auto xs:max-w-[16rem] mx-auto xs:max-h-[650px] scroll-smooth`}>
           {renderProductCards(filterData)}
         </div>
       )}
-
+      </div>
       {/* Featured Image Section */}
       <div className="w-full px-3 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8 bg-white">
         <div className="max-w-7xl mx-auto rounded-lg overflow-hidden">
@@ -259,86 +310,119 @@ export default function RentPage() {
       </div>
 
       {/* Product Slider */}
-<div className="bg-gray-50 py-4 sm:py-6 md:py-8">
-  <h2 className="text-base sm:text-lg md:text-2xl font-bold text-center mb-4">
-    Latest Arrivals
-  </h2>
-  
-  {/* Outer Container for Padding and Centering */}
-  <div className="px-4 sm:px-8 md:px-12 lg:px-16">
-    {/* Carousel Container - Centered with improved responsive widths */}
-    <div className="max-w-[95%] sm:max-w-[85%] md:max-w-[80%] lg:max-w-[75%] mx-auto relative">
-      {/* Navigation Buttons with Adjusted Spacing */}
-      <button
-        className="hidden sm:block absolute -left-12 lg:-left-16 top-1/2 -translate-y-1/2 z-10 bg-gradient-to-r from-blue-400 to-purple-500 hover:bg-gray-400 text-black rounded-full w-8 h-8 flex items-center justify-center transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400"
-        onClick={handlePrev}
-        aria-label="Previous slide"
-      >
-        &#8249;
-      </button>
-
-      {/* Main Carousel Viewport */}
-      <div className="overflow-hidden">
-        <div 
-          className="flex transition-all duration-300 ease-in-out"
-          style={{
-            transform: `translateX(-${currentIndex * screenConfig.slideWidth}%)`,
-          }}
-        >
-          {/* Updated Product Cards Container */}
-          {products.map((product) => (
-            <div 
-              key={product.id} 
-              style={{ 
-                flex: `0 0 ${screenConfig.slideWidth}%`,
-                maxWidth: `${screenConfig.slideWidth}%`,
-                transition: 'transform 0.3s ease'
-              }}
-              className="px-2 sm:px-3 md:px-4 flex justify-center"
+      <div className="bg-gray-50 py-4 sm:py-6 md:py-8">
+        <h2 className="text-base sm:text-lg md:text-2xl font-bold text-center mb-4">
+          Latest Arrivals
+        </h2>
+        
+        {/* Outer Container for Padding and Centering */}
+        <div className="px-4 sm:px-8 md:px-12 lg:px-16">
+          {/* Carousel Container - Centered with improved responsive widths */}
+          <div className="max-w-[95%] sm:max-w-[85%] md:max-w-[80%] lg:max-w-[60%] mx-auto relative">
+            {/* Navigation Buttons with Adjusted Spacing */}
+            {/* focus:outline-none focus:ring-2 focus:ring-gray-400 hover:bg-gray-400*/}
+            <button
+              className="hidden sm:block absolute -left-12 lg:-left-[11rem] top-[50%] -translate-y-1/2 z-10  text-black rounded-full w-[7rem] h-[7rem] flex items-center justify-center transition-colors duration-200 "
+              onClick={handlePrev}
+              aria-label="Previous slide"
             >
-              <ProductCard 
-                product={product}
-                isInCart={cartItem.some((item) => item._id === product._id)}
-              />
+              <span className="text-[4rem] text-black"
+              style={{
+                lineHeight: '1', // Ensures the line height matches the font size
+              }}
+              >&#8249;</span>
+            </button>
+
+            {/* Main Carousel Viewport */}
+            <div className="overflow-hidden pt-[60px] pb-[40px]">
+              <div 
+                className="flex transition-all duration-300 ease-in-out"
+                style={{
+                  transform: `translateX(-${currentIndex * screenConfig.slideWidth}%)`,
+                }}
+              >
+                {/* Updated Product Cards Container */}
+                {clonedProduct.map((product,index) => {
+                  let position = (index - 1 - currentIndex + products.length) % products.length;
+
+                  // Shift the position to handle left-side wrapping
+                  if (position > Math.floor(screenConfig.visibleProducts / 2)) {
+                    position -= products.length;
+                  }
+                  // Debugging
+                  //console.log("Index:", index, "Position:", position, "CurrentIndex:", currentIndex);
+
+                  // Determine the scale and opacity based on the position
+                  const scale = position === 0 ? 1.2 : Math.abs(position) === 1 ? 0.9 : 0.8;
+                  const opacity = position === 0 ? 1 : Math.abs(position) === 1 ? 0.8 : 0.5;
+
+                  // Apply conditional styles for screens >768px
+                  const conditionalStyles =
+                  window.innerWidth > 768
+                    ? {
+                        transform: `scale(${scale})`,
+                        opacity: `${opacity}`,
+                        maxWidth: `${screenConfig.slideWidth}%`,
+                      }
+                    : {};
+                  return <div 
+                    key={product.id} 
+                    style={{ 
+                      flex: `0 0 ${screenConfig.slideWidth}%`,
+                      maxWidth: `${screenConfig.slideWidth}%`,
+                      ...conditionalStyles, // Spread conditional styles here
+                      transition: 'transform 0.3s ease, opacity 0.3s ease'
+                    }}
+                    className="px-2 sm:px-3 md:px-4 flex justify-center"
+                  >
+                    <ProductCard 
+                      product={product}
+                      isInCart={(cartItem.some((item) => (item.productId._id || item._id) === product._id))}
+                    />
+                  </div>
+                })}
+              </div>
             </div>
-          ))}
+                {/* focus:outline-none focus:ring-2 focus:ring-gray-400 hover:bg-gray-400*/}
+            <button
+            className="hidden sm:block absolute -right-12 lg:-right-[11rem] top-[50%] -translate-y-1/2 z-10  text-black rounded-full w-[7rem] h-[7rem] flex items-center justify-center transition-colors duration-200 "
+            onClick={handleNext}
+            aria-label="Next slide"
+          >
+            <span className="text-[4rem] text-black"
+            style={{
+              lineHeight: '1', // Ensures the line height matches the font size
+            }}
+            >&rsaquo;</span> {/* Properly aligned arrow */}
+          </button>
+
+          </div>
+        </div>
+
+        {/* Mobile-specific Controls */}
+        <div className="sm:hidden">
+          {/* Touch Swipe Instructions */}
+          <p className="text-center text-sm text-gray-500 mt-4">
+            Swipe left or right to browse products
+          </p>
+
+          {/* Pagination Dots */}
+          <div className="flex justify-center mt-4 gap-2">
+            {Array.from({ length: Math.ceil(products.length / screenConfig.visibleProducts) }).map((_, index) => (
+              <button
+                key={index}
+                className={`h-2 rounded-full transition-all ${
+                  Math.floor(currentIndex / screenConfig.visibleProducts) === index 
+                    ? 'w-4 bg-blue-500' 
+                    : 'w-2 bg-gray-300'
+                }`}
+                onClick={() => setCurrentIndex(index * screenConfig.visibleProducts)}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
+          </div>
         </div>
       </div>
-
-      <button
-        className="hidden sm:block absolute -right-12 lg:-right-16 top-1/2 -translate-y-1/2 z-10 bg-gradient-to-r from-blue-400 to-purple-500 hover:bg-gray-400 text-black rounded-full w-8 h-8 flex items-center justify-center transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400"
-        onClick={handleNext}
-        aria-label="Next slide"
-      >
-        &#8250;
-      </button>
-    </div>
-  </div>
-
-  {/* Mobile-specific Controls */}
-  <div className="sm:hidden">
-    {/* Touch Swipe Instructions */}
-    <p className="text-center text-sm text-gray-500 mt-4">
-      Swipe left or right to browse products
-    </p>
-
-    {/* Pagination Dots */}
-    <div className="flex justify-center mt-4 gap-2">
-      {Array.from({ length: Math.ceil(products.length / screenConfig.visibleProducts) }).map((_, index) => (
-        <button
-          key={index}
-          className={`h-2 rounded-full transition-all ${
-            Math.floor(currentIndex / screenConfig.visibleProducts) === index 
-              ? 'w-4 bg-blue-500' 
-              : 'w-2 bg-gray-300'
-          }`}
-          onClick={() => setCurrentIndex(index * screenConfig.visibleProducts)}
-          aria-label={`Go to slide ${index + 1}`}
-        />
-      ))}
-    </div>
-  </div>
-</div>
 
       {/* Quiz Popup */}
       {showQuiz && (
@@ -351,10 +435,21 @@ export default function RentPage() {
             >
               &times;
             </button>
-            <FilterProduct handleCloseQuiz={() => setShowQuiz(false)} />
+            <FilterProduct handleCloseQuiz={() => setShowQuiz(false)}  />
           </div>
         </div>
       )}
+      {((cartItem && cartItem.length > 0) || (cartNItem && cartNItem.length > 0)) ? (
+          <a className="tk-btn fixed bottom-10 right-0 flex justify-end mr-[20px]" target="_blank" href="#">
+            <div className="flex  flex-end w-[200px]">
+              <h3 className="font-bold mx-2">
+                <span className="text-3xl">GO</span> <br /> <span className="text-2xl text-gray">TO</span> <br /> <span className="text-xl  bg: bg-gradient-to-r from-blue-400 to-purple-500">CART</span>
+              </h3>
+              <img src={normalImages.Cart} alt="Cart Icon" className="cart-icon" style={{ width: "6rem", height: "6rem" }} /> {/* Make sure CART is a valid variable or component */}
+            </div>
+          </a>
+        ) : null
+      }
     </div>
   );
 }

@@ -3,10 +3,12 @@ import { normalImages } from "../ImagePath";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle, faPenNib } from "@fortawesome/free-solid-svg-icons";
 import { faEye, faSun } from "@fortawesome/free-regular-svg-icons";
+import { useNavigate } from "react-router-dom";
 
 const CustomerSection = () => {
+  const Navigate = useNavigate();
   return (
-    <div className="bg-gray-100 py-10 pb-20 font-Inter">
+    <div className="bg-gray-100 py-10 pb-20 font-mulish">
       <div className="max-w-6xl lg:mx-auto mx-auto space-y-16 ml-4">
         {/* Top Section */}
         <div className="flex flex-col md:flex-row items-center gap-8 mr-4">
@@ -41,8 +43,8 @@ const CustomerSection = () => {
                 Work Order processed at our hub.
               </li>
             </ul>
-            <button className="bg-black text-green-400 font-bold py-2 px-6 rounded-full hover:bg-gray-800 transition">
-              Rent now
+            <button className="bg-black font-bold py-2 px-6 hover:bg-gray-800 transition">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600" onClick={()=>{Navigate('/rent')}}>Rent now</span>
             </button>
           </div>
         </div>
@@ -54,7 +56,7 @@ const CustomerSection = () => {
               We connect our customers with expert security advisors to help them design tailored security solutions
             </h2>
             <ul className="space-y-4">
-              <li className="flex items-center bg-blue-900 text-white p-4 rounded-md shadow-md">
+              <li className="flex items-center bg-gradient-to-r from-blue-400 to-purple-600 text-white p-4 rounded-md shadow-md">
                 <FontAwesomeIcon icon={faPenNib} className="mr-4" />
                 We connect our customers with Security Experts.
               </li>

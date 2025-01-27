@@ -6,6 +6,7 @@ import "../styles/LoginPage.scss";
 import {normalImages} from "../ImagePath";
 import { login } from "../redux/authSlice";
 import { successToast, errorToast, infoToast } from "../DecryptoAndOther/ToastUpdate";
+import { updateCartItem } from "../redux/cartSlice";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -96,9 +97,15 @@ const LoginPage = () => {
         } else {
           successToast("Login successful!");
         }
-        console.log("Login successful! after",user);
+        // console.log("Login successful! after",user);
         // Dispatch user data to the store
         dispatch(login(user));
+        // set the cartItems to the store
+        if(user.cart.length>0){
+          user.cart.map((item) => {
+            dispatch(updateCartItem(item));
+          });
+        }
         // Navigate based on user role
         // if (user.role === "SuperAdmin" || user.role === "SaleAdmin" || user.role==='ProductAdmin' || user.role==='SaleManager') {
         //   navigate("/admin");
@@ -141,7 +148,8 @@ const LoginPage = () => {
 
   // Handle Google login
   const handleGoogleLogin = () => {
-    window.open("http://localhost:5000/auth/google", "_self");
+    const newUserParam = newUser ? 'true' : 'false';
+    window.open(`http://localhost:5000/auth/google?newUser=${newUserParam}`, "_self");
   };
   // console.log(newUser);
   return (
@@ -218,7 +226,7 @@ const LoginPage = () => {
             className="w-full px-4 py-3 border border-gray-200 rounded flex items-center justify-center space-x-3 hover:bg-gray-50 transition"
           >
             <img src={normalImages.google} alt="Google" className="w-6 h-6" />
-            <span className="text-sm">Login with Google</span>
+            <span className="text-sm">{!newUser?"Login with Google":"Register with Google"}</span>
           </button>
         </div>
 

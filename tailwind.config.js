@@ -12,6 +12,9 @@ module.exports = {
         xxs: '375px',
         xxxs: '320px',
       },
+      boxShadow: {
+        "specific-lg": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -14px rgb(0 0 0 / 0.1)", // Custom shadow
+      },
     },
   },
   plugins: [],

@@ -1,59 +1,54 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { act } from "react";
 
-// Helper functions for localStorage
 const saveCartToLocalStorage = (cart) => {
+  console.log("cart",cart);
   localStorage.setItem('cart', JSON.stringify(cart));
+};
+const saveNCartToLocalStorage = (cart) => {
+  console.log("cart",cart);
+  localStorage.setItem('cartNuser', JSON.stringify(cart));
 };
 
 const loadCartFromLocalStorage = () => {
   const cart = localStorage.getItem('cart');
-  console.log('cart', cart);
+  return cart ? JSON.parse(cart) : [];
+};
+
+const loadNCartFromLocalStorage = () => {
+  const cart = localStorage.getItem('cartNuser');
   return cart ? JSON.parse(cart) : [];
 };
 
 const initialState = {
   totalCartCount: 0,
+  totalNCartCount: 0,
   cartItem: loadCartFromLocalStorage(),
+  cartNItem: loadNCartFromLocalStorage(),
   sellCartItem: [],
   cartMode: 'rent',
+  itemDelete: false,
   currentContainer: 'CartItem',
 };
 
-// Async thunk to validate cart items
-export const validateCart = createAsyncThunk(
-  'cart/validateCart',
-  async (cartItems) => {
-    const response = await fetch('http://localhost:5000/product/validate-cart', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ cartItems }),
-    });
-    return await response.json();
-  }
-);
-
-// Async thunk to sync cart with server
 export const syncCartWithServer = createAsyncThunk(
   'cart/syncCartWithServer',
-  async ({ userId, cartItems }) => {
-    // console.log(cartItems);
-    try {
-      const response = await fetch('http://localhost:5000/user/sync-cart', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, cartItems }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to sync cart with server');
+  async ({ userId, cartItems,delta }, { getState }) => {
+    const { itemDelete } = getState().cart;
+    console.log(userId, cartItems,delta);
+    if (!itemDelete) {
+      try {
+        const response = await fetch('http://localhost:5000/user/sync-cart', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId, cartItems,delta }),
+        });
+        if (!response.ok) throw new Error('Failed to sync cart with server');
+        const data = await response.json();
+        return data.cart;
+      } catch (error) {
+        console.error('Error syncing cart:', error);
+        throw error;
       }
-
-      const data = await response.json();
-      return data.cart; // Return updated cart from the server
-    } catch (error) {
-      console.error('Error syncing cart:', error);
-      throw error;
     }
   }
 );
@@ -62,98 +57,94 @@ const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
-    updateCartCount: (state, action) => {
-      state.totalCartCount = action.payload;
-    },
-    updateCartMode: (state, action) => {
-      state.cartMode = action.payload;
-    },
     updateCartItem: (state, action) => {
-      const updatedItem = { ...action.payload, addedAt: new Date().toISOString() };
-      const existingItemIndex = state.cartItem.findIndex(item => item._id === updatedItem._id);
-  
-      if (existingItemIndex !== -1) {
-          state.cartItem[existingItemIndex] = updatedItem;
-      } else {
-          state.cartItem.push(updatedItem);
-      }
-  
-      state.totalCartCount = state.cartItem.length;
-      saveCartToLocalStorage(state.cartItem);
-  },  
-    updateCurrentContainer: (state, action) => {
-      state.currentContainer = action.payload; // Corrected spelling
-    },
-    updateSellCartCount: (state, action) => {
       const updatedItem = action.payload;
-      const existingItemIndex = state.sellCartItem.findIndex(item => item._id === updatedItem._id);
-
-      if (existingItemIndex !== -1) {
-        state.sellCartItem[existingItemIndex] = updatedItem;
-      } else {
-        state.sellCartItem.push(updatedItem);
+      if(updatedItem.mohit){
+        const existingItemIndex = state.cartNItem.length>0 ?state.cartNItem.findIndex(item => item.productId._id === updatedItem.productId._id): -1;
+        if (existingItemIndex == -1) {
+          state.cartNItem.push({ ...updatedItem });
+        }
+        state.totalNCartCount = state.cartNItem.length;
+        saveNCartToLocalStorage(state.cartNItem);
+      }
+      if(updatedItem.user){
+        state.cartItem = action.payload.cart;
+      }
+    },
+    // updateCartItemsONRefresh: (state, action) => {
+    //   state.cartItem = action.payload;
+    //   state.totalCartCount = action.payload.length;
+    //   saveCartToLocalStorage(state.cartItem);
+    // },
+    updateQuantity: (state, action) => {
+      const { id, quantity, user } = action.payload;
+      if(user){
+        const existingItemIndex = state.cartItem.findIndex(item => item._id === id);
+        if(existingItemIndex !==-1){
+          if(existingItemIndex.quantity === 1 && quantity === -1){
+            // do nothing
+          }
+          state.cartItem[existingItemIndex].quantity += quantity;
+          saveCartToLocalStorage(state.cartItem);
+        }
+      }else{
+        const existingNItemIndex = state.cartNItem.findIndex(item => item.productId._id === id);
+        if(existingNItemIndex !==-1){
+          if(existingNItemIndex.quantity === 1 && quantity === -1){
+            // do nothing
+          }
+          state.cartNItem[existingNItemIndex].quantity += quantity;
+          saveNCartToLocalStorage(state.cartNItem);
+        }
+        
       }
     },
     removeCartItem: (state, action) => {
-      const currentID = action.payload._id;
-      state.cartItem = state.cartItem.filter(item => item._id !== currentID);
-      state.totalCartCount = state.cartItem.length;
-      saveCartToLocalStorage(state.cartItem);
-    },
-    removeOldCartItems: (state) => {
-      const now = Date.now();
-      const THIRTY_DAYS = 1000 * 60 * 60 * 24 * 30;
-      const expiredItems = state.cartItem.filter(
-        (item) => now - new Date(item.addedAt).getTime() > THIRTY_DAYS
-      );
-
-      if (expiredItems.length > 0) {
-        console.log(`${expiredItems.length} items removed due to expiry`);
+      let currentID;
+      if(action.payload.user){  
+        currentID = action.payload._id;
+        state.cartItem = state.cartItem.filter(item => item.productId._id != currentID);
+        state.totalCartCount = state.cartItem.length;
+        saveCartToLocalStorage(state.cartItem);
+      }else{
+        currentID = action.payload.product._id;
+        state.cartNItem = state.cartNItem.filter(item => item.productId._id !== currentID);
+        state.totalNCartCount = state.cartNItem.length;
+        saveNCartToLocalStorage(state.cartNItem);
       }
-
-      state.cartItem = state.cartItem.filter(
-        (item) => now - new Date(item.addedAt).getTime() <= THIRTY_DAYS
-      );
-      state.totalCartCount = state.cartItem.length;
-      saveCartToLocalStorage(state.cartItem);
     },
     removeSellCartItem: (state, action) => {
       const currentID = action.payload.id;
       state.sellCartItem = state.sellCartItem.filter(item => item.id !== currentID);
     },
-
-
+    updateCurrentContainer: (state, action) => {
+      state.currentContainer = action.payload;
+    },
+    updateCartMode:(state,action)=>{
+      state.cartMode = action.payload;
+    },
   },
   extraReducers: (builder) => {
-    builder.addCase(validateCart.fulfilled, (state, action) => {
-      if(action.payload.error){
-        state.cartItem = [];
-        state.totalCartCount =0;
-        saveCartToLocalStorage([]);
-      }
-      state.cartItem = action.payload.validatedItems;
-      state.totalCartCount = action.payload.validatedItems.length;
-      console.log(action.payload);
-      saveCartToLocalStorage(state.cartItem);
-    });
     builder.addCase(syncCartWithServer.fulfilled, (state, action) => {
-      console.log(action.payload);
-      state.cartItem = action.payload; // Clear Redux cartItem
-      state.totalCartCount = action.payload.length;
-      saveCartToLocalStorage(state.cartItem); // Clear localStorage
+      if (!state.itemDelete) {
+        state.cartItem = action.payload;
+        state.totalCartCount = action.payload.length;
+      } else {
+        state.itemDelete = false;
+      }
+      saveCartToLocalStorage(state.cartItem);
     });
   }
 });
 
 export const {
-  updateCartCount,
-  updateCartMode,
   updateCartItem,
-  updateCurrentContainer,
-  updateSellCartCount,
   removeCartItem,
-  removeOldCartItems,
   removeSellCartItem,
+  updateCurrentContainer,
+  updateCartMode,
+  updateQuantity,
+  // updateCartItemsONRefresh
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

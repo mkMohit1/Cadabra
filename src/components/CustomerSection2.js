@@ -69,7 +69,7 @@ const CustomerSection2 = () => {
   ];
 
   return (
-    <div className="customer-section flex flex-col items-center justify-center py-8 px-4 bg-gray-100">
+    <div className="customer-section flex flex-col items-center justify-center font-mulish py-8 px-4 bg-gray-100">
       <div className="content-container flex flex-col md:flex-row md:gap-8 max-w-7xl">
         <div
           ref={imageSectionRef}

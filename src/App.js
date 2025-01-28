@@ -29,7 +29,7 @@ function App() {
    useEffect(()=>{
       // Load cart from localStorage
       const storedCart = localStorage.getItem("cart");
-      console.log("storedCart", storedCart);
+      // console.log("storedCart", storedCart);
       // if (storedCart) {
       //   const cartItems = JSON.parse(storedCart);
       //   cartItems.forEach((item) => {
@@ -57,7 +57,7 @@ function App() {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await fetch("https://server-lmhc.onrender.com/blogs");
+        const response = await fetch(`${process.env.Back_Url}/blogs`);
         const blogsData = await response.json();
         setBlogs(blogsData);
       } catch (error) {

@@ -37,7 +37,7 @@ const SubscribeSection = () => {
       }
   
       try {
-        const response = await fetch("http://localhost:5000/subscribe", {
+        const response = await fetch(`${process.env.Back_Url}/subscribe`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

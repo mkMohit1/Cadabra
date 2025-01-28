@@ -24,7 +24,7 @@ const ProductCard = ({ product, isInCart }) => {
 
     const deleteCartItem = async (userId, productId) => {
       try {
-        const response = await fetch('http://localhost:5000/cart/item', {
+        const response = await fetch(`${process.env.Back_Url}/cart/item`, {
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ userId, productId }),
@@ -33,6 +33,7 @@ const ProductCard = ({ product, isInCart }) => {
         if (response.ok) {
           //successToast('Cart item deleted successfully');
           dispatch(removeCartItem({ _id: productId, user }));
+          console.log(productId);
         } else {
           errorToast('Error deleting cart item');
         }

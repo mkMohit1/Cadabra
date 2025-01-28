@@ -36,17 +36,17 @@ const AdminPage = () => {
 
   const fetchAdmins = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/admin/getAdmins/${currentUser.mobileNumber}`);
+      const response = await fetch(`${process.env.Back_Url}/admin/getAdmins/${currentUser.mobileNumber}`);
       if (!response.ok) {
         throw new Error('Failed to fetch admins');
       }
       const data = await response.json();
-      console.log(data);
+      console.log("mnk",data);
       // Handle related data based on role
       let adminList = [];
       switch (currentUser.role) {
         case 'SuperAdmin':
-          adminList = [...data.saleAdmin || [], ...data.productAdmin || []];
+          adminList = [...data.saleAdmins || [], ...data.productAdmins || []];
           break;
         case 'SaleAdmin':
           adminList = data.saleManager || [];
@@ -58,7 +58,7 @@ const AdminPage = () => {
           adminList = [];
       }
   
-      setAdmins(adminList);
+      setAdmins(adminList.sort((a, b) => new Date(a.updatedAt) - new Date(b.updatedAt)));
       console.log('Admins fetched:', adminList);
     } catch (error) {
       console.error('Error fetching admins:', error);
@@ -100,7 +100,7 @@ const AdminPage = () => {
     };
   
     try {
-      const response = await fetch('http://localhost:5000/admin/addAdmin', {
+      const response = await fetch(`${process.env.Back_Url}/admin/addAdmin`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -128,7 +128,7 @@ const AdminPage = () => {
 
   const handleDelete = async (id, type) => {
     try {
-      const response = await fetch(`http://localhost:5000/admin/deleteAdmin/${type}/${id}`, {
+      const response = await fetch(`${process.env.Back_Url}/admin/deleteAdmin/${type}/${id}`, {
         method: 'DELETE',
       });
 
@@ -151,7 +151,7 @@ const AdminPage = () => {
       name: admin.name,
       email: admin.email,
       mobileNumber: admin.mobileNumber,
-      type: admin.type
+      type: admin.role
     });
     setShowUpdateModal(true);
   };
@@ -166,7 +166,7 @@ const AdminPage = () => {
   const handleUpdateSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:5000/admin/updateAdmin/${selectedAdmin._id}`, {
+      const response = await fetch(`${process.env.Back_Url}/admin/updateAdmin/${selectedAdmin._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -203,7 +203,7 @@ const AdminPage = () => {
 
   const confirmDeleteAdmin = async () => {
     if (adminToDelete) {
-      await handleDelete(adminToDelete._id, adminToDelete.type);
+      await handleDelete(adminToDelete._id, adminToDelete.role);
       setShowDeleteModal(false);
     }
   };
@@ -249,7 +249,7 @@ const AdminPage = () => {
                 <td>{admin.name}</td>
                 <td>{admin.mobileNumber}</td>
                 <td>{admin.email}</td>
-                <td>{admin.type}</td>
+                <td>{admin.role}</td>
                 <td>
                   {admin.name === 'Default Product Admin' || admin.name === 'Default Sale Admin' ? null :
                     <div className="action-buttons">

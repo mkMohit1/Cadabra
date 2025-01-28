@@ -38,7 +38,7 @@ const AddressSelector = () => {
     const fetchAddresses = async()=>{
       if (!user || !user._id) return; // Ensure user is available
       try {
-        const response = await fetch(`http://localhost:5000/addresses/${user._id}`);
+        const response = await fetch(`${process.env.Back_Url}/addresses/${user._id}`);
         const data = await response.json();
 
         if (response.ok) {
@@ -69,8 +69,8 @@ const AddressSelector = () => {
 
     if (filteredAddress.street && filteredAddress.mobileNumber) {
       const endpoint = editingAddress
-        ? `http://localhost:5000/commonUser/updateAddress/${editingAddress._id}`
-        : 'http://localhost:5000/commonUser/addNewAddress';
+        ? `${process.env.Back_Url}/commonUser/updateAddress/${editingAddress._id}`
+        :  `${process.env.Back_Url}/commonUser/addNewAddress`;
       const method = editingAddress ? 'PUT' : 'POST';
 
       try {
@@ -115,7 +115,7 @@ const AddressSelector = () => {
   // Remove an address
   const handleRemoveAddress = async (addressId) => {
     try {
-      const response = await fetch(`http://localhost:5000/addresses/${addressId}`, {
+      const response = await fetch(`${process.env.Back_Url}/addresses/${addressId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

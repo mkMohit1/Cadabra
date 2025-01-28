@@ -54,7 +54,7 @@ const CreateProduct = ({ product, setShowCreateForm, fetchProducts, userID }) =>
 
     try {
       const method = product ? 'PUT' : 'POST';
-      const url = product ? `http://localhost:5000/admin/updateProduct/${product._id}` : 'http://localhost:5000/admin/addProduct';
+      const url = product ? `${process.env.Back_Url}/admin/updateProduct/${product._id}` : `${process.env.Back_Url}/admin/addProduct`;
       const response = await fetch(url, { method, body: formDataToSend });
 
       if (!response.ok) {

@@ -50,7 +50,7 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const [selectedCity, setSelectedCity] = useState("Delhi");
   const serviceProvideIn = useSelector((state) => state.product.serviceProvideIn);
-  console.log(serviceProvideIn);
+  // console.log(serviceProvideIn);
   cartCount = user?cartCount:totalNCartCount;
 
   useEffect(() => {
@@ -143,7 +143,7 @@ const Navbar = () => {
   // Handle logout
   const handleLogout = async () => {
     try {
-      const response = await fetch('http://localhost:5000/auth/logout', {
+      const response = await fetch(`${process.env.Back_Url}/auth/logout`, {
         method: 'GET',
         credentials: 'include', // Ensure cookies are sent
       });

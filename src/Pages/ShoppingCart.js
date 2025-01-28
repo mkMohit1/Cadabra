@@ -75,7 +75,7 @@ const ShoppingCart = () => {
     }
   }, [cartItem]);
 
-  console.log("currentCart", currentCart);
+  // console.log("currentCart", currentCart);
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-8">
       {currentContainer === 'CartItem' && (

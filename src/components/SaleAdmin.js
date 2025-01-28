@@ -23,11 +23,11 @@ const SaleAdmin = () => {
   };
 
   // Filter admins based on search
-  const filteredAdmins = admins && admins.filter((admin) =>
+  const filteredAdmins = admins && admins.length>0 && admins.filter((admin) =>
     (admin.name && admin.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
     (admin.email && admin.email.toLowerCase().includes(searchTerm.toLowerCase())) ||
     (admin.mobileNumber && admin.mobileNumber.includes(searchTerm)) ||
-    (admin.type && admin.type.toLowerCase().includes(searchTerm.toLowerCase()))
+    (admin.role && admin.role.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   // Reset search field
@@ -50,7 +50,7 @@ const SaleAdmin = () => {
     // If editing an admin, update them
     if (editingAdmin) {
       try {
-        const response = await fetch(`http://localhost:5000/admin/updateAdmin/${editingAdmin._id}`, {
+        const response = await fetch(`${process.env.Back_Url}/admin/updateAdmin/${editingAdmin._id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -87,7 +87,7 @@ const SaleAdmin = () => {
     } else {
       // Add new admin
       try {
-        const response = await fetch('http://localhost:5000/admin/addAdmin', {
+        const response = await fetch(`${process.env.Back_Url}/admin/addAdmin`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -124,7 +124,7 @@ const SaleAdmin = () => {
   const handleDelete = async (id, type) => {
     try {
       console.log(id, type);
-      const response = await fetch(`https://server-lmhc.onrender.com/admin/deleteAdmin/${type}/${id}`, {
+      const response = await fetch(`${process.env.Back_Url}/admin/deleteAdmin/${type}/${id}`, {
         method: 'DELETE',
       });
       if (!response.ok) {
@@ -145,13 +145,14 @@ const SaleAdmin = () => {
   useEffect(() => {
     const fetchAdmins = async () => {
       try {
-        const response = await fetch(`https://server-lmhc.onrender.com/admin/getAdmins/${currentUser.mobileNumber}`);
+        const response = await fetch(`${process.env.Back_Url}/admin/getAdmins/${currentUser.mobileNumber}`);
         if (!response.ok) {
           errorToast('Failed to fetch managers');
           return;
         }
         const data = await response.json();
-        setAdmins(data);
+        console.log("mknsds", data);
+        setAdmins(data.saleManagers);
       } catch (error) {
         console.error('Failed to fetch managers:', error);
         errorToast('Failed to fetch managers');
@@ -163,11 +164,12 @@ const SaleAdmin = () => {
   // Open modal for editing
   const handleEdit = (admin) => {
     setEditingAdmin(admin);
+    console.log(admin);
     setFormData({
       name: admin.name,
       email: admin.email,
       mobileNumber: admin.mobileNumber,
-      type: admin.type,
+      type: admin.role,
     });
     setShowModal(true);
   };
@@ -213,7 +215,7 @@ const SaleAdmin = () => {
                 <td>{admin.name}</td>
                 <td>{admin.mobileNumber}</td>
                 <td>{admin.email}</td>
-                <td>{admin.type}</td>
+                <td>{admin.role}</td>
                 <td>
                   <div className="action-buttons">
                     <button className="edit-btn" onClick={() => handleEdit(admin)}>
@@ -221,7 +223,7 @@ const SaleAdmin = () => {
                     </button>
                     <button
                       className="delete-btn"
-                      onClick={() => handleDelete(admin._id, admin.type)} // Pass _id to handleDelete
+                      onClick={() => handleDelete(admin._id, admin.role)} // Pass _id to handleDelete
                     >
                       <Trash size={16} />
                     </button>

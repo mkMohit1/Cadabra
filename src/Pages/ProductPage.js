@@ -12,16 +12,16 @@ const ProductPage = () => {
 
   // Fetch products when user ID is available
   const fetchProducts = async () => {
-    const response = await fetch(`http://localhost:5000/admin/getProducts/${currentUser.userID}`);
+    const response = await fetch(`${process.env.Back_Url}/admin/getProducts/${currentUser._id}`);
     const data = await response.json();
     setProducts(data.products);
   };
 
   useEffect(() => {
-    if (currentUser?.userID) {
+    if (currentUser?._id) {
       fetchProducts();
     }
-  }, [currentUser?.userID]);
+  }, [currentUser?._id]);
 
   const handleProductEdit=(product)=>{
     setProductToEdit(product);
@@ -44,7 +44,7 @@ const ProductPage = () => {
           product={productToEdit} 
           setShowCreateForm={setShowCreateForm} 
           fetchProducts={fetchProducts} 
-          userID={currentUser.userID} 
+          userID={currentUser._id} 
         />
       )}
     </div>

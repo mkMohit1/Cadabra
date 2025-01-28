@@ -38,7 +38,7 @@ const initialState = {
 // Async thunk to fetch products
 export const fetchProducts = createAsyncThunk("product/fetchProduct", async () => {
   try {
-    const response = await fetch("http://localhost:5000/products/allproducts", {
+    const response = await fetch(`${process.env.Back_Url}/products/allproducts`, {
       method: 'GET',
       credentials: 'include', // Include cookies for authentication
     });

@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const saveCartToLocalStorage = (cart) => {
-  console.log("cart",cart);
+  // console.log("cart",cart);
   localStorage.setItem('cart', JSON.stringify(cart));
 };
 const saveNCartToLocalStorage = (cart) => {
-  console.log("cart",cart);
+  // console.log("cart",cart);
   localStorage.setItem('cartNuser', JSON.stringify(cart));
 };
 
@@ -34,10 +34,10 @@ export const syncCartWithServer = createAsyncThunk(
   'cart/syncCartWithServer',
   async ({ userId, cartItems,delta }, { getState }) => {
     const { itemDelete } = getState().cart;
-    console.log(userId, cartItems,delta);
+    // console.log(userId, cartItems,delta);
     if (!itemDelete) {
       try {
-        const response = await fetch('http://localhost:5000/user/sync-cart', {
+        const response = await fetch(`${process.env.Back_Url}/user/sync-cart`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ userId, cartItems,delta }),
@@ -103,7 +103,10 @@ const cartSlice = createSlice({
       let currentID;
       if(action.payload.user){  
         currentID = action.payload._id;
-        state.cartItem = state.cartItem.filter(item => item.productId._id != currentID);
+        state.cartItem = state.cartItem.filter(item => {
+          // console.log(item.productId._id == currentID);
+          return item.productId._id != currentID;
+        });
         state.totalCartCount = state.cartItem.length;
         saveCartToLocalStorage(state.cartItem);
       }else{

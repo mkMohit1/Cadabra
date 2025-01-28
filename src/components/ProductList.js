@@ -5,7 +5,7 @@ import { infoToast,errorToast, successToast } from "../DecryptoAndOther/ToastUpd
 const ProductList = ({ products, fetchProducts, onNewProduct, onEditProduct }) => {
 
   const handleDeleteProduct = async (productId) => {
-    const response = await fetch(`http://localhost:5000/admin/deleteProduct/${productId}`, {
+    const response = await fetch(`${process.env.Back_Url}/admin/deleteProduct/${productId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -46,7 +46,7 @@ const ProductList = ({ products, fetchProducts, onNewProduct, onEditProduct }) =
           </tr>
         </thead>
         <tbody>
-          {products.map((product, index) => (
+          {products && products.map((product, index) => (
             <tr key={product.id}>
               <td>{index + 1}</td>
               <td className="product-cell">

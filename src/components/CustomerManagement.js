@@ -12,7 +12,7 @@ const CustomerManagement = () => {
 
   // Fetch customers data
   const fetchCustomers = async () => {
-    const response = await fetch(`http://localhost:5000/admin/getAdmins/${user.mobileNumber}`);
+    const response = await fetch(`${process.env.Back_Url}/admin/getAdmins/${user.mobileNumber}`);
     if (response.ok) {
       const data = await response.json();
       console.log("mnk", data);
@@ -25,20 +25,25 @@ const CustomerManagement = () => {
 
   useEffect(() => {
     fetchCustomers();
-  }, []);
+  }, [showAddCustomer]);
 
   const handleEdit = (customer) => {
     // Logic to handle edit, e.g., show a form pre-filled with customer details
     console.log("Edit customer:", customer);
-    setSelectedCustomer(customer); // Optionally set customer details for editing
+    //setSelectedCustomer(customer); // Optionally set customer details for editing
   };
+
+  const handleClose =()=>{
+    console.log("handleClose");
+    setSelectedCustomer(null);
+  }
   
   const handleDelete = async (customerId) => {
     // Logic to handle delete, e.g., call API to delete customer
     const confirmDelete = window.confirm("Are you sure you want to delete this customer?");
     if (confirmDelete) {
       try {
-        const response = await fetch(`http://localhost:5000/admin/deleteCustomer/${customerId}`, {
+        const response = await fetch(`${process.env.Back_Url}/admin/deleteCustomer/${customerId}`, {
           method: 'DELETE',
         });
         if (response.ok) {
@@ -90,11 +95,11 @@ const CustomerManagement = () => {
           </thead>
           <tbody>
           {Array.isArray(customers) && customers.length > 0 ? (
-            customers.map((customer) => (
+            customers.map((customer,index) => (
               <tr key={customer.id}>
-                <td>{customer.id}</td>
+                <td>{index+1}</td>
                 <td>{customer.name}</td>
-                <td>{customer.addresses?.occupation}</td>
+                <td>{customer.addresses?.[0].occupation}</td>
                 <td>{customer.mobileNumber}</td>
                 <td>
                   <span className={`kyc-status ${customer.kycStatus ? 'verified' : 'pending'}`}>
@@ -111,7 +116,7 @@ const CustomerManagement = () => {
                 </td>
                 <td>
                   <div className="action-buttons">
-                    <button className="edit-btn">✏️</button>
+                    <button className="edit-btn" onClick={handleEdit(customer)}>✏️</button>
                     <button className="delete-btn">🗑️</button>
                   </div>
                 </td>
@@ -128,79 +133,147 @@ const CustomerManagement = () => {
     </div>
   );
 
+
   // Customer Detail Component - This will display when a customer is selected
-  const CustomerDetail = ({ customer }) => (
-    <div className="popup-overlay">
-      <div className="popup-content">
-        <div className="popup-header">
-          <h2>Customer Details</h2>
-          <button onClick={() => setSelectedCustomer(null)}>X</button>
-         
+  const CustomerDetail = ({ customer, handleClose }) => ( //bg-gray-900 bg-opacity-50
+    <div className="sticky top-10 inset-0  flex justify-center items-center z-50">
+      <div className="bg-white rounded-lg shadow-xl max-w-lg w-full p-6 sm:p-8">
+        {/* Popup Header */}
+        <div className="flex justify-between items-center border-b pb-4 mb-6">
+          <h2 className="text-xl font-bold">Customer Details</h2>
+          <button 
+            onClick={handleClose} 
+            className="text-gray-500 hover:text-gray-700 focus:outline-none"
+          >
+            X
+          </button>
         </div>
-
-        <div className="popup-body">
-          <div className="form-section">
-            <div className="form-field">
-              <label>Name</label>
-              <input type="text" value={customer.name} readOnly />
-            </div>
-
-            <div className="form-field">
-              <label>Email</label>
-              <input type="email" value={customer.email} readOnly />
-            </div>
-
-            <div className="form-field">
-              <label>Occupation</label>
-              <input type="text" value={customer.addresses.occupation} readOnly />
-            </div>
-
-            <div className="form-field">
-              <label>Phone Number</label>
-              <input type="text" value={customer.mobileNumber} readOnly />
-            </div>
-
-            <div className="form-field">
-              <label>KYC Status</label>
+  
+        {/* Popup Body */}
+        <div className="space-y-6">
+          {/* Name */}
+          <div className="space-y-1">
+            <label className="block text-sm font-medium text-gray-700">Name</label>
+            <input 
+              type="text" 
+              value={customer.name} 
+              readOnly 
+              className="w-full border border-gray-300 rounded-md px-3 py-2 bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
+          </div>
+  
+          {/* Email */}
+          <div className="space-y-1">
+            <label className="block text-sm font-medium text-gray-700">Email</label>
+            <input 
+              type="email" 
+              value={customer.email} 
+              readOnly 
+              className="w-full border border-gray-300 rounded-md px-3 py-2 bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
+          </div>
+  
+          {/* Occupation */}
+          <div className="space-y-1">
+            <label className="block text-sm font-medium text-gray-700">Occupation</label>
+            <input 
+              type="text" 
+              value={customer.addresses[0].occupation} 
+              readOnly 
+              className="w-full border border-gray-300 rounded-md px-3 py-2 bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
+          </div>
+  
+          {/* Phone Number */}
+          <div className="space-y-1">
+            <label className="block text-sm font-medium text-gray-700">Phone Number</label>
+            <input 
+              type="text" 
+              value={customer.mobileNumber} 
+              readOnly 
+              className="w-full border border-gray-300 rounded-md px-3 py-2 bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
+          </div>
+  
+          {/* KYC Status */}
+          <div className="space-y-1">
+            <label className="block text-sm font-medium text-gray-700">KYC Status</label>
+            <input 
+              type="text" 
+              value={customer.kycStatus ? 'Verified' : 'Pending'} 
+              readOnly 
+              className="w-full border border-gray-300 rounded-md px-3 py-2 bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
+          </div>
+  
+          {/* Address Section */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Address</h3>
+  
+            {/* Address Type */}
+            <div className="space-y-1">
+              <label className="block text-sm font-medium text-gray-700">Address Type</label>
               <input 
                 type="text" 
-                value={customer.kycStatus ? 'Verified' : 'Pending'} 
+                value={customer.addresses[0].addressType} 
                 readOnly 
+                className="w-full border border-gray-300 rounded-md px-3 py-2 bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:outline-none"
               />
             </div>
-
-            <div className="address-section">
-              <h3>Address</h3>
-              
-              <div className="form-field">
-                <label>Address Type</label>
-                <input type="text" value={customer.addresses.addressType} readOnly />
-              </div>
-
-              <div className="form-field">
-                <label>Street</label>
-                <input type="text" value={customer.addresses.street} readOnly />
-              </div>
-
-
-              <div className="form-field">
-                <label>District</label>
-                <input type="text" value={customer.addresses.district} readOnly />
-              </div>
-              <div className="form-field">
-                <label>Sub-district</label>
-                <input type="text" value={customer.addresses.subDistrict} readOnly />
-              </div>
-
-              <div className="form-field">
-                <label>State</label>
-                <input type="text" value={customer.addresses.state} readOnly />
-              </div>
-
-              <div className="form-field">
-                <label>Zip Code</label>
-                <input type="text" value={customer.addresses.zipCode} readOnly />
-              </div>
+  
+            {/* Street */}
+            <div className="space-y-1">
+              <label className="block text-sm font-medium text-gray-700">Street</label>
+              <input 
+                type="text" 
+                value={customer.addresses[0].street} 
+                readOnly 
+                className="w-full border border-gray-300 rounded-md px-3 py-2 bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              />
+            </div>
+  
+            {/* District */}
+            <div className="space-y-1">
+              <label className="block text-sm font-medium text-gray-700">District</label>
+              <input 
+                type="text" 
+                value={customer.addresses[0].district} 
+                readOnly 
+                className="w-full border border-gray-300 rounded-md px-3 py-2 bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              />
+            </div>
+  
+            {/* Sub-district */}
+            <div className="space-y-1">
+              <label className="block text-sm font-medium text-gray-700">Sub-district</label>
+              <input 
+                type="text" 
+                value={customer.addresses[0].subDistrict} 
+                readOnly 
+                className="w-full border border-gray-300 rounded-md px-3 py-2 bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              />
+            </div>
+  
+            {/* State */}
+            <div className="space-y-1">
+              <label className="block text-sm font-medium text-gray-700">State</label>
+              <input 
+                type="text" 
+                value={customer.addresses[0].state} 
+                readOnly 
+                className="w-full border border-gray-300 rounded-md px-3 py-2 bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              />
+            </div>
+  
+            {/* Zip Code */}
+            <div className="space-y-1">
+              <label className="block text-sm font-medium text-gray-700">Zip Code</label>
+              <input 
+                type="text" 
+                value={customer.addresses[0].zipCode} 
+                readOnly 
+                className="w-full border border-gray-300 rounded-md px-3 py-2 bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              />
             </div>
           </div>
         </div>
@@ -252,10 +325,10 @@ const CustomerManagement = () => {
     const handleAddCustomer = async (e) => {
       e.preventDefault();
       // Sending separate data for the user and the address
-      const response = await fetch('http://localhost:5000/admin/addNewUser', {
+      const response = await fetch(`${process.env.Back_Url}/admin/addNewUser`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ customerData, currentUser: user }),
+        body: JSON.stringify({ customerData, currentUser: { userId: user._id, role: user.role }, }),
       });
 
       if (response.ok) {
@@ -524,7 +597,7 @@ const CustomerManagement = () => {
       {showAddCustomer ? (
         <AddCustomerForm setShowAddCustomer={setShowAddCustomer} />
       ) : selectedCustomer ? (
-        <CustomerDetail customer={selectedCustomer} /> // Show customer details when selected
+        <CustomerDetail customer={selectedCustomer} handleClose={handleClose}/> // Show customer details when selected
       ) : (
         <CustomerList />
       )}

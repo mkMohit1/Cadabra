@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import "../styles/ConsultationPopup.scss";
-import { event } from 'jquery';
 import { errorToast, successToast } from '../DecryptoAndOther/ToastUpdate';
 
 const ConsultationPopup = ({ isOpen, onClose }) => {
@@ -25,7 +24,7 @@ const ConsultationPopup = ({ isOpen, onClose }) => {
       return;
     }
     try {
-      const response = await fetch('http://localhost:5000/consultation', {
+      const response = await fetch(`${process.env.Back_Url}/consultation`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

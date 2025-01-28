@@ -10,7 +10,7 @@ import CustomerManagement from "../components/CustomerManagement";
 import ProductPage from "./ProductPage";
 import { io } from "socket.io-client";
 
-const socket= io('http://localhost:5000');
+const socket= io(process.env.Back_Url);
 
 const AdminDashboard = () => {
   const dispatch = useDispatch();
@@ -116,8 +116,8 @@ const AdminDashboard = () => {
               {isProfileOpen && (
                 <div className="dropdown-menu">
                   <div className="user-info">
-                    <div className="user-name">{currentUser.isAdmin}</div>
-                    <div className="user-email">example@gmail.com</div>
+                    <div className="user-name">{currentUser.role}</div>
+                    <div className="user-email">{currentUser.email}</div>
                   </div>
                   <button className="logout-button" aria-label="Logout" onClick={handleLogout}>
                     <LogOut size={16} />

@@ -16,6 +16,7 @@ export default function RentPage() {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.product.rentProduct);
   let cartItem = useSelector((state) => state.cart.cartItem) || [];
+  // console.log(cartItem);
   let cartNItem = useSelector((state) => state.cart.cartNItem) || [];
   const locationNames = useSelector((state) => state.product.indiaStatesAndUTs);
   const tenureOptions = useSelector((state) => state.product.tenureOptions);
@@ -32,6 +33,15 @@ export default function RentPage() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const clonedProduct = Array.isArray(products) ? [...products, ...products] :[];
+// useEffect(()=>{
+//   const cart = localStorage.getItem("cart");
+//   console.log("update inside cart");
+//   console.log(cart, cartItem, user);
+//   if(!cart && cartItem && cartItem.length>0 && user){
+//     dispatch(syncCartWithServer({userId: user._id,cartItems:[]}))
+//   }
+// },[])
+
   useEffect(() => {
     if (!user) {
       dispatch(updateCartItem(cartNItem));
@@ -157,9 +167,9 @@ export default function RentPage() {
   };
 
   const renderProductCards = (data) =>
-    data.map((product) => (
+    data.map((product,index) => (
       <div 
-        key={product.id} 
+        key={product.id+index} 
         style={{ 
           flex: `0 0 ${screenConfig.slideWidth}%`,
           maxWidth: `${screenConfig.slideWidth}%`,
@@ -174,6 +184,13 @@ export default function RentPage() {
       </div>
     ));
     // console.log("cartItem",cartItem);
+
+      useEffect(() => {
+       if(user){
+        dispatch(syncCartWithServer({ userId: user._id, cartItems: [] }));
+       }
+      },[]);
+
   return (
     <div className="font-inter min-h-screen bg-white relative font-mulish">
       {/* Header Section */}
@@ -366,7 +383,7 @@ export default function RentPage() {
                       }
                     : {};
                   return <div 
-                    key={product.id} 
+                    key={`${product.id}${index}`} 
                     style={{ 
                       flex: `0 0 ${screenConfig.slideWidth}%`,
                       maxWidth: `${screenConfig.slideWidth}%`,
@@ -377,7 +394,7 @@ export default function RentPage() {
                   >
                     <ProductCard 
                       product={product}
-                      isInCart={(cartItem.some((item) => (item.productId._id || item._id) === product._id))}
+                      isInCart={(cartItem.some((item) => (item.productId || item._id) == product._id))}
                     />
                   </div>
                 })}
@@ -439,8 +456,9 @@ export default function RentPage() {
           </div>
         </div>
       )}
+      {/* {console.log(cartItem, cartNItem)} */}
       {((cartItem && cartItem.length > 0) || (cartNItem && cartNItem.length > 0)) ? (
-          <a className="tk-btn fixed bottom-10 right-0 flex justify-end mr-[20px]" target="_blank" href="#">
+          <a className="tk-btn fixed bottom-10 right-0 flex justify-end mr-[20px]"  href="/cart">
             <div className="flex  flex-end w-[200px]">
               <h3 className="font-bold mx-2">
                 <span className="text-3xl">GO</span> <br /> <span className="text-2xl text-gray">TO</span> <br /> <span className="text-xl  bg: bg-gradient-to-r from-blue-400 to-purple-500">CART</span>

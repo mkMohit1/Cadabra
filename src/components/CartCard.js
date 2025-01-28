@@ -18,7 +18,7 @@ const CartCard = ({ item, currentMode }) => {
   const deleteCartItem = async (userId, productId) => {
     if(user){
       try {
-        const response = await fetch('http://localhost:5000/cart/item', {
+        const response = await fetch(`${process.env.Back_Url}/cart/item`, {
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ userId, productId }),
@@ -61,6 +61,7 @@ const CartCard = ({ item, currentMode }) => {
           }
   };
 
+  console.log(cartItem);
   // Ensure price is displayed with a currency symbol, for example ₹ or $.
   const price = currentMode === 'rent' ? item.productId.mrp : item.productId.mrp;
   const quantity = currentMode === "rent" ? item.quantity : item.quantity;

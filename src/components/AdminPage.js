@@ -36,7 +36,7 @@ const AdminPage = () => {
 
   const fetchAdmins = async () => {
     try {
-      const response = await fetch(`${process.env.Back_Url}/admin/getAdmins/${currentUser.mobileNumber}`);
+      const response = await fetch(`${process.env.REACT_APP_BACK_URL}/admin/getAdmins/${currentUser.mobileNumber}`);
       if (!response.ok) {
         throw new Error('Failed to fetch admins');
       }
@@ -100,7 +100,7 @@ const AdminPage = () => {
     };
   
     try {
-      const response = await fetch(`${process.env.Back_Url}/admin/addAdmin`, {
+      const response = await fetch(`${process.env.REACT_APP_BACK_URL}/admin/addAdmin`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -128,7 +128,7 @@ const AdminPage = () => {
 
   const handleDelete = async (id, type) => {
     try {
-      const response = await fetch(`${process.env.Back_Url}/admin/deleteAdmin/${type}/${id}`, {
+      const response = await fetch(`${process.env.REACT_APP_BACK_URL}/admin/deleteAdmin/${type}/${id}`, {
         method: 'DELETE',
       });
 
@@ -166,7 +166,7 @@ const AdminPage = () => {
   const handleUpdateSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${process.env.Back_Url}/admin/updateAdmin/${selectedAdmin._id}`, {
+      const response = await fetch(`${process.env.REACT_APP_BACK_URL}/admin/updateAdmin/${selectedAdmin._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'

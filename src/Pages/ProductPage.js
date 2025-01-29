@@ -12,7 +12,7 @@ const ProductPage = () => {
 
   // Fetch products when user ID is available
   const fetchProducts = async () => {
-    const response = await fetch(`${process.env.Back_Url}/admin/getProducts/${currentUser._id}`);
+    const response = await fetch(`${process.env.REACT_APP_BACK_URL}/admin/getProducts/${currentUser._id}`);
     const data = await response.json();
     setProducts(data.products);
   };

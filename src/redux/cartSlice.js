@@ -37,7 +37,7 @@ export const syncCartWithServer = createAsyncThunk(
     // console.log(userId, cartItems,delta);
     if (!itemDelete) {
       try {
-        const response = await fetch(`${process.env.Back_Url}/user/sync-cart`, {
+        const response = await fetch(`${process.env.REACT_APP_BACK_URL}/user/sync-cart`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ userId, cartItems,delta }),

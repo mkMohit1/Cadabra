@@ -24,7 +24,7 @@ const ProductCard = ({ product, isInCart }) => {
 
     const deleteCartItem = async (userId, productId) => {
       try {
-        const response = await fetch(`${process.env.Back_Url}/cart/item`, {
+        const response = await fetch(`${process.env.REACT_APP_BACK_URL}/cart/item`, {
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ userId, productId }),

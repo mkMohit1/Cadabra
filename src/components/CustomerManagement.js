@@ -12,7 +12,7 @@ const CustomerManagement = () => {
 
   // Fetch customers data
   const fetchCustomers = async () => {
-    const response = await fetch(`${process.env.Back_Url}/admin/getAdmins/${user.mobileNumber}`);
+    const response = await fetch(`${process.env.REACT_APP_BACK_URL}/admin/getAdmins/${user.mobileNumber}`);
     if (response.ok) {
       const data = await response.json();
       console.log("mnk", data);
@@ -43,7 +43,7 @@ const CustomerManagement = () => {
     const confirmDelete = window.confirm("Are you sure you want to delete this customer?");
     if (confirmDelete) {
       try {
-        const response = await fetch(`${process.env.Back_Url}/admin/deleteCustomer/${customerId}`, {
+        const response = await fetch(`${process.env.REACT_APP_BACK_URL}/admin/deleteCustomer/${customerId}`, {
           method: 'DELETE',
         });
         if (response.ok) {
@@ -325,7 +325,7 @@ const CustomerManagement = () => {
     const handleAddCustomer = async (e) => {
       e.preventDefault();
       // Sending separate data for the user and the address
-      const response = await fetch(`${process.env.Back_Url}/admin/addNewUser`, {
+      const response = await fetch(`${process.env.REACT_APP_BACK_URL}/admin/addNewUser`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ customerData, currentUser: { userId: user._id, role: user.role }, }),

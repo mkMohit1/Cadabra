@@ -44,7 +44,7 @@ const ContactForm = () => {
         return;
     }
     try {
-        const response = await fetch(`${process.env.Back_Url}/contact`, {
+        const response = await fetch(`${process.env.REACT_APP_BACK_URL}/contact`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

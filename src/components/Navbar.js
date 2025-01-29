@@ -143,7 +143,7 @@ const Navbar = () => {
   // Handle logout
   const handleLogout = async () => {
     try {
-      const response = await fetch(`${process.env.Back_Url}/auth/logout`, {
+      const response = await fetch(`${process.env.REACT_APP_BACK_URL}/auth/logout`, {
         method: 'GET',
         credentials: 'include', // Ensure cookies are sent
       });

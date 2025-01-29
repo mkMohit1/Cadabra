@@ -95,14 +95,14 @@ const OrderSummary = ({ currentCart, currentMode }) => {
       return;
     }
     // Check if the user exists
-    const allUsers = await (await fetch(`${process.env.Back_Url}/users`)).json();
+    const allUsers = await (await fetch(`${process.env.REACT_APP_BACK_URL}/users`)).json();
     const existingUser = allUsers.find((user) => user.mobileNumber === mobileNumber);
 
     const otp = generateOtp();
     updateFormData({ otp });
 
     try {
-      const response = await axios.post(`${process.env.Back_Url}/send-otp`, {
+      const response = await axios.post(`${process.env.REACT_APP_BACK_URL}/send-otp`, {
         mobileNumber,
         otp,
         type: loginWith,
@@ -132,10 +132,10 @@ const OrderSummary = ({ currentCart, currentMode }) => {
       return;
     }
     if (enteredOtp === otp) {
-    const allUsers = await (await fetch(`${process.env.Back_Url}/users`)).json();
+    const allUsers = await (await fetch(`${process.env.REACT_APP_BACK_URL}/users`)).json();
     const userfound = allUsers.find((user) => user.mobileNumber === mobileNumber);
     if(!newUser){
-      existingUser = await (await fetch(`${process.env.Back_Url}/user/${mobileNumber}`)).json();
+      existingUser = await (await fetch(`${process.env.REACT_APP_BACK_URL}/user/${mobileNumber}`)).json();
     }
     if(!userfound){
       setNewUser(true);
@@ -168,7 +168,7 @@ const OrderSummary = ({ currentCart, currentMode }) => {
       console.log(formData);
       const customerData= {name:formData.name, email: formData.email,mobileNumber: formData.mobileNumber, role:'commonUser', loginWith:formData.loginWith};
         // // Sending separate data for the user and the address
-        const response = await fetch(`${process.env.Back_Url}/register/verify`, {
+        const response = await fetch(`${process.env.REACT_APP_BACK_URL}/register/verify`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({customerData}),

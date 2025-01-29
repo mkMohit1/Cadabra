@@ -57,11 +57,12 @@ function App() {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await fetch(`${process.env.Back_Url}/blogs`);
+        console.log(process.env.REACT_APP_BACK_URL);
+        const response = await fetch(`${process.env.REACT_APP_BACK_URL}/blogs`);
         const blogsData = await response.json();
         setBlogs(blogsData);
       } catch (error) {
-        console.error("Error fetching blogs:", error);
+        console.log("Error fetching blogs:", error);
       }
     };
 

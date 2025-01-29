@@ -5,7 +5,7 @@ import { infoToast,errorToast, successToast } from "../DecryptoAndOther/ToastUpd
 const ProductList = ({ products, fetchProducts, onNewProduct, onEditProduct }) => {
 
   const handleDeleteProduct = async (productId) => {
-    const response = await fetch(`${process.env.Back_Url}/admin/deleteProduct/${productId}`, {
+    const response = await fetch(`${process.env.REACT_APP_BACK_URL}/admin/deleteProduct/${productId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

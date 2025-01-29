@@ -10,7 +10,7 @@ import CustomerManagement from "../components/CustomerManagement";
 import ProductPage from "./ProductPage";
 import { io } from "socket.io-client";
 
-const socket= io(process.env.Back_Url);
+const socket= io(process.env.REACT_APP_BACK_URL);
 
 const AdminDashboard = () => {
   const dispatch = useDispatch();

@@ -50,7 +50,7 @@ const SaleAdmin = () => {
     // If editing an admin, update them
     if (editingAdmin) {
       try {
-        const response = await fetch(`${process.env.Back_Url}/admin/updateAdmin/${editingAdmin._id}`, {
+        const response = await fetch(`${process.env.REACT_APP_BACK_URL}/admin/updateAdmin/${editingAdmin._id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -87,7 +87,7 @@ const SaleAdmin = () => {
     } else {
       // Add new admin
       try {
-        const response = await fetch(`${process.env.Back_Url}/admin/addAdmin`, {
+        const response = await fetch(`${process.env.REACT_APP_BACK_URL}/admin/addAdmin`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -124,7 +124,7 @@ const SaleAdmin = () => {
   const handleDelete = async (id, type) => {
     try {
       console.log(id, type);
-      const response = await fetch(`${process.env.Back_Url}/admin/deleteAdmin/${type}/${id}`, {
+      const response = await fetch(`${process.env.REACT_APP_BACK_URL}/admin/deleteAdmin/${type}/${id}`, {
         method: 'DELETE',
       });
       if (!response.ok) {
@@ -145,7 +145,7 @@ const SaleAdmin = () => {
   useEffect(() => {
     const fetchAdmins = async () => {
       try {
-        const response = await fetch(`${process.env.Back_Url}/admin/getAdmins/${currentUser.mobileNumber}`);
+        const response = await fetch(`${process.env.REACT_APP_BACK_URL}/admin/getAdmins/${currentUser.mobileNumber}`);
         if (!response.ok) {
           errorToast('Failed to fetch managers');
           return;

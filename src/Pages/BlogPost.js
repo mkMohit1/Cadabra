@@ -9,7 +9,7 @@ const BlogPost = ({ title, subtitle, imageUrl, featuredText, onContactClick, onS
   useEffect(()=>{
     const fetchBlog = async()=>{
       try{
-      const response = await fetch(`${process.env.Back_Url}/blog/${currentBlogID[1]}`);
+      const response = await fetch(`${process.env.REACT_APP_BACK_URL}/blog/${currentBlogID[1]}`);
       const data = await response.json();
       // console.log(data);
       setBlog(data);

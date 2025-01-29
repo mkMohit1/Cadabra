@@ -43,7 +43,7 @@ const LoginPage = () => {
     updateFormData({otp:otp});
     console.log(formData);
     try {
-      const response = await axios.post(`${process.env.Back_Url}/send-otp`, {
+      const response = await axios.post(`${process.env.REACT_APP_BACK_URL}/send-otp`, {
         mobileNumber,
         otp,
         type: loginWith,
@@ -77,8 +77,8 @@ const LoginPage = () => {
     try {
       // Determine the API endpoint based on newUser flag
       const endpoint = newUser
-        ? `${process.env.Back_Url}/register/verify` // Registration OTP verification
-        : `${process.env.Back_Url}/login`;        // Login OTP verification
+        ? `${process.env.REACT_APP_BACK_URL}/register/verify` // Registration OTP verification
+        : `${process.env.REACT_APP_BACK_URL}/login`;        // Login OTP verification
   
       const response = await axios.post(endpoint, {
         mobileNumber,

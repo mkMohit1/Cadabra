@@ -24,7 +24,7 @@ const ConsultationPopup = ({ isOpen, onClose }) => {
       return;
     }
     try {
-      const response = await fetch(`${process.env.Back_Url}/consultation`, {
+      const response = await fetch(`${process.env.REACT_APP_BACK_URL}/consultation`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

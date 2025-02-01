@@ -12,6 +12,8 @@ import BlogSection from '../components/BlogSection';
 import SubscribeSection from '../components/SubscribeSection';
 import { errorToast } from '../DecryptoAndOther/ToastUpdate';
 import { syncCartWithServer } from '../redux/cartSlice';
+import { normalImages } from '../ImagePath';
+import { NavLink } from 'react-router-dom';
 
 const HomePage = ({ blogs }) => {
   const dispatch = useDispatch();
@@ -73,7 +75,7 @@ const HomePage = ({ blogs }) => {
   }, []);
   
   return (
-    <div className="App">
+    <div className="App relative">
       <HeroSection />{/* font-mulish */}
       <LogosSection />
       <ServicesSection />{/* font-mulish */}
@@ -82,6 +84,9 @@ const HomePage = ({ blogs }) => {
       <CustomerSection2 />{/* font-mulish */}
       <BlogSection blogs={blogs} /> {/* font-mulish */}
       <SubscribeSection />{/* font-mulish */}
+      <div className={`tk-Rent fixed bottom-[40px] right-[5px] w-[200px] hidden md:hidden lg:block`}>
+        <NavLink to="/Rent"><img src={normalImages.rentToday} alt="Rent Now image" /></NavLink>
+      </div>
     </div>
   );
 };

@@ -68,14 +68,15 @@ const BlogSection = ({ blogs }) => {
     }
   }, [currentIndex, blogs.length, visibleBlogs]);
 
+  console.log(blogs);
   return (
     blogs && blogs.length > 0 ? (
       <div className="blog-section lg:max-w-[1700px] lg:mx-auto text-center py-12 px-4 bg-gray-100 font-mulish">
         {/* Header */}
         <div className=" mb-8 md:w-full lg:max-w-7xl mx-auto h-fit flex flex-col bg-gray-100">
-          <h3 className="text-sm font-medium text-[#555] opacity-[0.7]">Our Blog</h3>
-          <h2 className="text-sm sm:text-sm md:text-2xl lg:text-4xl font-light text-[#222] mt-2">
-            Value proposition accelerator product management venture
+          <h3 className="text-lg font-extrabold  opacity-[0.7]"><span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">Our Blog</span></h3>
+          <h2 className="text-sm sm:text-sm md:text-2xl lg:text-[2rem] font-light text-[#222] mt-2 tracking-[-1px]">
+              From around the World
           </h2>
         </div>
 
@@ -95,7 +96,7 @@ const BlogSection = ({ blogs }) => {
                 transform: `translateX(-${currentIndex * (100 / visibleBlogs)}%)`,
               }}
             >
-              {clonedBlogs.map((post) => {
+              {clonedBlogs.map((post,index) => {
                 const date = new Date(post.date);
                 const formattedDate = date.toLocaleDateString("en-US", {
                   year: "numeric",
@@ -106,7 +107,7 @@ const BlogSection = ({ blogs }) => {
                 return (
                   <div
                     className={`blog-card relative flex-shrink-0 bg-white mr-4 w-full lg:w-[330px] ${
-                      visibleBlogs === 1 ? "w-[310px] xxs:ml-4 xs:w-full xs:ml-0" : visibleBlogs === 2 ? "md:w-[330px] ml-[20px]" : "md:w-1/3"
+                      visibleBlogs === 1 ? `w-[310px] xxs:${index ==0?"ml-4":"ml-4"} xs:w-[95%] xs:ml-0` : visibleBlogs === 2 ? "md:w-[330px] ml-[20px]" : "md:w-1/3"
                     } p-4`}
                     key={post._id}
                     onClick={() => handleBlogClick(post._id)}

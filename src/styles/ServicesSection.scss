@@ -67,7 +67,7 @@
       }
       .service-link {
         font-size: 1rem;
-        color: black;
+        color: white;
         text-decoration: none;
         font-weight: bold;
         display: flex;
@@ -79,9 +79,8 @@
         justify-content: center;
         align-items: center;
         border-radius: 50%;
-        bottom: 25px;
-        right: 30px;
-        background: #ffd437;
+        bottom: 20px;
+        right: 20px;
         &:hover {
           color: #ffffff;
         }

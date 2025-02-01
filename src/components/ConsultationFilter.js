@@ -72,7 +72,7 @@ const ConsultationFilter = () => {
   );
 
   return (
-    <div className="consultant-filters">
+    <div className="consultant-filters xs:max-h-[200px]">
       <h2 className="filters-title">Filters</h2>
       
       <div className="filters-container">

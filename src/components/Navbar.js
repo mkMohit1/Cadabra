@@ -2,11 +2,12 @@ import React, { useState, useEffect, useRef } from "react";
 import { Navigate, NavLink, useLocation } from "react-router-dom";
 import "../styles/Navbar.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark, faBars, faCartShopping, faCircleChevronDown, faSearch, faLocationDot  } from "@fortawesome/free-solid-svg-icons";
+import { faXmark, faBars, faCartShopping, faCircleChevronDown, faSearch, faLocationDot, faLock  } from "@fortawesome/free-solid-svg-icons";
 import { useSelector, useDispatch } from "react-redux";
 import { mainLogo, normalImages } from "../ImagePath";
 import { logout } from "../redux/authSlice"; // Add your logout action
 import { infoToast,errorToast, successToast } from "../DecryptoAndOther/ToastUpdate";
+import { FaAddress } from "../svgComponents/Offer";
 
 
 const cities = [
@@ -50,6 +51,8 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const [selectedCity, setSelectedCity] = useState("Delhi");
   const serviceProvideIn = useSelector((state) => state.product.serviceProvideIn);
+  const dropdownRef = useRef(null); // Create a ref for tracking dropdown clicks
+
   // console.log(serviceProvideIn);
   cartCount = user?cartCount:totalNCartCount;
 
@@ -67,6 +70,32 @@ const Navbar = () => {
       setSelectedCity("Delhi"); // Default to Delhi if geolocation is unavailable
     }
   }, []);
+
+useEffect(() => {
+  const handleClickOutside = (event) => {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target) &&
+      event.target.getAttribute("data-ignore-close") !== "true" // Ignore elements that shouldn't trigger close
+    ) {
+      setDropdownOpen(null); // Close all dropdowns
+      setMenuOpen(false);
+    }
+  };
+
+  setInterval(()=>{
+    let temp = document.getElementById("stateselect");
+    if(temp){
+      setMenuOpen(false);
+    }
+  },0);
+
+  document.addEventListener("mousedown", handleClickOutside);
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+  };
+}, []);
+
 
   const fetchCityFromCoordinates = async (latitude, longitude) => {
     try {
@@ -169,60 +198,63 @@ const Navbar = () => {
     }
   };
   
-  
+  const handleUpdateMenu =()=>{
+    setMenuOpen(false);
+  }
+
   const handleCitySelect = (city) => {
     setSelectedCity(city);
   };
   return (
     <nav
       className="navbar"
+      ref={dropdownRef}
       style={{ backgroundColor: navbarBackground, transition: "background-color 0.3s ease" }}
     >
-      <div className="logo" onClick={NavigatetoHome}>
+      <div className="logo flex flex-row" onClick={NavigatetoHome}>
         <img 
           src={currentMainLogo}
           alt="Logo"
           className={`main-logo ${isFlipping ? "flip-animation" : ""}`}
-          style={{
-            height: window.scrollY<100?"70px":"50px"
-          }}
         />
-      </div>
-      <CitySelector 
+        <CitySelector 
         onCitySelect={handleCitySelect} 
         selectedCity={selectedCity}
         currentColor={currentColor}
+        handleUpdateMenu={handleUpdateMenu}
         serviceProvideIn={serviceProvideIn}
       />
+      </div>
+      
       <div className={`nav-links ${menuOpen ? "open max-w-md bg-purple-50" : "close"}`}>
-        <ul className={menuOpen?"flex flex-col ":null}>
+        <ul className={menuOpen?"flex flex-col xs:gap-[0.5rem] ":null}>
           <li>
-            <NavLink to="/" style={{ color: menuOpen?"black":currentColor }} >
+            <NavLink to="/" style={{ color: menuOpen?"black":currentColor }} className="font-semibold">
               Home
             </NavLink>
           </li>
           <li>
-            <NavLink to="/About" style={{ color: menuOpen?"black":currentColor }}>
+            <NavLink to="/About" style={{ color: menuOpen?"black":currentColor }} className="font-semibold">
               About
             </NavLink>
           </li>
           <li>
-            <NavLink to="/Contact" style={{ color: menuOpen?"black":currentColor }}>
+            <NavLink to="/Contact" style={{ color: menuOpen?"black":currentColor }} className="font-semibold">
               Contact
             </NavLink>
           </li>
-          <li>
-            <NavLink to="/Rent" style={{ color: menuOpen?"black":currentColor }}>
+          <li className="block lg:hidden">
+            <NavLink to="/Rent" style={{ color: menuOpen?"black":currentColor }} className="font-semibold">
               Rent
             </NavLink>
           </li>
           <li>
-            <NavLink to="/Suscription" style={{ color: menuOpen?"black":currentColor }}>
-              Suscription
+            <NavLink to="/Pricing" style={{ color: menuOpen?"black":currentColor }} className="font-semibold">
+              Pricing
             </NavLink>
           </li>
           <li>
-            <NavLink to="/Cart" style={{ color: menuOpen?"black":currentColor }}>
+            <NavLink to="/Cart" style={{ color: menuOpen?"black":currentColor }} className="font-semibold">
               <FontAwesomeIcon
                 icon={faCartShopping}
                 style={{
@@ -234,7 +266,7 @@ const Navbar = () => {
               {cartCount > 0 && <div className="totalCounter">{cartCount}</div>}
             </NavLink>
           </li>
-          <li className="rounded-none">
+          <li className={`rounded-none ${menuOpen?"text-center":""}`}>
             {user ? (
               <div className="userDetail" onClick={() => setDropdownOpen(!dropdownOpen)}>
               <div className="userImage"><img src={normalImages.google} alt="userImage" /></div>
@@ -247,7 +279,7 @@ const Navbar = () => {
               )}
             </div>
             ) :  (
-              <NavLink to="/Login" style={{ color: menuOpen?"black":currentColor }} className= "hello-btn">
+              <NavLink to="/Login" style={{ color: menuOpen?"black":currentColor }} className= "hello-btn font-semibold">
                 Login
               </NavLink>
               
@@ -269,7 +301,6 @@ const CitySelector = ({ onCitySelect, selectedCity, currentColor, serviceProvide
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const dropdownRef = useRef(null);
-
   const filteredCities = cities.filter(city =>
     city.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -286,23 +317,20 @@ const CitySelector = ({ onCitySelect, selectedCity, currentColor, serviceProvide
   }, []);
 
   return (
-    <div className="relative w-full md:w-[50%]" ref={dropdownRef}>
+    <div className="relative w-full md:w-fit xxxs:w-fit m-auto ml-[7px]" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center space-x-2 px-4 py-2 rounded-lg ml-7  w-full font-mulish justify-between md:justify-start"
-        style={{ color: currentColor }}
+        className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600 
+        flex items-center space-x-0 px-4 py-2 rounded-lg ml-7  w-full font-mulish  justify-between md:justify-start xxxs:justify-evenly xxxs:ml-0"
       >
-        <FontAwesomeIcon 
-          icon={faLocationDot} 
-          className={`transform transition-transform duration-200 text-[1rem] `}
-          style={{ color: "black" }}
-        />
-        <span>{serviceProvideIn.includes(selectedCity)?selectedCity:'Delhi'}</span>
+        <FaAddress className={`transform transition-transform duration-200 text-[1rem] ${window.scrollY>=100?currentColor:""}`} currentColor={currentColor} />
+        <span className="font-extrabold" style={{ color: window.scrollY >= 100 ? currentColor : "" }}
+        >{serviceProvideIn.includes(selectedCity)?selectedCity:'Delhi'}</span>
         
       </button>
 
       {isOpen && (
-        <div className="absolute z-50 mt-2 w-[90vw] md:w-[450px] bg-white rounded-lg shadow-lg border border-gray-200 left-1/2 transform -translate-x-1/2 md:left-0 md:translate-x-0">
+        <div id="stateselect" className="absolute z-50 mt-2 w-[90vw] md:w-[450px] xxxs:w-[250px] bg-white rounded-lg shadow-lg border border-gray-200 left-1/2 transform -translate-x-1/2 md:left-0 md:translate-x-[0] xs:translate-x-[-70px] xxxs:translate-x-[-125px] xxs:translate-x-[-100px]">
           <div className="p-2 md:p-4">
             <div className="relative mb-4">
               <input
@@ -333,15 +361,23 @@ const CitySelector = ({ onCitySelect, selectedCity, currentColor, serviceProvide
                     setIsOpen(false);
                     setSearchTerm("");
                   } : undefined} // Remove onClick handler if disabled
-                  className={`flex flex-col items-center p-2 cursor-pointer hover:bg-gray-50 rounded-lg
+                  className={`relative flex flex-col items-center p-2 cursor-pointer hover:bg-gray-50 rounded-lg
                     ${selectedCity === city.name ? 'bg-gray-50 border border-red-200' : ''}`}
                 >
-                  <div className="w-8 h-8 md:w-12 md:h-12 flex items-center justify-center border border-red-500 rounded-full">
+                  <div className={`w-8 h-8 md:w-12 md:h-12 flex items-center justify-center ${isDisabled?"":"border border-red-500"} rounded-full`}>
                     <span className="text-base md:text-xl">{city.icon}</span>
                   </div>
-                  <span className="mt-1 md:mt-2 text-xs md:text-sm text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">{city.name}</span>
+                  <span className={`mt-1 md:mt-2 text-xs md:text-sm text-center ${isDisabled?"text-black font-bold md:text-[10px]":"text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500"}`}>{city.name}</span>
                   {city.name === "Lucknow" && (
                     <span className="text-[10px] md:text-xs text-red-500">New</span>
+                  )}
+                  {isDisabled && (
+                    <div
+                      className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-lg"
+                      style={{ pointerEvents: "none" }} // Prevents interaction with the overlay
+                    >
+                      <img src={normalImages.commingSoon} className="w-[32%] object-contain" alt="comming soon"/>
+                    </div>
                   )}
                 </div>
               })}

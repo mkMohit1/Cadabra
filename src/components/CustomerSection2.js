@@ -52,7 +52,7 @@ const CustomerSection2 = () => {
 
   const toggleFAQ = (index) => {
     setOpenFAQs((prevState) =>
-      prevState.map((item, i) => (i === index ? !item : item))
+      prevState.map((item, i) => (i === index ? !item : false))
     );
   };
 
@@ -73,7 +73,7 @@ const CustomerSection2 = () => {
       <div className="content-container flex flex-col md:flex-row md:gap-8 max-w-7xl">
         <div
           ref={imageSectionRef}
-          className={`image-section w-full md:w-1/2 mb-8 md:mb-0 `}
+          className={`image-section w-full md:w-1/2 mb-8 md:mb-0 shadow-[8px_8px_1px_rgba(211,211,211,0.7)] border-gray-400 border-[2px]`}
         >
           <img
             src={normalImages.svgImage1}
@@ -83,11 +83,11 @@ const CustomerSection2 = () => {
         </div>
 
         <div className="w-full flex flex-col md:flex-row lg:flex-row justify-between items-center lg:items-start space-y-6 lg:space-y-0 lg:space-x-8">
-            <h2 className="text-xl md:text-2xl font-medium text-gray-800 md:w-fit  text-center lg:text-left lg:w-[50%] m-auto">
-              Not interested in Renting? You can also purchase from our wide selection of products and services.
+            <h2 className="text-xl md:text-2xl font-medium font-mulish text-gray-800 md:w-fit tracking-[-1px] text-center lg:text-left lg:w-[50%] m-auto">
+            <span className="font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">Not interested in Renting?</span><br/> <span className="mt-2 text-lg leading-tight">You can also purchase from our wide selection</span> <br/><div className="mt-[-3px] text-lg">of products and services.</div>
             </h2>
 
-            <div className="faq-container w-full lg:w-1/2 space-y-4">
+            <div className="faq-container w-full font-mulish lg:w-1/2 space-y-4">
               {faqs.map((faq, index) => (
                 <div
                   className={`faq-item p-4 shadow-md transition-all duration-300 ${

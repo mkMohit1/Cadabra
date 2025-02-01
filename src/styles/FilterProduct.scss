@@ -155,22 +155,17 @@ box-shadow: 0 2px 8px rgba(0, 123, 255, 0.25); /* Soft shadow */
   margin: 2.5rem 0;
   display: flex;
   justify-content: center;
-  gap: 8px;
 
   .box {
-    width: 12px;
-    height: 12px;
-    background-color: #dee2e6;
-    border-radius: 50%;
+    height: 10px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     &.active {
-      background-color: #007bff;
-      transform: scale(1.2);
+      // background: linear-gradient(to right, #60A5FA, #9333EA); 
     }
 
     &.completed {
-      background-color: #28a745;
+      background: linear-gradient(to right, #60A5FA, #9333EA);
       transform: scale(1);
     }
   }

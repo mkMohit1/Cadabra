@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../styles/FilterProduct.scss";
 import { mainLogo } from "../ImagePath";
 
-const FilterProduct = ({ handleCloseQuiz, handleData }) => {
+const FilterProduct = ({handleData,handleCloseQuiz }) => {
   const questions = [
     {
       question: "What type of product are you looking for?",
@@ -40,13 +40,13 @@ const FilterProduct = ({ handleCloseQuiz, handleData }) => {
         setIsAnimating(false);
       }, 400);
     } else {
-      // handleData({...selectedAnswers, [currentQuestion]: answer});
+      handleData({...selectedAnswers, [currentQuestion]: answer});
       handleCloseQuiz();
     }
   };
 
   return (
-    <div className="filterQizContainer">
+    <div className="filterQizContainer shadow-[8px_8px_1px_rgba(1,1,1,0.6)] border-black border-[2px]">
       <div className="logo"><img src={mainLogo.mainLogo2} className="main-logo" alt="logo"/></div>
 
       <div className="question-container">
@@ -100,13 +100,14 @@ const FilterProduct = ({ handleCloseQuiz, handleData }) => {
         )}
       </div>
 
-      <div className="dashbox">
+      <div className="dashbox w-full">
         {questions.map((_, index) => (
           <div
             key={index}
-            className={`box ${index === currentQuestion ? "active" : ""} ${
+            className={`-mt-[0.2rem] box  h-[1rem] ${index === currentQuestion ? "active" : ""} ${
               index < currentQuestion ? "completed" : ""
             }`}
+            style={{ width: `${100 / questions.length}%` }} 
           ></div>
         ))}
       </div>

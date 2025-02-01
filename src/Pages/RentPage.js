@@ -24,7 +24,7 @@ export default function RentPage() {
   const categories = useSelector((state) => state.product.categories);
   const user = useSelector((state) => state.auth.user);
   const [filterData, setFilterData] = useState({});
-  const [filterDataPopup, setFilterDataPopup] = useState({});
+  const [filterDataPopup, setFilterDataPopup] = useState([]);
   const [location, setLocation] = useState("");
   const [category, setCategory] = useState("");
   const [type, setType] = useState("");
@@ -33,6 +33,7 @@ export default function RentPage() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const clonedProduct = Array.isArray(products) ? [...products, ...products] :[];
+  const [bottomLog,setbottomLog] = useState(0);
 // useEffect(()=>{
 //   const cart = localStorage.getItem("cart");
 //   console.log("update inside cart");
@@ -184,12 +185,56 @@ export default function RentPage() {
       </div>
     ));
     // console.log("cartItem",cartItem);
+  const handleData =(data)=>{
+    const dataArray = Object.values(data);  // Convert object values to array
+    setFilterDataPopup(dataArray);
+    if(Object.keys(data).length>0){
+      setShowQuiz(true);
+    }
+    console.log(filterDataPopup);
+  }
+
+  const handleCloseFilter =()=>{
+    setShowQuiz(false);
+    setFilterDataPopup([]);
+  }
 
       useEffect(() => {
        if(user){
         dispatch(syncCartWithServer({ userId: user._id, cartItems: [] }));
        }
       },[]);
+
+      useEffect(() => {
+        const updateBottomLog = () => {
+          if(window.innerWidth>=768){
+            setbottomLog(window.innerWidth >= 768 && window.scrollY <= 600 ? 0 : 160);
+          }
+          if(window.innerWidth<768){
+            setbottomLog(window.scrollY<668?0:180);
+          }
+        };
+    
+        // Run on mount
+        updateBottomLog();
+    
+        // Listen to scroll & resize events
+        window.addEventListener("scroll", updateBottomLog);
+        window.addEventListener("resize", updateBottomLog);
+    
+        return () => {
+            window.removeEventListener("scroll", updateBottomLog);
+            window.removeEventListener("resize", updateBottomLog);
+        };
+    }, []);
+
+    useEffect(() => {
+      // console.log("filterDataPopup updated:", filterDataPopup);
+      // console.log("filterDataPopup length:", filterDataPopup.length);
+      if(filterDataPopup.length>0){
+        setShowQuiz(true);
+      }
+    }, [filterDataPopup]);
 
   return (
     <div className="font-inter min-h-screen bg-white relative font-mulish">
@@ -442,28 +487,67 @@ export default function RentPage() {
       </div>
 
       {/* Quiz Popup */}
-      {showQuiz && (
+      {showQuiz && filterDataPopup.length ==0 && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-3 sm:p-4 md:p-6 z-50">
           <div className="bg-white rounded-lg p-3 sm:p-4 md:p-6 w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg relative">
             <button
               onClick={() => setShowQuiz(false)}
-              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 transition-colors duration-200 text-xl p-1 rounded-full hover:bg-gray-100"
+              className="absolute top-[-7.5rem] right-[-14.5rem] z-10 text-gray-500 hover:text-gray-700 transition-colors duration-200 text-2xl p-1 rounded-full"
               aria-label="Close quiz"
             >
               &times;
             </button>
-            <FilterProduct handleCloseQuiz={() => setShowQuiz(false)}  />
+            <FilterProduct handleCloseQuiz={() => setShowQuiz(false)}  handleData={handleData}/>
+          </div>
+        </div>
+      )}
+      {showQuiz && filterDataPopup.length>0 && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-3 sm:p-4 md:p-6 z-50 md:pt-[5.5rem] xs:pt-[4rem]">
+          <div className="bg-white p-3 flex shadow-[8px_8px_1px_rgba(1,1,1,0.6)] border-black border-[2px] flex-row sm:p-4 md:p-6 w-full max-w-xs xs:max-w-[23rem] md:max-w-[45rem] lg:max-w-3xl relative lg:max-h-fit xs:flex-col xs:max-h-[400px]">
+            <button
+              onClick={handleCloseFilter}
+              className="absolute -top-1 right-2 z-10 text-gray-500 hover:text-gray-700 transition-colors duration-200 text-2xl p-1 rounded-full"
+              aria-label="Close quiz"
+            >
+              &times;
+            </button>
+            <div className="w-fit">
+            <ConsultationFilter/>
+            </div>
+            <div className="container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 py-7 gap-4 overflow-y-auto hide-scrollbar"
+              style={{
+                maxHeight: '380px',  // Adjust this value to match ConsultationFilter's height
+                overflowY: 'auto'    // Enable scrolling
+              }}
+            >
+              {products.map((product, index) => (
+                <div
+                  key={product.id + index}
+                  style={{
+                    transition: 'transform 0.3s ease'
+                  }}
+                  className="px-2 sm:px-3 md:px-4 justify-center"
+                >
+                  <ProductCard
+                    product={product}
+                    isInCart={Array.isArray(cartItem) && cartItem.some((item) => item.productId._id === product._id)}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}
       {/* {console.log(cartItem, cartNItem)} */}
       {((cartItem && cartItem.length > 0) || (cartNItem && cartNItem.length > 0)) ? (
-          <a className="tk-btn fixed bottom-10 right-0 flex justify-end mr-[20px]"  href="/cart">
-            <div className="flex  flex-end w-[200px]">
+          <a className="tk-btn fixed right-0 xxxs:right-[70px] flex justify-end lg:mr-[20px] md:mr-[10px]" 
+          style={{ bottom: bottomLog, transition:'bottom 0.5s ease-in' }}
+          href="/cart">
+            <div className="flex  flex-end w-fit">
               <h3 className="font-bold mx-2">
-                <span className="text-3xl">GO</span> <br /> <span className="text-2xl text-gray">TO</span> <br /> <span className="text-xl  bg: bg-gradient-to-r from-blue-400 to-purple-500">CART</span>
+                <span className="lg:text-3xl">GO</span> <br /> <span className="lg:text-2xl text-gray">TO</span> <br /> <span className="lg:text-xl  bg: bg-gradient-to-r from-blue-400 to-purple-500">CART</span>
               </h3>
-              <img src={normalImages.Cart} alt="Cart Icon" className="cart-icon" style={{ width: "6rem", height: "6rem" }} /> {/* Make sure CART is a valid variable or component */}
+              <img src={normalImages.Cart} alt="Cart Icon" className="cart-icon lg:w-[6rem] lg:h-[6rem] md:w-[4rem] md:h-[4rem]"/> {/* Make sure CART is a valid variable or component */}
             </div>
           </a>
         ) : null

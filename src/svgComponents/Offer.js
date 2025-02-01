@@ -51,4 +51,84 @@ const SVGComponent = ({ discount = 0, ...props }) => (
   </svg>
 );
 
+export const FaCheckCircle = ({ className = "" }) => {
+  return (
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="circle-check" className={`svg-inline--fa fa-circle-check text-blue-700 ${className}`} role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+      {/* Define the gradient */}
+      <defs>
+        <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="#60A5FA" /> {/* Blue-400 */}
+          <stop offset="100%" stopColor="#9333EA" /> {/* Purple-600 */}
+        </linearGradient>
+      </defs>
+
+      {/* Apply the gradient to the icon */}
+      <path 
+        d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"
+        fill="url(#gradient1)"
+      />
+    </svg>
+  );
+};
+
+export const FaAddress =({className="", currentColor})=>{
+  return(
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="location-dot" className={`svg-inline--fa fa-location-dot text-blue-700 ${className}`} role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+      {/* Define the gradient */}
+      <defs>
+        <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="#60A5FA" /> {/* Blue-400 */}
+          <stop offset="100%" stopColor="#9333EA" /> {/* Purple-600 */}
+        </linearGradient>
+      </defs>
+
+      {/* Apply the gradient to the icon */}
+      <path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"
+        fill={currentColor === "white" ? "white" : "url(#gradient1)"}
+      />
+    </svg>
+  );
+}
+
+export const FaPlusMinus = ({ className = "", currentColor, mode }) => {
+  let pathData = ""; // Store the correct path based on mode
+
+  if (mode === "plus") {
+    pathData =
+      "M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 144L48 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l144 0 0 144c0 17.7 14.3 32 32 32s32-14.3 32-32l0-144 144 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-144 0 0-144z";
+  } else if (mode === "minus") {
+    pathData =
+      "M432 256c0 17.7-14.3 32-32 32L48 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l352 0c17.7 0 32 14.3 32 32z";
+  }
+
+  return (
+    <svg
+      aria-hidden="true"
+      focusable="false"
+      data-prefix="fas"
+      data-icon={mode}
+      className={`svg-inline--fa fa-${mode} text-blue-700 ${className}`}
+      role="img"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 512 512"
+    >
+      {/* Define the gradient */}
+      <defs>
+        <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="#60A5FA" /> {/* Blue-400 */}
+          <stop offset="100%" stopColor="#9333EA" /> {/* Purple-600 */}
+        </linearGradient>
+      </defs>
+
+      {/* Apply the correct path based on mode */}
+      {pathData && (
+        <path
+          d={pathData}
+          fill={currentColor === "white" ? "white" : "url(#gradient1)"}
+        />
+      )}
+    </svg>
+  );
+};
+
 export default SVGComponent;

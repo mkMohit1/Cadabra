@@ -88,16 +88,16 @@ const Testimonials = () => {
         style={{ right: rightMargin }}
       >
       <button
-        className="bg-white text-[#0b1e39] w-10 h-10 rounded-full mx-2 hover:bg-blue-500 hover:text-white transition"
+        className=" text-white w-10 h-10 font-Inter bg-gradient-to-r from-blue-400 to-purple-600 rounded-full mx-2 transition text-[1.5rem]"
         onClick={handlePrev}
       >
-        &larr;
+        {"<-"}
       </button>
       <button
-        className="bg-white text-[#0b1e39] w-10 h-10 rounded-full mx-2 hover:bg-blue-500 hover:text-white transition"
+        className=" text-white w-10 h-10 font-Inter bg-gradient-to-r from-blue-400 to-purple-600 rounded-full mx-2 transition text-[1.5rem]"
         onClick={handleNext}
       >
-        &rarr;
+        {"->"}
       </button>
     </div>
 

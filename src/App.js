@@ -130,7 +130,7 @@ function AppRoutes({ blogs, user }) {
         <Route path="/Cart" element={<ShoppingCart />} />
         <Route path="/products/:id" element ={<SingleProductPage/>}/>
         <Route path="/About" element={<About />} />
-        <Route path="/Suscription" element={<PricingPage/>}/>
+        <Route path="/Pricing" element={<PricingPage/>}/>
         <Route path="/Contact" element={<ContactForm/>}/>
           <Route path="/Job/list" element={<List />} /> {/* Job list for admin */}
           <Route path='/Job/createjob' element={<CreateJob/>} /> {/* Create job for admin*/}

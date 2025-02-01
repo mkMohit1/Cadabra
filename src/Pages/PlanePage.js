@@ -1,11 +1,15 @@
 import React, { useState, useRef } from "react";
 import { Check, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { normalImages } from "../ImagePath";
+import { NavLink } from "react-router-dom";
+import FaqContainer from "../components/FaqContainer";
+import { errorToast, successToast } from "../DecryptoAndOther/ToastUpdate";
 
 const PricingPage = () => {
-  const [billingCycle, setBillingCycle] = useState("monthly");
+  const [billingCycle, setBillingCycle] = useState("Month");
   const [showComparison, setShowComparison] = useState(true);
   const [currentFaqIndex, setCurrentFaqIndex] = useState(0);
-
+  const telRef = useRef();
   const plans = [
     {
       name: "Homeshield Starter",
@@ -196,7 +200,7 @@ const PricingPage = () => {
     setCurrentFaqIndex((prev) => Math.max(prev - itemsPerPage, 0));
   };
   const handlePriceChange = (plan) => {
-    if (billingCycle === "yearly" && typeof plan.price === "number") {
+    if (billingCycle === "Year" && typeof plan.price === "number") {
       return plan.price * 12 * 0.975; // Applying a 2.5% discount for yearly
     }
     return plan.price;
@@ -205,7 +209,7 @@ const PricingPage = () => {
     if (plan.price === "contact") {
       return (
         <a href="/Contact">
-          <button className="bg-gradient-to-r from-blue-400 to-purple-500 text-white py-2 px-6 rounded-md hover:from-blue-500 hover:to-purple-600 transition-all text-lg w-full font-semibold">
+          <button className="bg-gradient-to-r from-blue-400 to-purple-500 text-white py-2 px-6  hover:from-blue-500 hover:to-purple-600 transition-all text-lg w-full font-semibold">
             Contact Us
           </button>
         </a>
@@ -227,38 +231,69 @@ const PricingPage = () => {
       plansRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
+
+    const handleSubmitConsultation = async(event) => {
+      event.preventDefault();
+      if (!telRef.current || !telRef.current.value.trim() || telRef.current.value.length !== 10) {
+        errorToast('Please enter a valid 10-digit mobile number.');
+        return;
+      }
+      try {
+        const response = await fetch(`${process.env.REACT_APP_BACK_URL}/consultation`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ mobileNumber: telRef.current.value }),
+        });
+        const data = await response.json();
+        if (!response.ok) {
+          errorToast( data.message || 'Failed to submit. Please try again later.');
+          telRef.current.value ='';
+          return;
+        }
+        if(response.ok){
+          successToast(data.message || 'Submitted successfully!');
+          telRef.current.value ='';
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+  
+      console.log('Arrow clicked with value:', telRef.current.value);
+    };
   return (
-   <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 font-sans">
+   <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 font-mulish relative">
       {/* Header Section */}
-      <div className="text-center py-8 space-y-4">
+      <div className="text-center py-8 pt-[4rem] space-y-4">
         <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold">Choose Your Plan</h1>
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
           Choose a plan for Securing your Loved ones
         </h2>
-        <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 max-w-3xl mx-auto">
+        <p className="text-lg sm:text-xl lg:text-xl lg:text-[1.1rem] text-gray-600 max-w-3xl mx-auto tracking-[-0.5px] ">
           Not sure what product to buy? Pick a plan to start and our AI tool will help you make selection.
         </p>
 
         {/* Billing Toggle */}
         <div className="flex justify-center mt-6">
-          <div className="inline-flex rounded-lg border border-gray-200 p-1">
+          <div className="inline-flex border border-gray-200 p-1">
             <button
-              className={`px-4 py-2 text-sm sm:text-base rounded-md transition-all ${
-                billingCycle === "monthly"
+              className={`px-4 py-2 text-sm sm:text-base transition-all ${
+                billingCycle === "Month"
                   ? "bg-gradient-to-r from-blue-400 to-purple-500 text-white"
                   : "text-gray-600"
               }`}
-              onClick={() => setBillingCycle("monthly")}
+              onClick={() => setBillingCycle("Month")}
             >
               Monthly
             </button>
             <button
-              className={`px-4 py-2 text-sm sm:text-base rounded-md transition-all ${
-                billingCycle === "yearly"
+              className={`px-4 py-2 text-sm sm:text-base transition-all ${
+                billingCycle === "Year"
                   ? "bg-gradient-to-r from-blue-400 to-purple-500 text-white"
                   : "text-gray-600"
               }`}
-              onClick={() => setBillingCycle("yearly")}
+              onClick={() => setBillingCycle("Year")}
             >
               Yearly (Save 2.5%)
             </button>
@@ -270,21 +305,21 @@ const PricingPage = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {plans.map((plan) => (
           <div key={plan.name} className="border rounded-lg p-4 sm:p-6 shadow-lg hover:shadow-xl transition-all">
-            <div className="space-y-4">
+            <div className="space-y-3">
               <div>
                 <h3 className="text-lg font-bold">{plan.name}</h3>
-                <p className="text-sm text-gray-600 h-12">{plan.subtitle}</p>
+                <p className="text-[0.7rem] text-gray-600 h-[25px] italic">{plan.subtitle}</p>
               </div>
               
               <div className="text-2xl sm:text-3xl font-bold">
                 {plan.price === "contact" ? (
-                  <button className="w-full py-2 px-4 bg-gradient-to-r from-blue-400 to-purple-500 text-white rounded-md text-base">
+                  <button className="w-full py-2 px-4 bg-gradient-to-r from-blue-400 to-purple-500 text-white  text-base">
                     Contact Us
                   </button>
                 ) : (
                   <>
                     ₹{handlePriceChange(plan).toFixed(2)}
-                    <span className="text-base font-normal text-gray-600">/{billingCycle}</span>
+                    <span className="text-base font-normal text-gray-600"> /{billingCycle}</span>
                   </>
                 )}
               </div>
@@ -300,7 +335,7 @@ const PricingPage = () => {
                 ))}
               </div>
 
-              <button className="w-full py-2 px-4 bg-gradient-to-r from-blue-400 to-purple-500 text-white rounded-md hover:from-blue-500 hover:to-purple-600 transition-all">
+              <button className="w-full py-2 px-4 bg-gradient-to-r from-blue-400 to-purple-500 text-white  hover:from-blue-500 hover:to-purple-600 transition-all">
                 Choose Plan
               </button>
             </div>
@@ -312,7 +347,7 @@ const PricingPage = () => {
       <div className="text-center mb-12 col-span-full">
         <button
           onClick={scrollToPlans}
-          className="inline-flex items-center space-x-2 bg-gradient-to-r from-blue-400 to-purple-500 text-white py-3 px-6 rounded-md hover:from-blue-500 hover:to-purple-600 transition-all text-lg"
+          className="inline-flex items-center space-x-2 bg-gradient-to-r from-blue-400 to-purple-500 text-white py-3 px-6 hover:from-blue-500 hover:to-purple-600 transition-all text-lg"
         >
           <span>View all Plans and Features</span>
         </button>
@@ -321,17 +356,18 @@ const PricingPage = () => {
       {/* Mobile Number Section */}
       <div className="bg-gray-50 rounded-xl p-6 sm:p-8 mb-12">
         <div className="text-center mb-6">
-          <p className="text-xl sm:text-2xl font-bold text-gray-600">
-            Provide your number, and our experts will call you back shortly!
+          <p className="text-xl sm:text-2xl font-bold text-gray-600 tracking-[-0.7px]">
+            Enter your Number below for a Security Expert Consultation!
           </p>
         </div>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <input
             type="tel"
+            ref={telRef}
             placeholder="Enter your mobile number......"
-            className="w-full sm:w-[60%] py-3 sm:py-5 px-4 border border-gray-300 rounded-md text-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full sm:w-[60%] py-3 sm:py-5 px-4 border border-gray-300 text-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
-          <button className="w-full sm:w-auto bg-gradient-to-r from-blue-400 to-purple-500 text-white py-3 sm:py-5 px-6 rounded-md hover:from-blue-500 hover:to-purple-600 transition-all">
+          <button className="w-full sm:w-auto bg-gradient-to-r from-blue-400 to-purple-500 text-white py-3 sm:py-5 px-6 hover:from-blue-500 hover:to-purple-600 transition-all" onClick={handleSubmitConsultation}>
             <ChevronRight className="w-6 h-6 mx-auto" />
           </button>
         </div>
@@ -343,7 +379,7 @@ const PricingPage = () => {
         <div className="text-center mb-8">
           <button
             onClick={() => setShowComparison(!showComparison)}
-            className="inline-flex items-center space-x-2 bg-gradient-to-r from-blue-400 to-purple-500 text-white py-2 px-4 rounded-md hover:from-blue-500 hover:to-purple-600 transition-all"
+            className="inline-flex items-center space-x-2 bg-gradient-to-r from-blue-400 to-purple-500 text-white py-2 px-4 hover:from-blue-500 hover:to-purple-600 transition-all"
           >
             <span>{showComparison ? "Hide" : "Show"} Comparison</span>
             <ChevronRight className={`w-5 h-5 transform transition-transform ${showComparison ? "rotate-90" : ""}`} />
@@ -385,6 +421,14 @@ const PricingPage = () => {
             </table>
           </div>
         )}
+      </div>
+      <div className="flex flex-col max-w-6xl mx-auto py-4 space-y-2">
+        <span className="text-2xl text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">FQA:-</span>
+        <FaqContainer faqs={faqs} className="lg:w-full"/>
+      </div>
+        
+      <div className={`tk-Rent fixed bottom-[40px] right-[5px] w-[200px] hidden md:hidden lg:block`}>
+              <NavLink to="/Rent"><img src={normalImages.rentToday} alt="Rent Now image" /></NavLink>
       </div>
     </div>
   );

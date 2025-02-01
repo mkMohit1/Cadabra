@@ -1,6 +1,8 @@
 import React from 'react';
 import '../styles/ServicesSection.scss';
 import serviceImg from '../ImagePath';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 const services = [
     {
@@ -9,7 +11,7 @@ const services = [
     description: '->',
   },
   {
-    title: 'CCTV Surve.',
+    title: 'CCTV Surveillance',
     subText: 'For Homes & Businesses',
     description: '->',
   },
@@ -30,8 +32,8 @@ const ServicesSection = () => {
             <img src={serviceImg[index]} alt={service.title} className="service-img" />
             <h3>{service.title}</h3>
             <p>{service.subText}</p>
-            <a href="/" className="service-link">
-              {service.description}
+            <a href="/" className="service-link bg-gradient-to-r from-blue-400 to-purple-600 font-Inter xs:font-[10px]">
+            <FontAwesomeIcon icon={faArrowRight} className="text-white"/>
             </a>
           </div>
         ))}

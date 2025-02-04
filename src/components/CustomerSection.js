@@ -30,7 +30,7 @@ const CustomerSection = () => {
             </div>
           </div>
           <div className="md:w-1/2 text-center md:text-left space-y-4 xs:mt-[1rem] xxs:mt-[4rem] xxxs:mt-[5rem]">
-            <h2 className="text-xl font-medium text-gray-800 xs:text-left xs:text-lg xs:text-center">
+            <h2 className="text-xl font-medium text-gray-800 xs:text-left xs:text-lg xs:text-center lg:text-left">
               We make security affordable by offering simple and flexible rental options for you
             </h2>
             <ul className="space-y-2">
@@ -59,7 +59,7 @@ const CustomerSection = () => {
         {/* Bottom Section */}
         <div className="flex flex-col md:flex-row items-center gap-8 mr-4 xs:m-[10px 0]">
           <div className="md:w-1/2 text-center md:text-left space-y-4 lg:ml-4">
-            <h2 className="text-xl text-left font-medium text-gray-800">
+            <h2 className="text-xl font-medium text-gray-800">
               We connect our customers with expert security advisors to help them design tailored security solutions
             </h2>
             <ul className="space-y-4">

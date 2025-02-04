@@ -215,7 +215,7 @@ useEffect(() => {
         <img 
           src={currentMainLogo}
           alt="Logo"
-          className={`main-logo ${isFlipping ? "flip-animation" : ""}`}
+          className={`main-logo ${isFlipping ? "flip-animation" : ""} cursor-pointer`}
         />
         <CitySelector 
         onCitySelect={handleCitySelect} 

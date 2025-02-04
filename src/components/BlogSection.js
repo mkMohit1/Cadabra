@@ -152,7 +152,7 @@ const BlogSection = ({ blogs }) => {
                     <img
                       src={`${process.env.REACT_APP_BACK_URL}${post.coverImage}` || "https://via.placeholder.com/1200x500"}
                       alt={post.title}
-                      className="blog-image w-full h-48 object-contain"
+                      className="blog-image w-full object-contain"
                     />
                     <div className="blog-content p-4">
                       <p className="category text-sm text-[#888] mb-4">

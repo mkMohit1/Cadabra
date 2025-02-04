@@ -27,7 +27,7 @@ const Footer = () => {
         <div className="footer-logo mb-2">
           <img src={mainLogo.mainLogo5} alt="footerLogo" className="w-28"/>
           </div>
-        <p className="text-sm text-gray-600 mb-4">
+        <p className="text-sm text-gray-600 mb-4 xxxs:text-center">
         Cadabra Secure offers a wide range of security solutions for sale and rent across India. We provide affordable, reliable protection for homes and businesses.
         </p>
         <p className="text-sm text-gray-400">Cadabra Secure 2024. All rights reserved.</p>

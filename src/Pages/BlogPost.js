@@ -43,7 +43,7 @@ const BlogPost = ({ title, subtitle, imageUrl, featuredText, onContactClick, onS
         {blog.category && <span className="blog-featured">{blog.category}</span>}
         <h2 className="blog-title">{blog.title}</h2>
         <p className="blog-subtitle">{blog.description}</p>
-        <img src={blog.coverImage} alt={title} className="blog-image" />
+        <img src={`${process.env.REACT_APP_BACK_URL}${blog.coverImage}`} alt={title} className="blog-image" />
         <div
           className="blog-html-content"
           dangerouslySetInnerHTML={{ __html: blog.content }}

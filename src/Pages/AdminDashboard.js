@@ -9,6 +9,8 @@ import SaleAdmin from "../components/SaleAdmin";
 import CustomerManagement from "../components/CustomerManagement";
 import ProductPage from "./ProductPage";
 import { io } from "socket.io-client";
+import FaqsPage from "./FaqsPage";
+import BlogsAdminPage from "./BlogsAdminPage";
 
 const socket= io(process.env.REACT_APP_BACK_URL);
 
@@ -18,6 +20,7 @@ const AdminDashboard = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [isProfileOpen, setProfileOpen] = useState(false);
   const [currentContainer, setCurrentContainer] = useState("Dashboard");
+  
 
   const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
   const toggleProfile = () => setProfileOpen(!isProfileOpen);
@@ -68,7 +71,9 @@ const AdminDashboard = () => {
             currentUser.role === "SuperAdmin" && { icon: "👥", text: "Admins" },
             currentUser.role === "SaleAdmin" && { icon: "👔", text: "Sales Manager" },
             currentUser.role === "ProductAdmin" && { icon: "📦", text: "Product" },
-            currentUser.role === "SaleManager" && { icon: "🙍‍♂️", text: "Customer" },
+            currentUser.role === "SaleManager" && { icon: "🙍‍♂️", text: "Customer" },            
+            currentUser.role === "SuperAdmin" && { icon: "👥", text: "FAQS" },
+            currentUser.role === "SuperAdmin" && { icon: "👥", text: "Blogs" },
           ]
             .filter(Boolean)  // Filter out falsy values
             .map(({ icon, text }) => (
@@ -135,6 +140,8 @@ const AdminDashboard = () => {
           {currentContainer === "Sales Manager" && currentUser.role === "SaleAdmin" && <SaleAdmin />}
           {currentContainer=== 'Customer' && <CustomerManagement />}
           {currentContainer === 'Product' && <ProductPage/>}
+          {currentContainer ==='FAQS' && <FaqsPage/>}
+          {currentContainer ==='Blogs' && <BlogsAdminPage/>}
         </div>
       </main>
     </div>

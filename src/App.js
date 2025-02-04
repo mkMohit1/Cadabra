@@ -1,4 +1,4 @@
-import React, { useState, useEffect, use } from "react";
+import React, { useState, useEffect, use, Children } from "react";
 import { BrowserRouter as Router, Route, Routes, useLocation, useNavigate, redirect } from "react-router-dom";
 import HomePage from "./Pages/HomePage";
 import BlogPost from "./Pages/BlogPost";
@@ -20,6 +20,8 @@ import CreateJob from "./components/Job/CreateJob";
 import JobsPortal from "./components/Job/JobsPortal";
 import { loginUser } from "./redux/authSlice";
 import { updateCartItem } from "./redux/cartSlice";
+import BlogForm from "./components/BlogForm";
+import BlogsAdminPage from "./Pages/BlogsAdminPage";
 
 function App() {
   const [blogs, setBlogs] = useState([]);
@@ -144,6 +146,14 @@ function AppRoutes({ blogs, user }) {
               <LoginPage />
             )
           }
+          // children={[
+          //   ...(user && ["SuperAdmin", "SaleAdmin", "ProductAdmin", "SaleManager"].includes(user.role)
+          //     ? [{ path: "blogs", element: <BlogsAdminPage /> },
+
+          //     ]
+          //     : []
+          //   )
+          // ]}          
         />
       </Routes>
       {showNavbarFooter && <FooterPage />}

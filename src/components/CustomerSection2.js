@@ -6,7 +6,8 @@ import { faCircleChevronDown, faCircleChevronUp } from "@fortawesome/free-solid-
 import ConsultationPopup from "./ConsultationPopup";
 
 const CustomerSection2 = () => {
-  const [openFAQs, setOpenFAQs] = useState([false, false, false]);
+  const [faqs, setFaqs] = useState([]);
+  const [openFAQs, setOpenFAQs] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [imageSectionVisible, setImageSectionVisible] = useState(false);
 
@@ -56,24 +57,44 @@ const CustomerSection2 = () => {
     );
   };
 
-  const faqs = [
-    { question: "How can I choose my right product?", answer: "Yes, we do!" },
-    {
-      question: "Warranty support if you buy from Cadabra",
-      answer: "Absolutely, we are leading in this domain.",
-    },
-    {
-      question: "How to ensure you’re buying the Original product?",
-      answer: "Absolutely, we are leading in this domain.",
-    },
-  ];
+  // const faqs = [
+  //   { question: "How can I choose my right product?", answer: "Yes, we do!" },
+  //   {
+  //     question: "Warranty support if you buy from Cadabra",
+  //     answer: "Absolutely, we are leading in this domain.",
+  //   },
+  //   {
+  //     question: "How to ensure you’re buying the Original product?",
+  //     answer: "Absolutely, we are leading in this domain.",
+  //   },
+  // ];
+
+  useEffect(() => {
+    const fetchFaqFunction = async () => {
+      try {
+        const response = await fetch(`${process.env.REACT_APP_BACK_URL}/${'consultancy'}`);
+
+        if (response.ok) {
+          const data = await response.json();
+          setFaqs([...data]);
+          setOpenFAQs(new Array(data.length).fill(false));
+        } else {
+          console.error('Failed to fetch FAQs');
+        }
+      } catch (error) {
+        console.error('Error fetching FAQs:', error);
+      }
+    };
+
+    fetchFaqFunction();
+  }, []);
 
   return (
     <div className="customer-section flex flex-col items-center justify-center font-mulish py-8 px-4 bg-gray-100">
       <div className="content-container flex flex-col md:flex-row md:gap-8 max-w-7xl">
         <div
           ref={imageSectionRef}
-          className={`image-section w-full md:w-1/2 mb-8 md:mb-0 shadow-[8px_8px_1px_rgba(211,211,211,0.7)] border-gray-400 border-[2px]`}
+          className={`image-section w-full md:w-1/2 mb-8 md:mb-0  h-fit shadow-[8px_8px_1px_rgba(1,1,1,0.7)] border-black border-[2px]`}
         >
           <img
             src={normalImages.svgImage1}

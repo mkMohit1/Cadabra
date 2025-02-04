@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleArrowRight } from "@fortawesome/free-solid-svg-icons";
@@ -6,16 +6,48 @@ import { faCircleArrowRight } from "@fortawesome/free-solid-svg-icons";
 const BlogSection = ({ blogs }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [visibleBlogs, setVisibleBlogs] = useState(3); // Default to 3 blogs
-  const clonedBlogs = Array.isArray(blogs) ? [...blogs, ...blogs] : []; // Duplicate blogs for infinite loop
+  const clonedBlogs = Array.isArray(blogs) && Array.isArray(blogs).length>3 ? [...blogs, ...blogs] :blogs.length<4 ?[...blogs]:[]; // Duplicate blogs for infinite loop
   const navigate = useNavigate();
+  const sliderRef = useRef({ startX: 0, endX: 0 });
   const handleNext = () => {
-    if (currentIndex < blogs.length + visibleBlogs - 1) {
+    if(currentIndex==1 && visibleBlogs ==2){
+      return;
+    }
+    if(currentIndex ==2 && visibleBlogs==1){
+      return;
+    }
+    if(window.innerWidth>768 && currentIndex==1 && visibleBlogs==3){
+      return;
+    }
+    if ((currentIndex < blogs.length + visibleBlogs - 1)) {
       setCurrentIndex(currentIndex + 1);
     } else {
       // Reset to start after finishing one loop (seamless)
       setTimeout(() => {
         setCurrentIndex(visibleBlogs);
       }, 300); // Match the transition duration
+    }
+  };
+
+  const handleTouchStart = (e) => {
+    sliderRef.current.startX = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e) => {
+    sliderRef.current.endX = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (!sliderRef.current) return;
+  
+    const diffX = sliderRef.current.startX - sliderRef.current.endX;
+  
+    if (Math.abs(diffX) > 50) {
+      if (diffX > 0) {
+        setCurrentIndex((prev) => Math.min(prev + 1, clonedBlogs.length - 1));
+      } else {
+        setCurrentIndex((prev) => Math.max(prev - 1, 0));
+      }
     }
   };
 
@@ -92,6 +124,10 @@ const BlogSection = ({ blogs }) => {
           <div className="blog-cards-container overflow-hidden w-full max-w-5xl mx-auto">
             <div
               className="blog-cards flex transition-transform duration-300"
+              ref={sliderRef}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
               style={{
                 transform: `translateX(-${currentIndex * (100 / visibleBlogs)}%)`,
               }}
@@ -114,9 +150,9 @@ const BlogSection = ({ blogs }) => {
                     style={{ cursor: "pointer" }}
                   >
                     <img
-                      src={post.coverImage || "https://via.placeholder.com/1200x500"}
+                      src={`${process.env.REACT_APP_BACK_URL}${post.coverImage}` || "https://via.placeholder.com/1200x500"}
                       alt={post.title}
-                      className="blog-image w-full h-48 object-cover"
+                      className="blog-image w-full h-48 object-contain"
                     />
                     <div className="blog-content p-4">
                       <p className="category text-sm text-[#888] mb-4">
@@ -128,6 +164,7 @@ const BlogSection = ({ blogs }) => {
                       <h4 className="title text-lg font-medium text-[#333] mb-4">
                         {post.title}
                       </h4>
+                      <span className="text-sm  text-[#333]">{post.description}</span>
                       <div className="author flex items-center justify-between">
                         {post.userImage && (
                           <div className="author-image flex items-center">

@@ -76,7 +76,7 @@ const ContactForm = () => {
     <div className="flex min-h-5xl items-center justify-center bg-white pt-[50px] pb-[20px] relative font-mulish">
       {/* <div className='absolute md:w-[50%] custom-bg-black bg-black md:h-[100%] z-1 left-0 sm:w-full sm:h-[60%] sm:top-0'></div>
       <div className='absolute md:w-[50%] custom-bg-white bg-white md:h-[100%] z-1 right-0 sm:w-full sm:h-[40.7%] sm:bottom-0'></div> */}
-      <div className="bg-white shadow-[8px_8px_1px_rgba(211,211,211,0.7)] border-gray-400 border-[2px] overflow-hidden md:flex w-4/5 max-w-4xl z-10 mt-[2rem] mb-[1rem]">
+      <div className="bg-white shadow-[8px_8px_1px_rgba(1,1,1,0.7)] border-black border-[2px] overflow-hidden md:flex w-4/5 max-w-4xl z-10 mt-[2rem] mb-[1rem]">
         {/* Left Form Section */}
         <div className="w-full md:w-1/2 p-8 py-4">
           <h2 className="text-3xl font-bold mb-4 text-black">
@@ -215,7 +215,7 @@ const ContactForm = () => {
         </div>
       </div>
 
-      <div className={`tk-Rent fixed bottom-[40px] right-[5px] w-[200px] hidden md:hidden lg:block`}>
+      <div className={`tk-Rent fixed bottom-[40px] right-[5px] w-[200px] hidden md:hidden lg:block z-10`}>
               <NavLink to="/Rent"><img src={normalImages.rentToday} alt="Rent Now image" /></NavLink>
       </div>
     </div>

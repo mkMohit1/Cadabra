@@ -8,7 +8,7 @@ const HeroSection = () => {
       <div className="absolute w-[800px] h-[800px] bg-gray-200 rounded-full top-[-400px] right-[-400px] z-[-1]"></div>
 
       <div className="max-w-5xl mx-auto space-y-6 md:pt-12 xs:tracking-[-1px] xs:mt-[30px] xxs:mt-[60px] xxxs:mt-[60px]">
-        <h1 className="text-4xl md:text-5xl font-extrabold xs:font-bold text-gray-700">
+        <h1 className="text-4xl md:text-5xl font-extrabold xs:font-bold text-black">
           Protect your Property
         </h1>
         <p className="text-2xl md:text-3xl font-bold"

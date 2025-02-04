@@ -50,7 +50,7 @@ const ProductList = ({ products, fetchProducts, onNewProduct, onEditProduct }) =
             <tr key={product.id}>
               <td>{index + 1}</td>
               <td className="product-cell">
-                <img src={`http://localhost:5000${product.productImage}`} alt={product.title} />
+                <img src={`${process.env.REACT_APP_BACK_URL}${product.productImage}`} alt={product.title} />
                 <span>{product.title}</span>
               </td>
               <td>{product.mrp}₹</td>

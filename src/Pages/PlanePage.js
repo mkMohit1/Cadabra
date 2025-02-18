@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { Check, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { normalImages } from "../ImagePath";
 import { NavLink } from "react-router-dom";
-import FaqContainer from "../components/FaqContainer";
+import FaqContainer from "../components/Popup&Faq/FaqContainer";
 import { errorToast, successToast } from "../DecryptoAndOther/ToastUpdate";
 
 const PricingPage = () => {

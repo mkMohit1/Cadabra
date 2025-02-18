@@ -149,7 +149,7 @@ const LoginPage = () => {
   // Handle Google login
   const handleGoogleLogin = () => {
     const newUserParam = newUser ? 'true' : 'false';
-    window.open(`http://localhost:5000/auth/google?newUser=${newUserParam}`, "_self");
+    window.open(`${process.env.REACT_APP_BACK_URL}/auth/google?newUser=${newUserParam}`, "_self");
   };
   // console.log(newUser);
   return (

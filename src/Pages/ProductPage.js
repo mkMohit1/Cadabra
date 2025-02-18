@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import ProductList from '../components/ProductList';
-import CreateProduct from '../components/CreateProduct';
+import ProductList from '../components/Admin/ProductList';
+import CreateProduct from '../components/Admin/CreateProduct';
 import '../styles/ProductPage.scss';
 import { useSelector } from 'react-redux';
 

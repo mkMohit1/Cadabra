@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { rentImage, normalImages } from "../ImagePath";
-import ProductCard from "../components/ProductCard";
-import FilterProduct from "../components/FilterProduct";
+import ProductCard from "../components/Product/ProductCard";
+import FilterProduct from "../components/Popup&Faq/FilterProduct";
 import "../styles/RentPage.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../redux/rentProductSlice";
@@ -11,7 +11,7 @@ import {
   updateCartItem,
   syncCartWithServer,
 } from "../redux/cartSlice";
-import ConsultationFilter from "../components/ConsultationFilter";
+import ConsultationFilter from "../components/Popup&Faq/ConsultationFilter";
 import { errorToast, infoToast } from "../DecryptoAndOther/ToastUpdate";
 
 export default function RentPage() {

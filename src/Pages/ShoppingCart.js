@@ -1,24 +1,15 @@
 import React, { useEffect, useState } from "react";
 import "../styles/ShoppingCart.scss";
 import { useSelector, useDispatch } from "react-redux";
-import CartCard from "../components/CartCard";
 import {
   updateCartItem,
-  updateSellCartCount,
-  updateCartCount,
-  updateCartMode,
-  validateCart,
   syncCartWithServer,
-  removeOldCartItems,
 } from "../redux/cartSlice";
-import OrderSummary from "../components/OrderSummary";
-import AddressSelector from "../components/AddressSelector";
-import CartItems from "../components/CartItems";
-import ShippingMethod from "../components/ShippingMethod";
-import { infoToast } from "../DecryptoAndOther/ToastUpdate";
+import OrderSummary from "../components/Cart/OrderSummary";
+import AddressSelector from "../components/Cart/AddressSelector";
+import CartItems from "../components/Cart/CartItems";
+import ShippingMethod from "../components/Cart/ShippingMethod";
 import { CalendarIcon, ChevronRight, ChevronLeft } from 'lucide-react';
-import { updateCurrentContainer } from '../redux/cartSlice';
-import debounce from 'lodash.debounce';
 
 const ShoppingCart = () => {
   const dispatch = useDispatch();
@@ -30,8 +21,15 @@ const ShoppingCart = () => {
   const totalNCartCount = useSelector((state) => state.cart.totalNCartCount);
   const currentContainer = useSelector(state=>state.cart.currentContainer);
   const currentCart = currentMode === "rent" && user ? cartItem : cartNItem;
-  
-
+  const [checkBook, setCheckBook] = useState(false);
+  const [currentAddress, setCurrentAddress]=useState(null);
+  const hadleUpdateBook=()=>{
+    setCheckBook((prev)=>!prev)
+  }
+  const handleAdrress = (address)=>{
+    setCurrentAddress(address);
+    console.log(address);
+  }
   // Load cart from localStorage and remove expired items
   useEffect(() => {
     let storedCart;
@@ -101,15 +99,15 @@ const ShoppingCart = () => {
         <div className={`max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 ${currentContainer !== 'CartItem' ? 'mt-16' : ''}`}>
           <div className="lg:col-span-2">
             {currentContainer === 'AddressContainer' ? (
-              <AddressSelector />
+              <AddressSelector currentAddress={currentAddress} handleAdrress={handleAdrress} />
             ) : currentContainer === 'Shipping' ? (
               <ShippingMethod />
             ) : (
-              <CartItems currentCart={currentCart} />
+              <CartItems currentCart={currentCart} checkBook={checkBook} hadleUpdateBook={hadleUpdateBook}/>
             )}
           </div>
           <div className="lg:col-span-1">
-            <OrderSummary currentCart={currentCart} currentMode={currentMode} />
+            <OrderSummary currentCart={currentCart} currentMode={currentMode} checkBook={checkBook} currentAddress={currentAddress}/>
           </div>
         </div>
       ) : (

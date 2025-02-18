@@ -44,9 +44,10 @@ export const syncCartWithServer = createAsyncThunk(
         });
         if (!response.ok) throw new Error('Failed to sync cart with server');
         const data = await response.json();
+        console.log(data);
         return data.cart;
       } catch (error) {
-        console.error('Error syncing cart:', error);
+        console.error('Error syncing cart:', error.message);
         throw error;
       }
     }

@@ -2,15 +2,16 @@ import React, { useEffect, useState } from "react";
 import { Menu, User, Maximize, ChevronDown, LogOut } from "lucide-react";
 import "../styles/AdminDashboard.Module.scss";
 import { useSelector, useDispatch } from "react-redux";
-import Dashboard from "../components/Dashboard";
-import AdminPage from "../components/AdminPage";
+import Dashboard from "../components/Admin/Dashboard";
+import AdminPage from "../components/Admin/AdminPage";
 import { logout } from "../redux/authSlice";
-import SaleAdmin from "../components/SaleAdmin";
-import CustomerManagement from "../components/CustomerManagement";
+import SaleAdmin from "../components/Admin/SaleAdmin";
+import CustomerManagement from "../components/Admin/CustomerManagement";
 import ProductPage from "./ProductPage";
 import { io } from "socket.io-client";
 import FaqsPage from "./FaqsPage";
 import BlogsAdminPage from "./BlogsAdminPage";
+import BookedOrders from "../components/Admin/BookOrder";
 
 const socket= io(process.env.REACT_APP_BACK_URL);
 
@@ -70,7 +71,9 @@ const AdminDashboard = () => {
             { icon: "📊", text: "Dashboard" },
             currentUser.role === "SuperAdmin" && { icon: "👥", text: "Admins" },
             currentUser.role === "SaleAdmin" && { icon: "👔", text: "Sales Manager" },
+            currentUser.role ==='InstallerAdmin' && { icon: "👔", text: "Installer" },
             currentUser.role === "ProductAdmin" && { icon: "📦", text: "Product" },
+          (currentUser.role === "InstallerAdmin" ||currentUser.role === "SaleAdmin" ||currentUser.role === "Installer") && { icon: "📦", text: "Orders" },
             currentUser.role === "SaleManager" && { icon: "🙍‍♂️", text: "Customer" },            
             currentUser.role === "SuperAdmin" && { icon: "👥", text: "FAQS" },
             currentUser.role === "SuperAdmin" && { icon: "👥", text: "Blogs" },
@@ -138,10 +141,12 @@ const AdminDashboard = () => {
           {currentContainer === "Dashboard" && <Dashboard />}
           {currentContainer === "Admins" && currentUser.role === "SuperAdmin" && <AdminPage />}
           {currentContainer === "Sales Manager" && currentUser.role === "SaleAdmin" && <SaleAdmin />}
+          {currentContainer === "Installer" && currentUser.role === "InstallerAdmin" && <SaleAdmin />}
           {currentContainer=== 'Customer' && <CustomerManagement />}
           {currentContainer === 'Product' && <ProductPage/>}
           {currentContainer ==='FAQS' && <FaqsPage/>}
           {currentContainer ==='Blogs' && <BlogsAdminPage/>}
+          {currentContainer ==='Orders' && <BookedOrders/>}
         </div>
       </main>
     </div>

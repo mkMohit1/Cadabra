@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBlogs } from "../redux/blogSlice";
-import BlogForm from "../components/BlogForm";
-import BlogList from "../components/BlogList";
+import BlogForm from "../components/Blog/BlogForm";
+import BlogList from "../components/Blog/BlogList";
 
 const BlogsAdminPage = () => {
   const dispatch = useDispatch();
@@ -16,6 +16,10 @@ const BlogsAdminPage = () => {
   useEffect(() => {
     dispatch(fetchBlogs());
   }, [dispatch]);
+
+  useEffect(()=>{
+    dispatch(fetchBlogs());
+  },[]);
 
   const handleBlogEdit=(blog)=>{
     setBlogToEdit(blog);

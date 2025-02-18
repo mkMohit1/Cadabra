@@ -7,12 +7,12 @@ const initialState ={
 }
 
 export const fetchBlogs = createAsyncThunk('blogs/fetchBlogs',async()=>{
-    const response = await fetch('http://localhost:5000/blogs');
+    const response = await fetch(`${process.env.REACT_APP_BACK_URL}/blogs`);
     if(!response.ok){
         throw new Error('Failed to fetch the blogs');
     }
     const data = await response.json();
-    //console.log(data);
+    console.log(data);
     return data;
 });
 
@@ -21,7 +21,7 @@ export const updateBlogCoverTop = createAsyncThunk(
     'blogs/updateBlogCoverTop',
     async ({ blogId, isOnCoverTop }) => {
         console.log(blogId, isOnCoverTop);
-      const response = await fetch(`http://localhost:5000/blogs/isOnCoverTop/${blogId}`, {
+      const response = await fetch(`${process.env.REACT_APP_BACK_URL}/blogs/isOnCoverTop/${blogId}`, {
         method: 'PATCH', // assuming PATCH is used to update a single field
         headers: {
           'Content-Type': 'application/json',

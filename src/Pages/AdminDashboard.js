@@ -12,6 +12,8 @@ import { io } from "socket.io-client";
 import FaqsPage from "./FaqsPage";
 import BlogsAdminPage from "./BlogsAdminPage";
 import BookedOrders from "../components/Admin/BookOrder";
+import SubscriptionPage from "./SubscriptionPage";
+import ConsultancyPage from "./ConsultancyPage";
 
 const socket= io(process.env.REACT_APP_BACK_URL);
 
@@ -75,8 +77,10 @@ const AdminDashboard = () => {
             currentUser.role === "ProductAdmin" && { icon: "📦", text: "Product" },
           (currentUser.role === "InstallerAdmin" ||currentUser.role === "SaleAdmin" ||currentUser.role === "Installer") && { icon: "📦", text: "Orders" },
             currentUser.role === "SaleManager" && { icon: "🙍‍♂️", text: "Customer" },            
-            currentUser.role === "SuperAdmin" && { icon: "👥", text: "FAQS" },
+            (currentUser.role === "SuperAdmin" || currentUser.role === "GeneralAdmin") && { icon: "👥", text: "FAQS" },
             currentUser.role === "SuperAdmin" && { icon: "👥", text: "Blogs" },
+            currentUser.role === "GeneralAdmin" && {icon: "📰", text: "Subscription"},
+            currentUser.role === "GeneralAdmin" && {icon: "🧑🏻‍💻", text: "Consultancy"},
           ]
             .filter(Boolean)  // Filter out falsy values
             .map(({ icon, text }) => (
@@ -147,6 +151,8 @@ const AdminDashboard = () => {
           {currentContainer ==='FAQS' && <FaqsPage/>}
           {currentContainer ==='Blogs' && <BlogsAdminPage/>}
           {currentContainer ==='Orders' && <BookedOrders/>}
+          {currentContainer ==='Subscription' && <SubscriptionPage/>}
+          {currentContainer ==='Consultancy' && <ConsultancyPage/> }
         </div>
       </main>
     </div>

@@ -25,23 +25,25 @@ import BlogsAdminPage from "./Pages/BlogsAdminPage";
 import BookingConfirmation from "./components/Cart/BookingConfirmation";
 import PrivacyPolicy from "./components/common/PrivacyPolicy";
 import MyOrders from "./components/Cart/MyOrders";
+import BlogPage from "./Pages/BlogsPage";
+import { fetchProducts } from "./redux/rentProductSlice";
 
 function App() {
   const [blogs, setBlogs] = useState([]);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
 
-   useEffect(()=>{
-      // Load cart from localStorage
-      const storedCart = localStorage.getItem("cart");
-      // console.log("storedCart", storedCart);
-      // if (storedCart) {
-      //   const cartItems = JSON.parse(storedCart);
-      //   cartItems.forEach((item) => {
-      //     dispatch(updateCartItem(item));
-      //   });
-      // }
-    },[])
+  useEffect(()=>{
+    // Load cart from localStorage
+    const storedCart = localStorage.getItem("cart");
+    // console.log("storedCart", storedCart);
+    // if (storedCart) {
+    //   const cartItems = JSON.parse(storedCart);
+    //   cartItems.forEach((item) => {
+    //     dispatch(updateCartItem(item));
+    //   });
+    // }
+  },[]);
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("loggedInUser"));
@@ -111,7 +113,7 @@ function AppRoutes({ blogs, user }) {
   // Redirect user after login based on their role
   useEffect(() => {
     if (user) {
-      if (user.role && ["SuperAdmin", "SaleAdmin", "ProductAdmin",'SaleManager','InstallerAdmin','Installer'].includes(user.role)) {
+      if (user.role && ["SuperAdmin", "SaleAdmin", "ProductAdmin",'SaleManager','InstallerAdmin','Installer','GeneralAdmin'].includes(user.role)) {
         console.log("mk admin");
         navigate("/admin"); // Redirect admin users to admin dashboard
       } else if (location.pathname === "/login" || location.pathname === "/Login" || location.pathname === "/admin-login") {
@@ -140,13 +142,14 @@ function AppRoutes({ blogs, user }) {
         <Route path="policy" element={<PrivacyPolicy/>}/>
         <Route path="/Contact" element={<ContactForm/>}/>
         <Route path="/my-orders" element={<MyOrders />} />
+        <Route path="/blogs" element={<BlogPage blogs={blogs}/>}/>
           <Route path="/Job/list" element={<List />} /> {/* Job list for admin */}
           <Route path='/Job/createjob' element={<CreateJob/>} /> {/* Create job for admin*/}
           <Route path="/Job" element={<JobsPortal />} /> {/* Main Jobs Portal page */}
         <Route
           path="/admin"
           element={
-            user && ["SuperAdmin", "SaleAdmin", "ProductAdmin",'SaleManager','InstallerAdmin','Installer'].includes(user.role) ? (
+            user && ["SuperAdmin", "SaleAdmin", "ProductAdmin",'SaleManager','InstallerAdmin','Installer','GeneralAdmin'].includes(user.role) ? (
               <AdminDashboard />
             ) : (
               <LoginPage />

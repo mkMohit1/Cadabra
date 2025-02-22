@@ -36,7 +36,7 @@ const SubscribeSection = () => {
       }
   
       try {
-        const response = await fetch(`${process.env.Back_Url}/subscribe`, {
+        const response = await fetch(`${process.env.REACT_APP_BACK_URL}/subscribe`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -49,8 +49,10 @@ const SubscribeSection = () => {
           return;
         }
         successToast(data.message || "Subscribed successfully!");
+        e.target[0].value ="";
       } catch (error) {
         errorToast(error.message || "Failed to subscribe. Please try again later.");
+        e.target[0].value ="";
       }
     };
 

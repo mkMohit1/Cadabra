@@ -178,6 +178,9 @@ export default function RentPage() {
       )
     );
     setFilterData(filteredProducts);
+    if(filteredProducts.length ==0){
+      infoToast("Their is no products found that has these property.");
+    }
   };
 
   const renderProductCards = (data) =>

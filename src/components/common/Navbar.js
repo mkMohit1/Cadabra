@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Navigate, NavLink, useLocation } from "react-router-dom";
 import "../../styles/Navbar.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { User } from "lucide-react";
 import { faXmark, faBars, faCartShopping, faCircleChevronDown, faSearch, faLocationDot, faLock  } from "@fortawesome/free-solid-svg-icons";
 import { useSelector, useDispatch } from "react-redux";
 import { mainLogo, normalImages } from "../../ImagePath";
@@ -269,7 +270,7 @@ useEffect(() => {
           <li className={`rounded-none ${menuOpen?"text-center":""}`}>
             {user ? (
               <div className="userDetail" onClick={() => setDropdownOpen(!dropdownOpen)}>
-              <div className="userImage"><img src={normalImages.google} alt="userImage" /></div>
+              <div className="userImage"><img src={user.userImage} alt="userImage" /></div>
               <FontAwesomeIcon icon={faCircleChevronDown} className="userDropdown" />
               {dropdownOpen && (
                 <div className="dropdown-menu">

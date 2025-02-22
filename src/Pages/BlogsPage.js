@@ -1,61 +1,24 @@
-import React from "react";
-import "../styles/BlogPage.Module.scss";
+import React, { useState } from "react";
+import "../styles/BlogPage.scss";
 
-const BlogPage = () => {
-  const featuredBlogs = [
-    {
-      id: 1,
-      title: "10 Must-Have Skincare Products for Radiant Skin",
-      description:
-        "Explore essential skincare products that can transform your daily routine...",
-      image: "featured1.png",
-    },
-  ];
+const BlogPage = ({blogs = []}) => {
+  const [showMoreFeature, setShowMoreFeature] = useState(false);
+  let featuredBlogs = blogs.filter((blog) => blog.isOnCoverTop === 'yes');
+  
+  // Check if featuredBlogs is empty or undefined
+  if (!featuredBlogs || featuredBlogs.length === 0) {
+    if (blogs.length > 0) {
+      let randomIndex = Math.floor(Math.random() * blogs.length);
+      // Convert single blog to array
+      featuredBlogs = [blogs[randomIndex]];
+    } else {
+      // Ensure featuredBlogs is an empty array if blogs is empty
+      featuredBlogs = [];
+    }
+  }
+  console.log(featuredBlogs);
 
-  const trendingBlogs = [
-    {
-      id: 1,
-      title: "Seasonal Makeup Trends: Fall Edition",
-      description:
-        "Dive into the enchanting world of fall-inspired makeup trends...",
-      image: "image1.png",
-    },
-    {
-      id: 2,
-      title: "Reviewing the Latest Beauty Innovations in 2023",
-      description:
-        "Stay on the cutting edge of beauty with a comprehensive review...",
-      image: "image2.png",
-    },
-    {
-      id: 3,
-      title: "Reader Spotlight: Transformation Stories",
-      description:
-        "Witness incredible transformations of our valued customers...",
-      image: "image3.png",
-    },
-    {
-      id: 4,
-      title: "Inside BB: Product Development Journey",
-      description:
-        "Take an exclusive behind-the-scenes look at the creation of beauty products...",
-      image: "image4.png",
-    },
-    {
-      id: 5,
-      title: "Exclusive Interview with Jenna Milhouse (@missyb)",
-      description:
-        "Gain insights from a renowned beauty influencer or expert...",
-      image: "image5.png",
-    },
-    {
-      id: 6,
-      title: "Step-by-Step Guide: Achieving the Perfect Smokey Eye",
-      description:
-        "Witness the art of achieving the perfect smokey eye through step-by-step guidance...",
-      image: "image6.png",
-    },
-  ];
+  const trendingBlogs = blogs;
 
   const featuredVideos = [
     {
@@ -78,31 +41,67 @@ const BlogPage = () => {
     },
   ];
 
+  const handleShowFeatureBlog = () => {
+    setShowMoreFeature(!showMoreFeature);
+  };
+
   return (
-    <section className="blog-section">
+    <section className="blog-section pt-[4rem] font-mulish">
       {/* Featured Blog */}
       <div className="featured-section">
         {featuredBlogs.map((blog) => (
-          <div key={blog.id} className="featured-content">
-            <div className="text-content">
-              <h2 className="title">{blog.title}</h2>
-              <p className="description">{blog.description}</p>
-              <button className="read-more">Read more</button>
+          // featured-content
+          <div key={blog._id} className={`flex flex-col ${!showMoreFeature ? 'lg:flex-row' : ''} gap-4`}>
+            <div className={`image-content ${!showMoreFeature ? 'lg:w-[80%]' : 'w-full'}`}>
+              <img 
+                src={`${process.env.REACT_APP_BACK_URL}${blog.coverImage}`} 
+                alt={blog.title}
+                className={`w-full object-contain ml-2 rounded-lg ${!showMoreFeature ? 'h-[300px]' : 'max-h-[500px]'}`}
+              />
             </div>
-            <div className="image-content">
-              <img src={blog.image} alt={blog.title} />
+            <div className="flex flex-col w-full px-4 pt-2 relative font-mulish">
+              <h2 className="text-4xl font-bold mb-6 text-gray-800 leading-tight">{blog.title}</h2>
+              <div className={`relative ${!showMoreFeature ? 'max-h-[180px]' : ''} overflow-hidden`}>
+                <div
+                  className="blog-html-content prose prose-lg max-w-none 
+                    prose-headings:text-gray-800 prose-headings:font-semibold prose-headings:mt-6 prose-headings:mb-4
+                    prose-p:text-gray-600 prose-p:leading-relaxed prose-p:text-base prose-p:mb-4
+                    prose-strong:text-gray-700 prose-strong:font-medium
+                    prose-ul:my-4 prose-li:text-gray-600"
+                  dangerouslySetInnerHTML={{ __html: blog.content }}
+                ></div>
+                {!showMoreFeature && (
+                  <>
+                    <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent"></div>
+                    <button 
+                      className="read-more absolute bottom-2 left-1/2 -translate-x-1/2 bg-[#0A2640] text-white px-4 py-2 rounded-[8px] text-xl font-medium hover:bg-[#1C3D5D] transition-colors z-10 border border-[#0A2640] hover:border-[#1C3D5D]"
+                      onClick={handleShowFeatureBlog}
+                    >
+                      Read more
+                    </button>
+                  </>
+                )}
+              </div>
+              {showMoreFeature && (
+                <button 
+                  className="read-more mt-3 mb-2 bg-[#0A2640] text-white px-8 py-3 rounded-[8px] text-xl font-medium hover:bg-[#1C3D5D] transition-colors self-center border border-[#0A2640] hover:border-[#1C3D5D]"
+                  onClick={handleShowFeatureBlog}
+                >
+                  Read less
+                </button>
+              )}
             </div>
           </div>
         ))}
       </div>
 
       {/* Trending Blogs */}
-      <div className="trending-section">
+      <div className="trending-section font-mulish">
         <h2 className="section-title">Stay Trendy with Our Latest Insights</h2>
         <div className="blogs-grid">
           {trendingBlogs.map((blog) => (
-            <div key={blog.id} className="blog-card">
-              <img src={blog.image} alt={blog.title} className="blog-image" />
+            <div key={blog._id} className="blog-card">
+              <img src={`${process.env.REACT_APP_BACK_URL}${blog.coverImage}`} alt={blog.title} className="blog-image" />
               <div className="blog-content">
                 <h3 className="blog-title">{blog.title}</h3>
                 <p className="blog-description">{blog.description}</p>
@@ -117,7 +116,7 @@ const BlogPage = () => {
       </div>
 
       {/* Featured Videos */}
-      <div className="featured-videos">
+      {/* <div className="featured-videos">
         <h2 className="section-title">Featured Videos</h2>
         <div className="video-container">
           <div className="video-main">
@@ -134,11 +133,11 @@ const BlogPage = () => {
             ))}
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Subscription Section */}
       <div className="subscription-section">
-        <div className="subscription-content">
+        <div className="subscription-content font-mulish">
           <h3>Join our exclusive beauty community</h3>
           <p>
             Elevate your beauty journey with personalized recommendations and

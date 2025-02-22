@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { decryptData } from '../DecryptoAndOther/DecryptEncrpt';
 import { login } from '../redux/authSlice';
@@ -14,12 +14,17 @@ import { errorToast } from '../DecryptoAndOther/ToastUpdate';
 import { syncCartWithServer } from '../redux/cartSlice';
 import { normalImages } from '../ImagePath';
 import { NavLink } from 'react-router-dom';
+import { fetchProducts } from '../redux/rentProductSlice';
 
 const HomePage = ({ blogs }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const [gettingError, setGettingError] = React.useState('');
-
+  const products = useSelector((state) => state.product.rentProduct);
+  useEffect(() => {
+    // Fetch products when the page loads
+    dispatch(fetchProducts());
+  }, [dispatch]);
   useEffect(() => {
     if (!user) {
       const urlParams = new URLSearchParams(window.location.search);
@@ -78,7 +83,7 @@ const HomePage = ({ blogs }) => {
     <div className="App relative">
       <HeroSection />{/* font-mulish */}
       <LogosSection />
-      <ServicesSection />{/* font-mulish */}
+      <ServicesSection products={products}/>{/* font-mulish */}
       <CustomerSection />{/* font-mulish */}
       <Testimonials />{/* font-mulish */}
       <CustomerSection2 />{/* font-mulish */}

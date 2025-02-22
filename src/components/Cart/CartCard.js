@@ -6,8 +6,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { removeCartItem, removeSellCartItem } from '../../redux/cartSlice';
 import { errorToast, successToast } from '../../DecryptoAndOther/ToastUpdate';
 import { syncCartWithServer , updateQuantity} from '../../redux/cartSlice';
+import { useNavigate } from 'react-router-dom';
 
 const CartCard = ({ item, currentMode }) => {
+  const navigate = useNavigate();
   const user = useSelector(state => state.auth.user);
   const cartItem = useSelector(state => state.cart.cartItem);
   const dispatch = useDispatch();
@@ -61,6 +63,10 @@ const CartCard = ({ item, currentMode }) => {
           }
   };
 
+  const handleGotoProduct= ()=>{
+    navigate(`/products/${item.productId._id}`);
+  }
+
   console.log(cartItem);
   // Ensure price is displayed with a currency symbol, for example ₹ or $.
   const price = currentMode === 'rent' ? item.productId.mrp : item.productId.mrp;
@@ -68,7 +74,7 @@ const CartCard = ({ item, currentMode }) => {
   return (
     <div className="cart-item">
       <div className="cart-item-content">
-        <div className="item-details">
+        <div className="item-details" onClick={handleGotoProduct}>
           <img src={`${process.env.REACT_APP_BACK_URL}${item.productId.productImage}`} alt={item.title} className="item-image" />
           <div>
             <h4>{item.productId.title}</h4>
@@ -81,7 +87,7 @@ const CartCard = ({ item, currentMode }) => {
           <button onClick={() => user?handleQuantityChange(item._id, 1, user):handleQuantityChange(item.productId._id, 1)}>►</button>
         </div>
         <div className="item-actions">
-          <span className="price">{price}</span>
+          <span className="price">&#x20b9;{price}</span>
           <button
             onClick={
               currentMode === 'rent'

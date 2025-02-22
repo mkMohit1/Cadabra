@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaPlusMinus } from '../../svgComponents/Offer';
 
-const ConsultationFilter = () => {
+const ConsultationFilter = ({categoryIndex}) => {
   const [priceRange, setPriceRange] = useState([0, 10000]);
-  const [activeAccordion, setActiveAccordion] = useState(null);
+  const [activeAccordions, setActiveAccordions] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
-
+  const [selectedFilters, setSelectedFilters] = useState({});
   const filterCategories = {
+    category:{title:"Category",options:['Alarm System','CCTV', 'Display & TV']},
     delivery: { title: 'Delivery', options: ['Same Day Delivery', '2 Days Delivery', '7 Days Delivery'] },
     reviews: { title: 'Customer Reviews', options: ['3 Star', '4 Star', '5 Star'] },
     features: { title: 'Special Features', options: ['Home Camera', 'Night Vision', 'Pan/Tilt', 'Portable', 'Audio Detection'] },
@@ -19,22 +20,75 @@ const ConsultationFilter = () => {
   };
 
   const toggleAccordion = (key) => {
-    setActiveAccordion(activeAccordion === key ? null : key);
-  };
+    setActiveAccordions((prevAccordions) => {
+      if (prevAccordions.includes(key)) {
+        return prevAccordions.filter((item) => item !== key); // Close the filter if it's already open
+      } else {
+        return [...prevAccordions, key]; // Keep previously opened filters
+      }
+    });
+  }; 
+ 
 
+  const handleCheckboxChange = (categoryKey, option) => {
+    setSelectedFilters((prevFilters) => {
+      const updatedFilters = { ...prevFilters };
+  
+      // Initialize array if not exists
+      if (!updatedFilters[categoryKey]) {
+        updatedFilters[categoryKey] = [];
+      }
+  
+      // Check if option is already selected
+      if (updatedFilters[categoryKey].includes(option)) {
+        // Remove the selected option
+        updatedFilters[categoryKey] = updatedFilters[categoryKey].filter(item => item !== option);
+      } else {
+        // Add the selected option
+        updatedFilters[categoryKey] = [...updatedFilters[categoryKey], option];
+      }
+  
+      return updatedFilters;
+    });
+  };
+  
+  useEffect(() => {
+    const keyID = 'category'; // Use lowercase to match the key in filterCategories
+    if (categoryIndex !== null && categoryIndex !== undefined) { 
+      setActiveAccordions((prevAccordions) => {
+        if (!prevAccordions.includes(keyID)) {
+          return [...prevAccordions, keyID]; // Open "Category" filter
+        }
+        return prevAccordions;
+      });
+  
+      // Automatically select the corresponding category option
+      const selectedOption = filterCategories[keyID]?.options[categoryIndex];
+      if (selectedOption) {
+        setSelectedFilters((prevFilters) => ({
+          ...prevFilters,
+          [keyID]: [...(prevFilters[keyID] || []), selectedOption],
+        }));
+      }
+    }
+  }, []); // Run effect whenever categoryIndex changes
+  
   const FilterGroup = ({ title, options, categoryKey }) => (
     <div className="border rounded-md shadow-sm">
       <button 
-        className={`w-full text-left px-4 py-2 bg-gray-100 hover:bg-gray-200 transition ${activeAccordion === categoryKey ? 'bg-gray-200' : ''}`}
+        className={`w-full text-left px-4 py-2 bg-gray-100 hover:bg-gray-200 transition ${activeAccordions.includes(categoryKey) ? 'bg-gray-200' : ''}`}
         onClick={() => toggleAccordion(categoryKey)}
       >
         {title}
-        <span className="float-right">{activeAccordion === categoryKey ? '-' : '+'}</span>
+        <span className="float-right">{activeAccordions.includes(categoryKey) ? '-' : '+'}</span>
       </button>
-      <div className={`px-4 py-2 ${activeAccordion === categoryKey ? 'block' : 'hidden'}`}>
+      <div className={`px-4 py-2 ${activeAccordions.includes(categoryKey) ? 'block' : 'hidden'}`}>
         {options.map((option) => (
           <div key={option} className="flex items-center py-1">
-            <input type="checkbox" className="mr-2" />
+            <input type="checkbox" className="mr-2" 
+                checked={selectedFilters[categoryKey]?.includes(option) || false}
+                onChange={() => handleCheckboxChange(categoryKey, option)}
+            />
             <span>{option}</span>
           </div>
         ))}
@@ -73,13 +127,13 @@ const ConsultationFilter = () => {
         ))}
         <div className="border rounded-md shadow-sm">
           <button 
-            className={`w-full text-left px-4 py-2 bg-gray-100 hover:bg-gray-200 transition ${activeAccordion === 'price' ? 'bg-gray-200' : ''}`}
+            className={`w-full text-left px-4 py-2 bg-gray-100 hover:bg-gray-200 transition ${activeAccordions.includes('price') ? 'bg-gray-200' : ''}`}
             onClick={() => toggleAccordion('price')}
           >
             Price Range
-            <span className="float-right">{activeAccordion === 'price' ? '-' : '+'}</span>
+            <span className="float-right">{activeAccordions.includes('price') ? '-' : '+'}</span>
           </button>
-          <div className={`px-4 py-2 ${activeAccordion === 'price' ? 'block' : 'hidden'}`}>
+          <div className={`px-4 py-2 ${activeAccordions.includes('price') ? 'block' : 'hidden'}`}>
             <div className="flex flex-col sm:flex-row items-center gap-2">
               <input
                 type="range"

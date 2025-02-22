@@ -44,6 +44,11 @@ const AddressSelector = ({currentAddress,handleAdrress}) => {
 
         if (response.ok) {
           setAddresses(data.addresses);
+          if(data.addresses.length ==1){
+            //infoToast(`selected address 1`);
+            setSelectedAddress(data.addresses[0]._id);
+            handleAdrress(data.addresses[0]._id);
+          }
         } else {
           console.error('Error fetching addresses:', data.message);
           errorToast(data.message ||'Error fetching addresses:');
@@ -187,7 +192,7 @@ const AddressSelector = ({currentAddress,handleAdrress}) => {
           <div
             key={addr._id}
             className={`p-4 rounded-lg border-2 ${
-              selectedAddress === addr.id ? 'border-blue-600' : 'border-gray-200'
+              selectedAddress === addr._id ? 'border-blue-600' : 'border-gray-200'
             }`}
           >
             <div className="flex space-x-4">
@@ -282,7 +287,7 @@ const AddressSelector = ({currentAddress,handleAdrress}) => {
               />
             </label>
             <label>
-              ZIP Code
+              PIN Code
               <input
                 type="text"
                 value={newAddress.zipCode}

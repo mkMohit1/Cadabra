@@ -69,7 +69,7 @@ const ProductCard = ({ product, isInCart }) => {
   };
 
   const handleProductPage = ()=>{
-    navigate(`/products/product-${product._id}`);
+    navigate(`/products/${product._id}`);
   }
 
   // Process the description

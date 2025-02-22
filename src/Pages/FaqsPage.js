@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrash, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
 const truncateText = (text, limit) => {
   return text.length > limit ? text.substring(0, limit) + '...' : text;
@@ -13,6 +13,8 @@ const FaqsPage = () => {
   const [showForm, setShowForm] = useState(false);
   const [editingFAQ, setEditingFAQ] = useState(null);
   const [newFAQ, setNewFAQ] = useState({ page: '', question: '', answer: '' });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(5); // Default rows per page
 
   useEffect(() => {
     const fetchFAQs = async () => {
@@ -66,6 +68,14 @@ const FaqsPage = () => {
   const handleSubmit = () => {
     editingFAQ ? handleUpdateFAQ() : handleAddFAQ();
   };
+
+  // Filtering and pagination logic
+  const filteredFaqs = faqs.filter(faq => faq.question.toLowerCase().includes(search.toLowerCase()));
+  const totalPages = Math.ceil(filteredFaqs.length / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredFaqs.slice(indexOfFirstItem, indexOfLastItem);
+
 
   return (
     <div className="container mx-auto px-4 py-6">
@@ -215,6 +225,54 @@ const FaqsPage = () => {
           </tbody>
         </table>
       </div>
+
+      {/* Pagination and Manual Rows Per Page */}
+      <div className="flex flex-col sm:flex-row justify-between items-center mt-6 gap-2">
+        <div className="flex items-center">
+          <span className="mr-2 text-gray-600">Show</span>
+          <select
+            value={itemsPerPage}
+            onChange={(e) => {
+              setItemsPerPage(Number(e.target.value));
+              setCurrentPage(1); // Reset to first page on change
+            }}
+            className="border border-gray-300 px-2 py-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+          </select>
+          <span className="ml-2 text-gray-600">entries</span>
+        </div>
+        {totalPages > 1 && (
+          <div className="flex justify-center items-center space-x-2">
+            <button
+              onClick={() => setCurrentPage(currentPage - 1)}
+              disabled={currentPage === 1}
+              className={`px-4 py-2 rounded transition duration-300 ${
+                currentPage === 1 ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 text-white'
+              }`}
+            >
+              <FontAwesomeIcon icon={faChevronLeft} /> Prev
+            </button>
+
+            <span className="text-gray-700 px-4">
+              Page {currentPage} of {totalPages}
+            </span>
+
+            <button
+              onClick={() => setCurrentPage(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className={`px-4 py-2 rounded transition duration-300 ${
+                currentPage === totalPages ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 text-white'
+              }`}
+            >
+              Next <FontAwesomeIcon icon={faChevronRight} />
+            </button>
+          </div>
+        )}
+        </div>
     </div>
   );
 };

@@ -67,3 +67,12 @@ html::-webkit-scrollbar, body::-webkit-scrollbar {
     transform: translate3d(4px, 0, 0);
   }
 }
+
+/* Hide scrollbar for all browsers */
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hidden {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

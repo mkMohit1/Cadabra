@@ -20,7 +20,7 @@ const OrderSummary = ({ currentCart, currentMode, checkBook, currentAddress }) =
   const [newUser, setNewUser] = useState(false);
   const [isOtpFieldVisible, setIsOtpFieldVisible] = useState(false);
   const [beforelogin, setBeforeLogin] = useState(false);
-  //console.log(currentCart);
+  console.log(currentCart);
   const [formData, setFormData] = useState({
     mobileNumber: "",
     enteredOtp: "",
@@ -81,6 +81,7 @@ const OrderSummary = ({ currentCart, currentMode, checkBook, currentAddress }) =
           const data = await response.data;
            console.log(data);
           successToast("Booking successful! Your order will be processed at installation.");
+          dispatch(updateCurrentContainer("cartItem"));
           navigate(`/booking-confirmation/${data.transactionID}`); // Redirect to a confirmation page
         } else {
           errorToast("Failed to book. Please try again.");
@@ -201,6 +202,18 @@ const OrderSummary = ({ currentCart, currentMode, checkBook, currentAddress }) =
         if (response.ok) {
           const result = await response.json();
           successToast(result.message);
+          console.log(result);
+          // Store the new user ID
+        updateFormData({ userID: result.user._id });
+
+        // Sync the cart with the new user
+        let breforeLoginCart = localStorage.getItem('cartNuser');
+        breforeLoginCart = JSON.parse(breforeLoginCart);
+
+        if (breforeLoginCart && breforeLoginCart.length > 0) {
+          dispatch(syncCartWithServer({ userId: result.userID, cartItems: [...breforeLoginCart] }));
+          localStorage.removeItem('cartNuser');
+        }
           handleClose(); // Hide the form after submission
         }
     } catch (error) {
@@ -244,7 +257,7 @@ const OrderSummary = ({ currentCart, currentMode, checkBook, currentAddress }) =
                     <div className="text-sm text-gray-600 flex justify-between">
                       <span>{item.productId.title}</span>
                       <span>{quantity}</span>
-                      <span className="ml-4">${(quantity * price).toFixed(2)}</span>
+                      <span className="ml-4">&#x20b9; {(quantity * price).toFixed(2)}</span>
                     </div>
                   </div>
                   <button
@@ -277,7 +290,7 @@ const OrderSummary = ({ currentCart, currentMode, checkBook, currentAddress }) =
       <div className="mt-6 pt-6 border-t">
         <div className="flex justify-between items-center mb-6">
           <span className="font-semibold">TOTAL</span>
-          <span className="text-xl font-bold">${total.toFixed(2)}</span>
+          <span className="text-xl font-bold">&#x20b9;{total.toFixed(2)}</span>
         </div>
 
         <div className="text-sm text-gray-600 mb-6">

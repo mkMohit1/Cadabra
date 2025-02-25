@@ -72,7 +72,7 @@ const CustomerSection2 = () => {
   useEffect(() => {
     const fetchFaqFunction = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_BACK_URL}/${'consultancy'}`);
+        const response = await fetch(`${process.env.REACT_APP_BACK_URL}/faqs/${'consultancy'}`);
 
         if (response.ok) {
           const data = await response.json();

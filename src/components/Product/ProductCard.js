@@ -83,9 +83,9 @@ const ProductCard = ({ product, isInCart }) => {
         className="product-image"
       />
       <h3 className="product-name" onClick={handleProductPage}>{product.title}</h3>
-      <p className="product-description">
+      {/* <p className="product-description">
         {product.subTitle}
-      </p>
+      </p> */}
       <p className="product-usp">
       {product.productUsp.length>MAX_USP_LENGTH?`${product.productUsp.slice(0,MAX_USP_LENGTH)}...`:product.productUsp}
       </p>

@@ -51,6 +51,7 @@ import Cart from "./images/cart.svg";
 import mainLogo5 from './images/mainLogo5.png';
 import commingSoon from "./images/coming_soon.png";
 import rentToday from "./images/rentToday.png";
+import noImage from "./images/noImage.png";
 
 export const mainLogo = {mainLogo1, mainLogo2, mainLogo3, mainLogo4, mainLogo5};
 export const contactImage = [contact1,contact2,contact3];
@@ -90,6 +91,7 @@ export const normalImages ={
     Cart:Cart,
     commingSoon:commingSoon,
     rentToday:rentToday,
+    noImage:noImage,
 }
 
 export const rentImage = {

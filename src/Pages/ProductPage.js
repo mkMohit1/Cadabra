@@ -12,9 +12,17 @@ const ProductPage = () => {
 
   // Fetch products when user ID is available
   const fetchProducts = async () => {
-    const response = await fetch(`${process.env.REACT_APP_BACK_URL}/admin/getProducts/${currentUser._id}`);
-    const data = await response.json();
-    setProducts(data.products);
+    const response = await fetch(`${process.env.REACT_APP_BACK_URL}/admins/admin/getProducts/${currentUser._id}`);
+    if(response.ok){
+      console.log("products fetched");
+      const data = await response.json();
+      console.log("data",data);
+      setProducts(data.products);
+    }else{
+      console.log("products not fetched");
+    }
+    
+    
   };
 
   useEffect(() => {

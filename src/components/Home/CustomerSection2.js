@@ -133,7 +133,6 @@ const CustomerSection2 = () => {
               ))}
             </div>
           </div>
-
       </div>
 
       {showPopup && <ConsultationPopup isOpen={showPopup} onClose={handleonClose} />}

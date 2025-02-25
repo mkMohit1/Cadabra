@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Check, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { normalImages } from "../ImagePath";
 import { NavLink } from "react-router-dom";
@@ -9,6 +9,8 @@ const PricingPage = () => {
   const [billingCycle, setBillingCycle] = useState("Month");
   const [showComparison, setShowComparison] = useState(true);
   const [currentFaqIndex, setCurrentFaqIndex] = useState(0);
+  const [faqs, setFaqs]= useState([]);
+  const [openFAQs, setOpenFAQs] = useState([]);
   const telRef = useRef();
   const plans = [
     {
@@ -161,44 +163,16 @@ const PricingPage = () => {
     "Command Center Monitoring",
     "Emergency SOS Support",
   ];
-
-  const faqs = [
-    {
-      question: "What's included in the installation process?",
-      answer:
-        "Our professional installation team handles everything - from camera mounting and wiring to system configuration and app setup.",
-    },
-    {
-      question: "How long does the installation take?",
-      answer:
-        "Typical installation takes 2-4 hours depending on the number of cameras and complexity of setup. We work efficiently to minimize disruption to your schedule.",
-    },
-    {
-      question: "Is there a warranty on the equipment?",
-      answer:
-        "Yes, all our cameras and equipment come with a 1-year manufacturer warranty. Plus, our service plans include maintenance and support.",
-    },
-    {
-      question: "Can I access the cameras from my phone?",
-      answer:
-        "Yes, you can view your cameras anytime, anywhere through our iOS and Android apps. The apps also provide notifications and camera controls.",
-    },
-    {
-      question: "What happens if I need technical support?",
-      answer:
-        "We provide 24/7 technical support for all our plans. Plus and higher tiers get priority support with faster response times.",
-    },
-  ];
   const itemsPerPage = 3;
-  const nextFaq = () => {
-    setCurrentFaqIndex((prev) =>
-      Math.min(prev + itemsPerPage, faqs.length - itemsPerPage)
-    );
-  };
+  // const nextFaq = () => {
+  //   setCurrentFaqIndex((prev) =>
+  //     Math.min(prev + itemsPerPage, faqs.length - itemsPerPage)
+  //   );
+  // };
 
-  const prevFaq = () => {
-    setCurrentFaqIndex((prev) => Math.max(prev - itemsPerPage, 0));
-  };
+  // const prevFaq = () => {
+  //   setCurrentFaqIndex((prev) => Math.max(prev - itemsPerPage, 0));
+  // };
   const handlePriceChange = (plan) => {
     if (billingCycle === "Year" && typeof plan.price === "number") {
       return plan.price * 12 * 0.975; // Applying a 2.5% discount for yearly
@@ -262,6 +236,24 @@ const PricingPage = () => {
   
       console.log('Arrow clicked with value:', telRef.current.value);
     };
+    useEffect(() => {
+      const fetchFaqFunction = async () => {
+        try {
+          const response = await fetch(`${process.env.REACT_APP_BACK_URL}/faqs/${'Plane'}`);
+          if (response.ok) {
+            const data = await response.json();
+            setFaqs(data);
+            setOpenFAQs(new Array(data.length).fill(false)); // ✅ Initialize only after faqs is set
+          } else {
+            console.error("Failed to fetch FAQs");
+          }
+        } catch (error) {
+          console.error("Error fetching FAQs:", error);
+        }
+      };
+    
+      fetchFaqFunction();
+    }, []);    
   return (
    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 font-mulish relative">
       {/* Header Section */}
@@ -423,8 +415,8 @@ const PricingPage = () => {
         )}
       </div>
       <div className="flex flex-col max-w-6xl mx-auto py-4 space-y-2">
-        <span className="text-2xl text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">FQA:-</span>
-        <FaqContainer faqs={faqs} className="lg:w-full"/>
+        <span className="text-2xl text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">FAQ:-</span>
+        <FaqContainer faqs={faqs} openFAQ={openFAQs} className="lg:w-full"/>
       </div>
         
       <div className={`tk-Rent fixed bottom-[40px] right-[5px] w-[200px] hidden md:hidden lg:block`}>

@@ -1,13 +1,17 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import { FaPlusMinus } from '../../svgComponents/Offer';
 
-function FaqContainer({faqs, className=''}) {
-      const [openFAQs, setOpenFAQs] = useState([false, false, false]);
-    const toggleFAQ = (index) => {
-        setOpenFAQs((prevState) =>
-          prevState.map((item, i) => (i === index ? !item : false))
-        );
-      };
+function FaqContainer({faqs, openFAQ,className=''}) {
+  const [openFAQs, setOpenFAQs] = useState([]);
+  const toggleFAQ = (index) => {
+      setOpenFAQs((prevState) =>
+        prevState.map((item, i) => (i === index ? !item : false))
+      );
+    };
+    useEffect(()=>{
+      setOpenFAQs([...openFAQ]);
+    },[]);
+    console.log(openFAQ);
   return (
     <div className={`faq-container w-full font-mulish ${className} space-y-4`}>
                   {faqs.map((faq, index) => (

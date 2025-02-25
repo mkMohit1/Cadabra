@@ -1,13 +1,14 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { ChevronRight, ChevronLeft, Star, Truck, Shield, ArrowLeft } from 'lucide-react';
+import React, { useState, useRef, useEffect, use } from 'react';
+import { ChevronRight, ChevronLeft, Star, Truck, Shield, ArrowLeft, Server, UserRound } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {errorToast, infoToast, successToast} from '../../DecryptoAndOther/ToastUpdate';
 import { useDispatch, useSelector } from "react-redux";
 import { updateCartItem, syncCartWithServer, removeCartItem, removeSellCartItem } from "../../redux/cartSlice";
-
+import { normalImages } from '../../ImagePath';
+import FaqContainer from '../Popup&Faq/FaqContainer';
 
 const PriceAndDeliveryCard = ({product}) => {
-  //console.log(product);
+  console.log(product);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   let cartNItem = useSelector((state) => state.cart.cartNItem) || [];
@@ -81,11 +82,11 @@ const PriceAndDeliveryCard = ({product}) => {
       {/* Price Section */}
       <div className="space-y-4">
         <div className="flex items-baseline gap-2">
-          <span className="text-3xl font-bold text-gray-900">₹{product.mrp}</span>
+          <span className="text-3xl font-bold text-gray-900">₹{Math.round(product.mrp * (1 - product.discount / 100))}</span>
           <span className="text-lg text-gray-500 line-through">₹{product.mrp}</span>
           <span className="text-green-600 text-sm font-medium">{product.discount}% off</span>
         </div>
-        <p className="text-sm text-gray-500">Inclusive of all taxes</p>
+        {/* <p className="text-sm text-gray-500">Inclusive of all taxes</p> */}
       </div>
 
       {/* Delivery Section */}
@@ -94,21 +95,21 @@ const PriceAndDeliveryCard = ({product}) => {
           <Truck className="w-5 h-5 text-gray-600 mt-1" />
           <div>
             <p className="font-medium text-gray-900">Free Delivery</p>
-            <p className="text-sm text-gray-500">Delivery by 23rd Jan</p>
+            <p className="text-sm text-gray-500">Delivery same day</p>
           </div>
         </div>
         <div className="flex items-start gap-3">
-          <ArrowLeft className="w-5 h-5 text-gray-600 mt-1" />
+          <Server className="w-5 h-5 text-gray-600 mt-1" />
           <div>
-            <p className="font-medium text-gray-900">Easy Returns</p>
-            <p className="text-sm text-gray-500">7 Days Return Policy</p>
+            <p className="font-medium text-gray-900">Installation</p>
+            <p className="text-sm text-gray-500">First install will be free</p>
           </div>
         </div>
         <div className="flex items-start gap-3">
-          <Shield className="w-5 h-5 text-gray-600 mt-1" />
+          <UserRound className="w-5 h-5 text-gray-600 mt-1" />
           <div>
-            <p className="font-medium text-gray-900">Warranty</p>
-            <p className="text-sm text-gray-500">1 Year Manufacturer Warranty</p>
+            <p className="font-medium text-gray-900">Support</p>
+            <p className="text-sm text-gray-500">24/7 Support avilable</p>
           </div>
         </div>
       </div>
@@ -123,7 +124,7 @@ const PriceAndDeliveryCard = ({product}) => {
         <button className="w-full bg-gradient-to-r from-blue-400 to-purple-500 text-white py-3 px-4  font-medium hover:bg-orange-600 transition-colors"
         onClick={handleAddCart}
         >
-          {!isInCart?"Add to Cart":"Remove from Cart"}
+          {!isInCart?"Rent to Cart":"Remove from Cart"}
         </button>
       </div>
 
@@ -148,7 +149,28 @@ export const SingleProductPage = () => {
   const {id}= useParams();
   const [currentProduct, setCurrentProduct] = useState(null);
   const [similarProducts, setSimilarProducts] = useState([]);
+  const [faqs,setFaqs] = useState([]);
+  const [openFAQs, setOpenFAQs] = useState([]);
+  const user = useSelector(state=>state.auth.user);
 
+  useEffect(() => {
+    const fetchFaqFunction = async () => {
+      try {
+        const response = await fetch(`${process.env.REACT_APP_BACK_URL}/faqs/${'consultancy'}`);
+        if (response.ok) {
+          const data = await response.json();
+          setFaqs([...data]);
+          setOpenFAQs(new Array(data.length).fill(false));
+        } else {
+          console.error('Failed to fetch FAQs');
+        }
+      } catch (error) {
+        console.error('Error fetching FAQs:', error);
+      }
+    };
+
+    fetchFaqFunction();
+  }, []);
   useEffect(()=>{
     let category =null;
     const fetchProduct = async()=>{
@@ -181,18 +203,7 @@ export const SingleProductPage = () => {
     // ✅ Smooth scroll to top
   window.scrollTo({ top: 0, behavior: "smooth" });
   },[id]);
-  const product = {
-    name: "Generic IP Bullet Camera",
-    model: "GENCAM2024",
-    price: "₹10,500",
-    specifications: {
-      resolution: "2MP",
-      lens: "3.6mm",
-      type: "Bullet Camera",
-      connectivity: "IP",
-    },
-    image: "https://plus.unsplash.com/premium_photo-1675016457613-2291390d1bf6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Y2FtZXJhJTIwY2N0dnxlbnwwfHwwfHx8MA%3D%3D",
-  };
+  const product = currentProduct;
 
   const PromoBanner = () => {
     return (
@@ -226,20 +237,22 @@ export const SingleProductPage = () => {
           <div className="bg-white rounded-lg shadow-md p-6 max-h-[850px] overflow-y-auto scrollbar-hidden">
             <div className="flex flex-col md:flex-row gap-8">
               <div className="w-full md:w-96 top-4">
-                <div className="space-y-4">
+                <div className="space-y-4 h-[200px]">
                   <img 
                     src={`${process.env.REACT_APP_BACK_URL}${currentProduct.productImage}`} 
                     alt={currentProduct.name} 
-                    className="w-full rounded-lg"
+                    className="w-full rounded-lg object-contain h-full"
                   />
                   <div className="grid grid-cols-3 gap-3 bg-gray-100 p-2 rounded-lg">
                     {[...Array(3)].map((_, i) => (
                       <div className='bg-white'>
                       <img
                         key={i}
-                        src={`${process.env.REACT_APP_BACK_URL}${currentProduct.productImage}`}
+                        src={currentProduct?.subProductImages?.[i] 
+                          ? `${process.env.REACT_APP_BACK_URL}${currentProduct.subProductImages[i]}` 
+                          :`${normalImages.noImage}`} 
                         alt={`${currentProduct.name} view ${i + 1}`}
-                        className="w-full h-20 object-cover rounded-md cursor-pointer hover:opacity-75"
+                        className="w-full h-20 object-contain rounded-md cursor-pointer hover:opacity-75"
                       />
                       </div>
                     ))}
@@ -249,84 +262,76 @@ export const SingleProductPage = () => {
 
               <div className="flex-1">
                 <h2 className="text-3xl font-bold text-gray-900 mb-2">{currentProduct.title}</h2>
-                <h4 className="text-gray-600 mb-4">Model: {product.model}</h4>
+                <h4 className="text-gray-600 mb-4">Model: {product.title}</h4>
                 <div className="flex items-center gap-2 mb-4">
                   <span className="bg-green-600 text-white px-3 py-1 rounded-lg flex items-center gap-1">
                     4.0 <Star className="w-4 h-4" />
                   </span>
                   <span className="text-gray-600">(5 Reviews)</span>
                 </div>
-                <p className="text-2xl font-bold text-green-700 mb-6">{currentProduct.mrp}</p>
-                <PromoBanner />
-                <ProductDetails />
+                <p className="text-xl font-bold text-gray-600 mb-6">{currentProduct.productUsp}</p>
+                {!user && (
+                  <PromoBanner />
+                )}
+                <ProductDetails product={currentProduct} />
               </div>
             </div>
-          </div>
-          <div className="mt-8">
-            <SimilarProducts similarProducts={similarProducts}/>
           </div>
         </div>
         <div className="w-full lg:w-1/4 sticky top-4 h-fit">
           <PriceAndDeliveryCard product={currentProduct}/>
         </div>
       </div>
-      <div className='flex flex-col'>
-        
+      <div className="flex flex-col mt-6 max-w-6xl  py-4 space-y-2">
+        <span className="text-2xl text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">FAQ:-</span>
+        <FaqContainer faqs={faqs} openFAQ={openFAQs} className="lg:w-full"/>
       </div>
+      <div className="flex flex-col max-w-6xl mt-6 py-4 space-y-2">
+            <SimilarProducts similarProducts={similarProducts}/>
+          </div>
     </div>
     )}
     </>
   );
 };
 
-export const ProductDetails = () => {
+export const ProductDetails = ({product}) => {
   const [showAllSpecs, setShowAllSpecs] = useState(false);
   const [showAllFeatures, setShowAllFeatures] = useState(false);
   const [showFullDescription, setShowFullDescription] = useState(false);
 
-  const specifications = [
-    { label: 'Brand', value: 'BGT' },
-    { label: 'Colour', value: 'Grey' },
-    { label: 'IR Range', value: '30-40 m' },
-    { label: 'Image Sensor', value: '1/3 in Sony Super HAD CCD' },
-    // Additional specifications shown when expanded
-    { label: 'Video Resolution', value: '700 TVL' },
-    { label: 'Power Supply', value: '12V DC' },
-    { label: 'Night Vision', value: 'Yes' },
-    { label: 'Material', value: 'Metal Housing' },
-    { label: 'Operating Temperature', value: '-10°C to 50°C' },
-    { label: 'Waterproof Rating', value: 'IP66' }
-  ];
+  const specifications =product.productSpecifications;
 
-  const keyFeatures = [
-    { feature: 'Power Consumption: Maximum 5 W with IR cut filter on.' },
-    { feature: 'Weather Proof: yes.' },
-    { feature: 'Lens Mount: M12.' },
-    // Additional features shown when expanded
-    { feature: 'Advanced motion detection with customizable zones' },
-    { feature: 'Built-in IR-cut filter for true day/night operation' },
-    { feature: 'Wide Dynamic Range (WDR) for balanced images' },
-    { feature: 'Privacy masking zones' },
-    { feature: '3D Digital Noise Reduction' },
-    { feature: 'ONVIF compliant for easy integration' }
-  ];
+  const keyFeatures = product.productFeatures;
 
-  const shortDescription = `The BGT 700 TVL Bullet CCTV Camera is a great way to keep an eye on your property. This camera features 700 TV lines of resolution, allowing you to see what's going on clearly. The BGT CCTV Cameras are one of the most reliable and affordable options when it comes to security...`;
+  // ✅ Function to remove HTML tags
+const stripHtmlTags = (html) => {
+  if (!html) return "";
+  return html.replace(/<\/?[^>]+(>|$)/g, ""); // Removes HTML tags
+};
 
-  const fullDescription = `The BGT 700 TVL Bullet CCTV Camera is a great way to keep an eye on your property. This camera features 700 TV lines of resolution, allowing you to see what's going on clearly. The BGT CCTV Cameras are one of the most reliable and affordable options when it comes to security.
+// ✅ Function to decode HTML entities (&amp;, &nbsp;, etc.)
+const decodeHtmlEntities = (text) => {
+  const doc = new DOMParser().parseFromString(text, "text/html");
+  return doc.body.textContent || "";
+};
 
-With a resolution of 700 TVL, these cameras provide high quality images and are absolutely ideal for both home and business security. The image sensor is a 1/3 in Sony Super HAD CCD, making it one of the most advanced options on the market.
+// ✅ Function to get short description with 50-word limit
+const getShortDescription = (text, wordLimit = 50) => {
+  if (!text) return "";
 
-The camera comes with a built-in IR-cut filter that automatically switches between day and night modes, ensuring optimal image quality in any lighting condition. The weatherproof metal housing is rated IP66, making it suitable for both indoor and outdoor installation.
+  const words = text.split(" ");
+  return words.length > wordLimit
+      ? words.slice(0, wordLimit).join(" ") + "..." 
+      : text;
+};
 
-Advanced features include:
-• Wide Dynamic Range (WDR) technology that balances bright and dark areas in the image
-• 3D Digital Noise Reduction for clear night vision
-• Motion detection with email alerts
-• Multiple privacy masking zones
-• ONVIF compatibility for easy integration with existing systems
+// ✅ Apply all functions
+const cleanDescription = decodeHtmlEntities(stripHtmlTags(product.description));
+const shortDescription = getShortDescription(cleanDescription, 50);
 
-The camera supports various network protocols and can be easily integrated into your existing security infrastructure. With its professional-grade build quality and advanced features, this camera is an excellent choice for comprehensive security solutions.`;
+
+  const fullDescription = product.description;
 
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-6 mt-8 font-mulish">
@@ -338,16 +343,18 @@ The camera supports various network protocols and can be easily integrated into 
             <ul className="list-disc pl-5 text-gray-600 space-y-2">
               {keyFeatures.slice(0, showAllFeatures ? keyFeatures.length : 3).map((item, index) => (
                 <li key={index} className="transition-all duration-300 ease-in-out">
-                  {item.feature}
+                  {item}
                 </li>
               ))}
             </ul>
-            <button 
+            {keyFeatures.length>3 && (
+              <button 
               onClick={() => setShowAllFeatures(!showAllFeatures)}
               className="text-blue-700 font-medium text-sm hover:underline transition-colors"
             >
               {showAllFeatures ? 'SHOW LESS FEATURES' : 'SHOW ALL KEY FEATURES'}
             </button>
+            )}
           </div>
         </section>
 
@@ -359,24 +366,27 @@ The camera supports various network protocols and can be easily integrated into 
                 key={index} 
                 className="flex p-3 hover:bg-gray-50 transition-colors duration-200"
               >
-                <div className="w-1/3 text-gray-600">{spec.label}</div>
+                <div className="w-1/3 text-gray-600">{spec.property}</div>
                 <div className="w-2/3 text-gray-900">{spec.value}</div>
               </div>
             ))}
           </div>
-          <button 
+          {specifications.length>4 &&(
+            <button 
             onClick={() => setShowAllSpecs(!showAllSpecs)}
             className="mt-4 text-blue-700 font-medium text-sm hover:underline transition-colors"
           >
             {showAllSpecs ? 'SHOW LESS SPECIFICATIONS' : 'SHOW ALL SPECIFICATIONS'}
           </button>
+          )}
         </section>
 
         <section>
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Product Details</h2>
           <div className="text-gray-600 leading-relaxed">
             <p className={`${showFullDescription ? '' : 'line-clamp-3'} transition-all duration-300`}>
-              {showFullDescription ? fullDescription : shortDescription}
+              {showFullDescription ? <p dangerouslySetInnerHTML={{ __html: fullDescription }} />
+ : shortDescription}
             </p>
             <button 
               onClick={() => setShowFullDescription(!showFullDescription)}
